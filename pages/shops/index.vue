@@ -69,7 +69,7 @@ export default {
         },
         addUrl(shopId)
         {
-          return "../api/booking?shop="+shopId;
+          return "../api/dobooking?id="+shopId;
         }
     },
   

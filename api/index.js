@@ -14,21 +14,24 @@ const url = require('url')
 const { ObjectID } = require("mongodb")
 var { mongoose } = require('./db/mongoose');
 const {LineUser} = require("./models/lineuser")
-var { Todo } = require("./models/todo");
+//var { Todo } = require("./models/todo");
 var { Shop } = require("./models/shop")
-var { authenticate } = require("./middleware/authenticate")
-var { authenticate_admin } = require("./middleware/authenticate_admin")
+//var { authenticate } = require("./middleware/authenticate")
+//var { authenticate_admin } = require("./middleware/authenticate_admin")
 
 /** LINE LOGIN , LINE MESSAGE */
 // const line_login = require("line-login"); //module
 const line_login = require("./line/line-login"); //custom
+
+
+/*
 const line_message = require('@line/bot-sdk');
 const config = {
       channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
       channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
 }
 const line_client = new line_message.Client(config)
-
+*/
 const router = express.Router();
 const app = express()
 router.use((req, res, next) => {
@@ -58,6 +61,32 @@ const login = new line_login({
     prompt: "consent" // 追加
 });
 // console.log('-- line_login', login);
+
+
+router.get('/dobooking',(req,res)=>{
+    var id = req.params.id;
+    /*
+    if (!ObjectID.isValid(id)) {
+        return res.status(400).send();
+    }
+    */
+  
+    Shop.findOne({
+        _id: id,
+        // _creator: req.user._id
+    }).then((shop) => {
+        if (!shop) {
+            return res.status(404).send();
+        }
+        req.session.bookingShop = req.params.id;
+        //return res.status(200).send({ shop });
+        router.redirect('/auth');
+        
+    }).catch((e) => {
+        return res.status(400).send();
+    })
+})
+
 
 // 認証フローを開始するためのルーター設定。
 router.get("/auth", login.auth());
@@ -100,194 +129,27 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
     }
 ));
 
-// POST /api/logout
-router.post('/logout',(req,res)=>{
-    console.log('--[/api/logout]')
-    delete req.session.lineuser
-    res.status(200).json({ok:true});
-});
-
-//======================================================
-// LINE MESSAGE API (@line/bot-sdk)
 //======================================================
 
-// GET /api/lineusers
-router.get('/lineusers',authenticate_admin, async (req,res)=>{
-    console.log('--[/api/lineusers]')
-    try{
-        const lineusers = await LineUser.find();
-        res.send({lineusers})
-    }catch(error){
-        res.status(400).send(e);
-    }
-});
-
-// GET /api/line_push
-router.post("/line_push",authenticate_admin, async(req,res)=>{
-    debugger
-    console.log('--[POST /test/line_push]');
-    // var userId='U5b6986839debb86192d011f49fb2553e'; //Nakamura
-    // Uc5943d1660983a3b628916e0efa1d715 //chanon
-    var pushmessage =  'no post data';
-    if(!req.body.userid || !req.body.message ){
-        console.log('--Bad request body=--',req.body)
-        return res.status('400').json({message:'Bad request'});
-    }
-    console.log('--req.body',req.body)
-    userid = req.body.userid;
-    pushmessage =  req.body.message;
-   
-    try{
-        await line_client.pushMessage(userid,{type:'text',text:pushmessage})
-        res.status(200).json({message: pushmessage});
-    }catch(e){
-        console.log(e.statusCode, e.message)
-        return res.status(e.statusCode).json({message:'Bad request'});
-    }
+router.get('/users',(req,res)=>{
+    LineUser.find({
+        //all
+    }).then((lineUser)=>{ res.send({lineUser } );
+    }).catch((e)=> { res.status(400).send(e) } );
 })
 
-/**
- *  LINE MESSAGE API getProfile
- */
-router.get('/profile/:id', async (req, res) => {
-    console.log("--[/test_profile]");
-    // var userid='U5b6986839debb86192d011f49fb2553e'; //Nakamura
-    if(req.params.id){
-      userid = req.params.id
-    }
-    try{
-      var profile = await line_client.getProfile(userid);
-      res.status(200).json(profile);
-    }catch(e){
-      console.log(e.statusCode, e.message)
-      res.status(e.statusCode).send();
-    }
-});
+
+
 
 //=====================================================
-// TODO
-//=====================================================
-router.post('/todos', authenticate, async(req, res) => {
-    var todo = new Todo({
-        text: req.body.text,
-        _creator: req.user._id
-    });
-    try{
-      const doc = await todo.save();
-      res.send(doc);
-    }catch(e){
-      res.status(400).send(e);
-    }
-});
 
-router.get('/todos', authenticate, (req, res) => {
-    Todo.find({
-        _creator: req.user._id
-    }).then((todos) => {
-        res.send({ todos });
-    }, (e) => {
-        res.status(400).send(e);
-    })
-});
 
-router.get('/todos/:id', authenticate, (req, res) => {
-    var id = req.params.id;
-    if (!ObjectID.isValid(id)) {
-        return res.status(400).send();
-    }
-  
-    Todo.findOne({
-        _id: id,
-        _creator: req.user._id
-    }).then((todo) => {
-        if (!todo) {
-            return res.status(404).send();
-        }
-        return res.status(200).send({ todo });
-    }).catch((e) => {
-        return res.status(400).send();
-    })
-});
-
-router.delete('/todos/:id', authenticate, async(req, res) => {
-    const id = req.params.id;
-    if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
-    }
-    try {
-        const todo = await Todo.findOneAndRemove({
-            _id: id,
-            _creator: req.user._id
-        })
-        if (!todo) {
-            return res.status(404).send();
-        }
-        return res.status(200).send({ todo });
-    }
-    catch (e) {
-        res.status(400).send();
-    }
-});
-
-router.patch('/todos/:id', authenticate, (req, res) => {
-    var id = req.params.id;
-    var body = _.pick(req.body, ['text', 'completed']);
-    if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
-    }
-  
-    if (_.isBoolean(body.completed) && body.completed) {
-        body.completedAt = new Date().getTime();
-    }
-    else {
-        body.completed = false;
-        body.completedAt = null;
-    }
-  
-    // Todo.findByIdAndUpdate(id, { $set: body }, { new: true }).then((todo) => {
-    Todo.findOneAndUpdate({
-        _id: id,
-        _creator: req.user.id
-    }, {
-        $set: body
-    }, { new: true }).then((todo) => {
-        if (!todo) {
-            return res.status(404).send();
-        }
-        res.send({ todo });
-    }).catch((e) => {
-        res.status(400).send();
-    })
-})
-
-//=====================================================
-// Shop
-//=====================================================
-router.post('/shops',async(req,res)=>{
-    var shop = new Shop({
-        shopid   : req.body.shopid,
-        shopname : req.body.shopname,
-        explain  : req.body.explain,
-        address  : req.body.address,
-        business_hours  : req.body.business_hours,
-        pic_avater  : req.body.pic_avater,
-        pic_back  : req.body.pic_back,
-        lastupdate :  new Date().getTime()
-        // _creator: req.user._id
-    });
-    try{
-      const doc = await shop.save();
-      res.send(doc);
-    }catch(e){
-      res.status(400).send(e);
-    }
-});
 router.get('/shops',(req,res)=>{
     Shop.find({
         //all
     }).then((shops)=>{ res.send({shops } );
     }).catch((e)=> { res.status(400).send(e) } );
-});
+})
 router.get('/shops/:id',(req,res)=>{
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -306,6 +168,7 @@ router.get('/shops/:id',(req,res)=>{
         return res.status(400).send();
     })
 });
+
 router.delete('/shops/:id', async(req, res) => {
     const id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -325,6 +188,7 @@ router.delete('/shops/:id', async(req, res) => {
         res.status(400).send();
     }
 });
+
 router.patch('/shops/:id', (req, res) => {
     var id = req.params.id;
     // var body = _.pick(req.body, ['text', 'completed']);
@@ -357,30 +221,6 @@ router.patch('/shops/:id', (req, res) => {
     })
 })
 
-//=====================================================
- // Test 
-//=====================================================
-router.get("/testlogin",authenticate,(req,res)=>{
-    console.log("--[/testlogin w auth]");
-    if(req.session.lineuser){
-        res.status(200).json(req.session.lineuser)
-    }else{
-        res.status(404).json(null)
-    }
-    
-});
-router.get("/test/:id", (req, res) => {
-    console.log("--[/test:id]");
-    console.log("--id " ,req.params.id)
-    // res.status(200).json({ message: "test get" });
-    res.status(200).json({message:`hello test_id = ${req.params.id}`});
-});
-
-router.get("/testquery", (req, res) => {
-    debugger;
-    console.log(req.query)
-    res.status(200).json({message:`test query}`});
-});
 
 module.exports = {
     path: '/api',
