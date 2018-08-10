@@ -11,7 +11,7 @@ const _42a88339 = () => import('../pages/booking/index.vue' /* webpackChunkName:
 const _50c810f8 = () => import('../pages/shops/index_ori.vue' /* webpackChunkName: "pages/shops/index_ori" */).then(m => m.default || m)
 const _0065467e = () => import('../pages/results/_id.vue' /* webpackChunkName: "pages/results/_id" */).then(m => m.default || m)
 const _d672aa00 = () => import('../pages/results/ori_id.vue' /* webpackChunkName: "pages/results/ori_id" */).then(m => m.default || m)
-const _fc92fbe2 = () => import('../pages/users/index_ori.vue' /* webpackChunkName: "pages/users/index_ori" */).then(m => m.default || m)
+const _95b95c9c = () => import('../pages/users/index_ori1.vue' /* webpackChunkName: "pages/users/index_ori1" */).then(m => m.default || m)
 const _7a80003e = () => import('../pages/booking/_id.vue' /* webpackChunkName: "pages/booking/_id" */).then(m => m.default || m)
 const _5c1f1596 = () => import('../pages/index_ori.vue' /* webpackChunkName: "pages/index_ori" */).then(m => m.default || m)
 const _3927666f = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
@@ -115,9 +115,9 @@ export function createRouter () {
 			name: "results-oriid"
 		},
 		{
-			path: "/users/index:ori",
-			component: _fc92fbe2,
-			name: "users-indexori"
+			path: "/users/index:ori1",
+			component: _95b95c9c,
+			name: "users-indexori1"
 		},
 		{
 			path: "/booking/:id",

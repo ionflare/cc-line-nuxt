@@ -48,18 +48,24 @@ export default {
       getData(){
         return [
         {
-          id: false,
-          name: 'Frozen Yogurt',
-          lastupdate: 159,
+          id: 1,
+          name: 'NewsNet_1',
+          lastupdate: '1533783994593.0',
 
-        }
+        },
+         {
+          id: 2,
+          name: 'bestluck',
+          lastupdate: '1533784146455.0',
+
+        },
       ]
       }
       
   },
   
   asyncData(context){
-  return  this.desserts = [];
+    return  this.desserts = [];
       
     /*
     return context.app.$axios.$get('/api/shops')

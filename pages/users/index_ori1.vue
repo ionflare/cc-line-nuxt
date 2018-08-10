@@ -1,17 +1,17 @@
 <template>
   <div>
-        <h1>Services</h1>
-       <PaginateTable_ori />
+        <h1>Users</h1>
+       <PaginateTable />
    </div>
 </template>
 <script>
-import PaginateTable_ori from '~/components/PaginateTable_ori.vue';
+import PaginateTable from '~/components/PaginateTable.vue';
 
 
 export default {
 
   components:{
-        PaginateTable_ori
+        PaginateTable
   },
 
 }

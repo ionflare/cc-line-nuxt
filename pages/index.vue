@@ -4,16 +4,16 @@
 <!-- [main] -->
 <v-content>
   <v-container fluid>
-  <h1> Home Page </h1>
+  <h1> Home Page (Underconstruction)</h1>
   <pre>
-    - Nuxt
-    - Vuetify module
-    - Expless
-    - Axios module
-    - Mongdb,Mongoose
-    - Heroku
+   <h1> Current Tasks</h1>
+    - Designing Database Structure
+    - Test Line Api with Nuxt 
+    - Learning how to use Vuetify 
+    
+
   </pre>
-  <v-btn @click="location('booking')">Begin Booking Process</v-btn>
+  <v-btn color="green" @click="location('booking')">Begin Booking Process</v-btn>
   <p>{{items}}</p>
 
   </v-container>
