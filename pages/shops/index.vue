@@ -4,7 +4,7 @@
       <div v-for="(shp,index) in items">
           <Card 
             :shopName= "shp.shopname"
-            :url= "addUrl(shopid)"
+            :url= "addUrl(shp.shopid)"
             :description= "shp.description"
             :thumbnail= "shp.pic_back"
             :color="pickColor(index)"
@@ -69,7 +69,7 @@ export default {
         },
         addUrl(shopId)
         {
-          return "../api/dobooking?id="+shopId;
+          return "../api/dobooking/"+shopId;
         }
     },
   

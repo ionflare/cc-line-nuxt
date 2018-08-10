@@ -1,66 +1,75 @@
 <template>
-  <section class="container">
-  <div>
-    <ToolBar/>
-    <nuxt/>
-  </div>
-  </section>
+  <v-app dark>  
+    <!-- [toolbar] -->
+    <v-toolbar dark color="primary">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <!-- *manu -->
+      <v-toolbar-title class="white--text">nuxt app template</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn flat v-for="item in items" :key="item.title" :to="item.url">
+            {{ item.title }}
+          </v-btn>
+      </v-toolbar-items>
+      
+     
+    </v-toolbar>
+    <!-- ***[Left Menu]***  -->
+    <v-navigation-drawer fixed v-model="drawer"  app>
+      <!-- [User left] -->
+      <v-toolbar flat @click.stop="drawer = !drawer">
+        <v-list>
+          <v-list-tile>
+            <v-list-tile avatar>
+              <v-list-tile-avatar>
+                <!-- <img v-if="currentUser" :src="currentUser.picture">
+                <v-icon v-else medium>account_circle</v-icon> -->
+                <v-icon  medium>account_circle</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title class="title">
+                  <!-- <span v-if="currentUser">{{currentUser.displayname}}</span>
+                  <span v-else>No Sigin</span> -->
+                  <span>No Sigin</span>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+  
+      <!-- [Items Menus [Home,Feature,Contact]]-->
+      <v-list dense class="pt-0">
+          <v-list-tile v-for="item in items" :key="item.title" :to="item.url">
+          <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+          </v-list-tile>
+      </v-list>
+    </v-navigation-drawer> 
+
+      <!-- ***[contents]*** -->
+      <nuxt />
+  </v-app>
 </template>
 
 <script>
-import ToolBar from '~/components/Toolbar.vue'
-export default{
-  components: {
-    ToolBar
+  export default {
+    data() {
+      return {
+        drawer: null,
+        items: [
+          { title: 'HOME'      , icon: 'home'         , url: '/' },
+          { title: 'Shop Lists'  , icon: 'assignment', url: '/shops' },
+          { title: 'User Lists'   , icon: 'assignment'       , url: '/users' },
+           { title: 'Booking Info'   , icon: 'assignment'       , url: '/' },
+          //{ title: 'Booking Info'   , icon: 'build'       , url: '/' },
+          
+        ],
+      }
+    }
   }
-}
 </script>
-
-
-<style>
-html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*, *:before, *:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-</style>
-

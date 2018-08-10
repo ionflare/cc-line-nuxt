@@ -16,12 +16,13 @@ var { mongoose } = require('./db/mongoose');
 const {LineUser} = require("./models/lineuser")
 //var { Todo } = require("./models/todo");
 var { Shop } = require("./models/shop")
+var { BookInfo } = require("./models/bookinfo")
 //var { authenticate } = require("./middleware/authenticate")
 //var { authenticate_admin } = require("./middleware/authenticate_admin")
 
 /** LINE LOGIN , LINE MESSAGE */
-// const line_login = require("line-login"); //module
-const line_login = require("./line/line-login"); //custom
+ const line_login = require("line-login"); //module
+//const line_login = require("./line/line-login"); //custom
 
 
 /*
@@ -63,28 +64,27 @@ const login = new line_login({
 // console.log('-- line_login', login);
 
 
-router.get('/dobooking',(req,res)=>{
+router.get('/dobooking/:id',(req,res)=>{
+    
     var id = req.params.id;
-    /*
-    if (!ObjectID.isValid(id)) {
-        return res.status(400).send();
-    }
-    */
-  
     Shop.findOne({
-        _id: id,
+        //shopid: id,
+        shopid: id
         // _creator: req.user._id
-    }).then((shop) => {
-        if (!shop) {
+    }).then((shops) => {
+        if (!shops) {
             return res.status(404).send();
+             //res.redirect('../shops');
         }
         req.session.bookingShop = req.params.id;
         //return res.status(200).send({ shop });
-        router.redirect('/auth');
+        res.redirect('../auth');
         
     }).catch((e) => {
         return res.status(400).send();
+        //res.redirect('../shops');
     })
+    
 })
 
 
@@ -104,9 +104,11 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
             id_token    : token_response.id_token_raw
         }
         //Store Session
-        req.session.lineuser = userinfo
+        //req.session.lineuser = userinfo
         try{ // Save LineUser to DB  
-            doc = await LineUser.findOneAndUpdate(
+        
+        
+           doc = await LineUser.findOneAndUpdate(
                 {   userid     :token_response.id_token.sub },
                 {
                     displayname:token_response.id_token.name,
@@ -116,7 +118,17 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                 },
                 {upsert:true}
             );
-            res.redirect('/dashboard');
+            
+            var _bookinfo = new BookInfo({
+               
+                shopid: req.session.bookingShop,
+                serviceid : "1",
+                userid: token_response.id_token.sub,
+                lastupdate : new Date().getTime()
+            });
+           doc = await _bookinfo.save();
+            
+           await  res.redirect('../');
         }catch(e){
             console.log('[save-error]',e)
             res.status(400).json(e);
@@ -134,7 +146,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
 router.get('/users',(req,res)=>{
     LineUser.find({
         //all
-    }).then((lineUser)=>{ res.send({lineUser } );
+    }).then((lineuser)=>{ res.send({lineuser } );
     }).catch((e)=> { res.status(400).send(e) } );
 })
 

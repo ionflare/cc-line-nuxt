@@ -56,6 +56,13 @@ module.exports = {
     //'@nuxtjs/vuetify',
     //'@nuxtjs/font-awesome'
   ],
+  
+    css: [
+    'vuetify/src/stylus/main.styl'
+  ],
+
+  
+  
   plugins: ['~plugins/vuetify.js'],
   css:['~assets/app.styl'],
   loading: { color: '#3B8070' },
