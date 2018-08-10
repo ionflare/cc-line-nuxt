@@ -4,10 +4,15 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _48d1f768 = () => import('../pages/users/index.vue' /* webpackChunkName: "pages/users/index" */).then(m => m.default || m)
+const _37c50b94 = () => import('../pages/services/index.vue' /* webpackChunkName: "pages/services/index" */).then(m => m.default || m)
+const _5951b132 = () => import('../pages/bookinginfo/index.vue' /* webpackChunkName: "pages/bookinginfo/index" */).then(m => m.default || m)
 const _224e6f5d = () => import('../pages/shops/index.vue' /* webpackChunkName: "pages/shops/index" */).then(m => m.default || m)
-const _d672aa00 = () => import('../pages/results/ori_id.vue' /* webpackChunkName: "pages/results/ori_id" */).then(m => m.default || m)
-const _7a80003e = () => import('../pages/booking/_id.vue' /* webpackChunkName: "pages/booking/_id" */).then(m => m.default || m)
+const _42a88339 = () => import('../pages/booking/index.vue' /* webpackChunkName: "pages/booking/index" */).then(m => m.default || m)
+const _50c810f8 = () => import('../pages/shops/index_ori.vue' /* webpackChunkName: "pages/shops/index_ori" */).then(m => m.default || m)
 const _0065467e = () => import('../pages/results/_id.vue' /* webpackChunkName: "pages/results/_id" */).then(m => m.default || m)
+const _d672aa00 = () => import('../pages/results/ori_id.vue' /* webpackChunkName: "pages/results/ori_id" */).then(m => m.default || m)
+const _fc92fbe2 = () => import('../pages/users/index_ori.vue' /* webpackChunkName: "pages/users/index_ori" */).then(m => m.default || m)
+const _7a80003e = () => import('../pages/booking/_id.vue' /* webpackChunkName: "pages/booking/_id" */).then(m => m.default || m)
 const _5c1f1596 = () => import('../pages/index_ori.vue' /* webpackChunkName: "pages/index_ori" */).then(m => m.default || m)
 const _3927666f = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
@@ -75,9 +80,34 @@ export function createRouter () {
 			name: "users"
 		},
 		{
+			path: "/services",
+			component: _37c50b94,
+			name: "services"
+		},
+		{
+			path: "/bookinginfo",
+			component: _5951b132,
+			name: "bookinginfo"
+		},
+		{
 			path: "/shops",
 			component: _224e6f5d,
 			name: "shops"
+		},
+		{
+			path: "/booking",
+			component: _42a88339,
+			name: "booking"
+		},
+		{
+			path: "/shops/index:ori",
+			component: _50c810f8,
+			name: "shops-indexori"
+		},
+		{
+			path: "/results/:id?",
+			component: _0065467e,
+			name: "results-id"
 		},
 		{
 			path: "/results/ori:id?",
@@ -85,14 +115,14 @@ export function createRouter () {
 			name: "results-oriid"
 		},
 		{
-			path: "/booking/:id?",
-			component: _7a80003e,
-			name: "booking-id"
+			path: "/users/index:ori",
+			component: _fc92fbe2,
+			name: "users-indexori"
 		},
 		{
-			path: "/results/:id?",
-			component: _0065467e,
-			name: "results-id"
+			path: "/booking/:id",
+			component: _7a80003e,
+			name: "booking-id"
 		},
 		{
 			path: "/index:ori",

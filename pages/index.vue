@@ -13,7 +13,7 @@
     - Mongdb,Mongoose
     - Heroku
   </pre>
-  <v-btn @click="onClickTest">/api/todos</v-btn>
+  <v-btn @click="location('booking')">Begin Booking Process</v-btn>
   <p>{{items}}</p>
 
   </v-container>
@@ -32,6 +32,14 @@ export default {
       items:null
     };
   },
+  methods:{
+    location(url){
+      location.href = url;
+    }
+  }
+  
+  
+  
   /*
   async asyncData(context){
     console.log('--asyncData');
@@ -62,3 +70,8 @@ export default {
   */
 };
 </script>
+<style>
+h1{
+  text-align: center; 
+}
+</style>

@@ -4,7 +4,7 @@
     <v-toolbar dark color="primary">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <!-- *manu -->
-      <v-toolbar-title class="white--text">nuxt app template</v-toolbar-title>
+      <v-toolbar-title class="white--text">cc-line-nuxt</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
           <v-btn flat v-for="item in items" :key="item.title" :to="item.url">
@@ -63,9 +63,10 @@
         drawer: null,
         items: [
           { title: 'HOME'      , icon: 'home'         , url: '/' },
-          { title: 'Shop Lists'  , icon: 'assignment', url: '/shops' },
-          { title: 'User Lists'   , icon: 'assignment'       , url: '/users' },
-           { title: 'Booking Info'   , icon: 'assignment'       , url: '/' },
+          { title: 'Shops'  , icon: 'assignment', url: '/shops' },
+          { title: 'Services'  , icon: 'assignment', url: '/services' },
+          { title: 'Users'   , icon: 'assignment'       , url: '/users' },
+           { title: 'Booking Info'   , icon: 'assignment'       , url: '/bookinginfo' },
           //{ title: 'Booking Info'   , icon: 'build'       , url: '/' },
           
         ],
