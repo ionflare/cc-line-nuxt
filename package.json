@@ -39,5 +39,11 @@
     "stylus-loader": "3.0.2",
     "url": "0.11.0",
     "vuetify": "1.1.9"
+  },
+  "scripts": {
+  "dev": "nuxt",
+  "build": "nuxt build",
+  "start": "nuxt start",
+  "heroku-postbuild": "npm run build"
   }
 }
