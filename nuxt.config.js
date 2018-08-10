@@ -11,11 +11,13 @@ if (env === 'development' || env === 'test') {
   
 }
 else{
-  //var API_URL=process.env.HEROKU_URL
+  var API_URL=process.env.HEROKU_URL
 }
 
-module.exports = {
+ module.exports = {
+   
   mode: 'universal',
+  
   serverMiddleware:[
     bodyParser.json(),
     session({
