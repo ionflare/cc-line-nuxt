@@ -4,7 +4,7 @@
     <div>
       <h1>User Lists</h1>
       <div v-for="(usr,index) in items">
-         <h1>{{ usr.displayname }}</h1><br>
+         <h1>{{index+1}}. {{ usr.displayname }}</h1><br>
       </div>
       </div>
       

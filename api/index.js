@@ -141,6 +141,17 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
     }
 ));
 
+
+
+
+//======================================================
+router.get('/bookinfo',(req,res)=>{
+    BookInfo.find({
+        //all
+    }).then((bookinfo)=>{ res.send({bookinfo } );
+    }).catch((e)=> { res.status(400).send(e) } );
+})
+
 //======================================================
 
 router.get('/users',(req,res)=>{
