@@ -71,7 +71,7 @@ router.get('/dobooking/:id',(req,res)=>{
     var id = req.params.id;
     Shop.findOne({
         //shopid: id,
-        shopid: id
+        id: id
         // _creator: req.user._id
     }).then((shops) => {
         if (!shops) {
