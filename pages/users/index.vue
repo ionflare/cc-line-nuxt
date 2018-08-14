@@ -1,54 +1,48 @@
 <template>
-  
-    
-    <div>
-      <h1>User Lists</h1>
-      <div v-for="(usr,index) in items">
-         <h1>{{index+1}}. {{ usr.displayname }}</h1><br>
-      </div>
-      </div>
-      
+  <div>
+        <h1>LineUser</h1>
+        
+       <UserTable v-bind="getProp" />
+   </div>
 </template>
 <script>
-import Card from '~/components/Card.vue';
+import UserTable from '~/components/UserTable.vue';
 
 
 export default {
- 
-  
-  data(){
-    return { items: '' };
-  },
-  
-  
-  computed:{
-    shopExists(){
-       return  this.items.lenght >0;
+    
+    data () {
+    return {
+       headers: [
+                { text: 'Name', value: 'displayname' },
+                { text: 'UserId', value: 'userid' },
+                 { text: 'LastUpdate', value: 'lastupdate' },
+              ],
+             
+        listinfo: []
     }
   },
-  methods:{
-        pickColor(index){
-          return index % 2 == 0 ? 'purple' : 'blue';
+    computed:{
+        getProp(){
+           
+            return {
+               headers: this.headers, listinfo: this.listinfo
+                
+            }
         }
     },
-  
+
   components:{
-        Card
+        UserTable
   },
-  asyncData(context){
-  
-    
+   asyncData(context){
     return context.app.$axios.$get('/api/users')
     .then(data =>{
-      // console.log(data);
-      return { items: data.lineuser }
+      return { 
+        listinfo: data.lineuser
+      }
     }).catch(e => context.error(e));
-  /*
-    
-    return context.app.$axios.$get('/api/shops').then((response) => {
-      return {items : response.data.results}
-    });
-    */
+
   }
 }
 

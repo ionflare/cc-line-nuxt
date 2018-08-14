@@ -1,64 +1,49 @@
 <template>
-  
-    
-    <div>
-      <h1>Booking information</h1>
-      <br>
-      
-      <div v-if="items.length">
-           <h1>{{items.length}} Booking information available</h1>
-      </div>
-      <div v-else>
-          <h1>Booking information does not exist!!</h1>
-     </div>
-      <!--
-      <div v-for="(usr,index) in items">
-         <h1>{{index+1}}. {{ usr.displayname }}</h1><br>
-      </div>
-      -->
-      </div>
-      
+  <div>
+        <h1>Booking Information</h1>
+        
+       <BookingTable v-bind="getProp" />
+   </div>
 </template>
 <script>
-import Card from '~/components/Card.vue';
+import BookingTable from '~/components/BookingTable.vue';
 
 
 export default {
- 
-  
-  data(){
-    return { items: '' };
-  },
-  
-  
-  computed:{
-    shopExists(){
-       return  this.items.lenght >0;
+    
+    data () {
+    return {
+       headers: [
+                { text: 'Shopid', value: 'shopid' },
+                { text: 'Serviceid', value: 'serviceid' },
+                { text: 'Userid', value: 'userid' },
+                { text: 'LastUpdate', value: 'lastupdate' },
+              ],
+             
+        listinfo: []
     }
   },
-  methods:{
-        pickColor(index){
-          return index % 2 == 0 ? 'purple' : 'blue';
+    computed:{
+        getProp(){
+           
+            return {
+               headers: this.headers, listinfo: this.listinfo
+                
+            }
         }
     },
-  
+
   components:{
-        Card
+        BookingTable
   },
-  asyncData(context){
-  
-    
+   asyncData(context){
     return context.app.$axios.$get('/api/bookinfo')
     .then(data =>{
-      // console.log(data);
-      return { items: data.bookinfo }
+      return { 
+        listinfo: data.bookinfo
+      }
     }).catch(e => context.error(e));
-  /*
-    
-    return context.app.$axios.$get('/api/shops').then((response) => {
-      return {items : response.data.results}
-    });
-    */
+
   }
 }
 

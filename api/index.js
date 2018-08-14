@@ -17,6 +17,8 @@ const {LineUser} = require("./models/lineuser")
 //var { Todo } = require("./models/todo");
 var { Shop } = require("./models/shop")
 var { BookInfo } = require("./models/bookinfo")
+var { Service } = require("./models/service")
+//var { Shop_Service } = require("./models/shop_service")
 //var { authenticate } = require("./middleware/authenticate")
 //var { authenticate_admin } = require("./middleware/authenticate_admin")
 
@@ -161,7 +163,14 @@ router.get('/users',(req,res)=>{
     }).catch((e)=> { res.status(400).send(e) } );
 })
 
+//======================================================
 
+router.get('/services',(req,res)=>{
+    Service.find({
+        //all
+    }).then((service)=>{ res.send({service } );
+    }).catch((e)=> { res.status(400).send(e) } );
+})
 
 
 //=====================================================
@@ -243,6 +252,31 @@ router.patch('/shops/:id', (req, res) => {
         res.status(400).send();
     })
 })
+
+
+//=====================================================
+//Test Add Shop_Service
+router.get('/t_add_service',async (req,res)=>{
+     
+    
+   
+            var _service = new Service({
+               
+                id: "0",
+                name : "Massage",
+                description: "If u know what I mean",
+                lastupdate : new Date().getTime()
+            });
+           doc = await _service.save();
+    }
+)
+
+
+
+
+
+
+
 
 
 module.exports = {

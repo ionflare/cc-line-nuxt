@@ -1,23 +1,25 @@
 var mongoose = require("mongoose");
 var Service= mongoose.model('Service', {
    
-    serviceid:{
-        type: String,
-        required: false,
-        minlength: 1,
-        trim: true
+     id:{
+        type:String,
+        required:true,
+        minlength:1,
+        trim:true
     },
-    servicename: {
-         type: String,
-        required: false,
-        minlength: 1,
-        trim: true
+    name:{
+        type:String,
+        required:true,
+        minlength:1,
+        trim:true
     },
-    description: {
-        type: String,
-        required: false,
-        minlength: 1,
-        trim: true
+    description:{
+        type:String,
+        required:false,
+    },
+     lastupdate: {
+        type: Number,
+        default: null
     }
 });
 

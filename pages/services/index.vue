@@ -1,19 +1,50 @@
 <template>
   <div>
-        <h1>Services</h1>
-       <PaginateTable_ori />
+        <h1>Services Information</h1>
+        
+       <ServiceTable v-bind="getProp" />
    </div>
 </template>
 <script>
-import PaginateTable_ori from '~/components/PaginateTable_ori.vue';
+import ServiceTable from '~/components/ServiceTable.vue';
 
 
 export default {
+    
+    data () {
+    return {
+       headers: [
+                { text: 'ServiceId', value: 'id' },
+                { text: 'ServiceName', value: 'name' },
+                { text: 'Description', value: 'description' },
+                { text: 'LastUpdate', value: 'lastupdate' },
+              ],
+             
+        listinfo: []
+    }
+  },
+    computed:{
+        getProp(){
+           
+            return {
+               headers: this.headers, listinfo: this.listinfo
+                
+            }
+        }
+    },
 
   components:{
-        PaginateTable_ori
+        ServiceTable
   },
+   asyncData(context){
+    return context.app.$axios.$get('/api/services')
+    .then(data =>{
+      return { 
+        listinfo: data.service
+      }
+    }).catch(e => context.error(e));
 
+  }
 }
 
 </script>

@@ -1,12 +1,12 @@
 var mongoose = require("mongoose");
 var Shop = mongoose.model('Shop',{
-    shopid:{
+    id:{
         type:String,
         required:true,
         minlength:1,
         trim:true
     },
-    shopname:{
+    name:{
         type:String,
         required:true,
         minlength:1,
