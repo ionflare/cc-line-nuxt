@@ -4,7 +4,7 @@
       <div v-for="(shp,index) in items">
           <Card 
             :shopName= "shp.shopname"
-            :url= "addUrl(shp.shopid)"
+            :url= "addUrl(shp.id)"
             :description= "shp.description"
             :thumbnail= "shp.pic_back"
             :color="pickColor(index)"
