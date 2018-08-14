@@ -18,6 +18,7 @@ const {LineUser} = require("./models/lineuser")
 var { Shop } = require("./models/shop")
 var { BookInfo } = require("./models/bookinfo")
 var { Service } = require("./models/service")
+//var { Shop_Service } = require("./models/service")
 //var { Shop_Service } = require("./models/shop_service")
 //var { authenticate } = require("./middleware/authenticate")
 //var { authenticate_admin } = require("./middleware/authenticate_admin")
@@ -183,13 +184,16 @@ router.get('/shops',(req,res)=>{
     }).catch((e)=> { res.status(400).send(e) } );
 })
 router.get('/shops/:id',(req,res)=>{
+    
+    /*
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
         return res.status(400).send();
     }
-  
+    */
+    
     Shop.findOne({
-        _id: id,
+        id: id,
         // _creator: req.user._id
     }).then((shop) => {
         if (!shop) {

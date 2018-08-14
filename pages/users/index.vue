@@ -1,10 +1,23 @@
+
 <template>
-  <div>
-        <h1>LineUser</h1>
-        
-       <UserTable v-bind="getProp" />
-   </div>
+<div>
+
+<!-- [main] -->
+<v-content>
+  <v-container fluid>
+  <h1> LineUser</h1>
+   <UserTable v-bind="getProp" />
+  
+  </v-container>
+</v-content>
+<!-- [footer] -->
+<v-footer  app inset>
+      <span class="white--text">&copy; 2018 footer</span>
+</v-footer>
+
+</div>
 </template>
+
 <script>
 import UserTable from '~/components/UserTable.vue';
 

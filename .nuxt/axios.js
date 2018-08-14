@@ -113,8 +113,8 @@ export default (ctx, inject) => {
   const axiosOptions = {
     // baseURL
     baseURL : process.browser
-      ? 'https://cc-line-nuxt.herokuapp.com/'
-      : (process.env._AXIOS_BASE_URL_ || 'https://cc-line-nuxt.herokuapp.com/'),
+      ? 'https://3c9df73438794ae49a6a317ae2eeb187.vfs.cloud9.ap-southeast-1.amazonaws.com'
+      : (process.env._AXIOS_BASE_URL_ || 'https://3c9df73438794ae49a6a317ae2eeb187.vfs.cloud9.ap-southeast-1.amazonaws.com'),
 
     // Create fresh objects for all default header scopes
     // Axios creates only one which is shared across SSR requests!

@@ -15,7 +15,7 @@
   </pre>
   <v-btn color="green" @click="location('booking')">Begin Booking Process</v-btn>
   <p>{{items}}</p>
-
+  <Carousel/>
   </v-container>
 </v-content>
 <!-- [footer] -->
@@ -26,6 +26,7 @@
 </div>
 </template>
 <script>
+import Carousel from '~/components/Carousel.vue'; 
 export default {
   data() {
     return {
@@ -36,6 +37,9 @@ export default {
     location(url){
       location.href = url;
     }
+  },
+  components:{
+    Carousel
   }
   
   

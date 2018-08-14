@@ -5,8 +5,8 @@
 <!-- [main] -->
 <v-content>
   <v-container fluid>
-  <h1> Shops</h1>
-   <ShopTable v-bind="getProp" />
+  <h1> Shop : {{$route.params.id}}</h1>
+   <!-- <BookingTable v-bind="getProp" /> -->
   
   </v-container>
 </v-content>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ShopTable from '~/components/ShopTable.vue';
+import BookingTable from '~/components/BookingTable.vue';
 
 
 export default {
@@ -27,13 +27,10 @@ export default {
     data () {
     return {
        headers: [
-                {
-                  text: 'ID',
-                  value: 'id'
-                },
-                { text: 'Name', value: 'name' },
-                { text: 'Description', value: 'description' },
-                 { text: 'LastUpdate', value: 'lastupdate' },
+                { text: 'Shopid', value: 'shopid' },
+                { text: 'Serviceid', value: 'serviceid' },
+                { text: 'Userid', value: 'userid' },
+                { text: 'LastUpdate', value: 'lastupdate' },
               ],
              
         listinfo: []
@@ -50,13 +47,13 @@ export default {
     },
 
   components:{
-        ShopTable
+        BookingTable
   },
    asyncData(context){
-    return context.app.$axios.$get('/api/shops')
+    return context.app.$axios.$get('/api/bookinfo')
     .then(data =>{
       return { 
-        listinfo: data.shops
+        listinfo: data.bookinfo
       }
     }).catch(e => context.error(e));
 
