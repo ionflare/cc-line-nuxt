@@ -18,6 +18,7 @@ const {LineUser} = require("./models/lineuser")
 var { Shop } = require("./models/shop")
 var { BookInfo } = require("./models/bookinfo")
 var { Service } = require("./models/service")
+var { User_Role } = require("./models/user_role")
 //var { Shop_Service } = require("./models/service")
 //var { Shop_Service } = require("./models/shop_service")
 //var { authenticate } = require("./middleware/authenticate")
@@ -28,14 +29,15 @@ var { Service } = require("./models/service")
 //const line_login = require("./line/line-login"); //custom
 
 
-/*
+
 const line_message = require('@line/bot-sdk');
 const config = {
       channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
-      channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
+      channelSecret: process
+      .env.LINE_MESSAGE_CHANNEL_SECRET,
 }
 const line_client = new line_message.Client(config)
-*/
+
 const router = express.Router();
 const app = express()
 router.use((req, res, next) => {
@@ -130,7 +132,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                 lastupdate : new Date().getTime()
             });
            doc = await _bookinfo.save();
-            
+        //    await line_client.pushMessage(userid,{type:'text',text:pushmessage}) 
            await  res.redirect('../');
         }catch(e){
             console.log('[save-error]',e)
@@ -163,6 +165,17 @@ router.get('/users',(req,res)=>{
     }).then((lineuser)=>{ res.send({lineuser } );
     }).catch((e)=> { res.status(400).send(e) } );
 })
+
+
+//======================================================
+
+router.get('/user_roles',(req,res)=>{
+    User_Role.find({
+        //all
+    }).then((user_roles)=>{ res.send({user_roles } );
+    }).catch((e)=> { res.status(400).send(e) } );
+})
+
 
 //======================================================
 
@@ -275,6 +288,52 @@ router.get('/t_add_service',async (req,res)=>{
     }
 )
 
+
+router.get('/t_add_role',async (req,res)=>{
+     
+    
+   
+            var _user_role_1 = new User_Role({
+               
+              
+                roleName : "Admin",
+                accessibleLV: 4,
+                isActive : true,
+                lastupdate : new Date().getTime()
+            });
+           
+            var _user_role_2 = new User_Role({
+               
+              
+                roleName : "Provider",
+                accessibleLV: 3,
+                isActive : true,
+                lastupdate : new Date().getTime()
+            });
+          
+          var _user_role_3 = new User_Role({
+               
+              
+                roleName : "Secretary",
+                accessibleLV: 2,
+                isActive : true,
+                lastupdate : new Date().getTime()
+            });
+         
+            var _user_role_4 = new User_Role({
+               
+              
+                roleName : "Customer",
+                accessibleLV: 1,
+                isActive : true,
+                lastupdate : new Date().getTime()
+            });
+           await _user_role_1.save();
+           await _user_role_2.save();
+           await _user_role_3.save();
+           await _user_role_4.save();
+    }
+)
 
 
 

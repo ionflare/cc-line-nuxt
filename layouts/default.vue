@@ -66,7 +66,9 @@
           { title: 'Shops'  , icon: 'assignment', url: '/shops' },
           { title: 'Services'  , icon: 'assignment', url: '/services' },
           { title: 'Users'   , icon: 'assignment'       , url: '/users' },
+            { title: 'User Roles'   , icon: 'assignment'       , url: '/userroles' },
            { title: 'Booking Info'   , icon: 'assignment'       , url: '/bookinginfo' },
+           { title: 'Sign In'   , icon: 'face'       , url: '/' },
           //{ title: 'Booking Info'   , icon: 'build'       , url: '/' },
           
         ],
