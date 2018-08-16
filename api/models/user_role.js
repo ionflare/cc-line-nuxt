@@ -21,6 +21,10 @@ var User_Role_Schema = new mongoose.Schema({
         type:Boolean,
         required:false,
     },
+     isDel:{
+        type:Boolean,
+        required:false,
+    },
        lastupdate: {
         type: Number,
         default: null

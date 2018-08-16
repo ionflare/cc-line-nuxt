@@ -168,13 +168,64 @@ router.get('/users',(req,res)=>{
 
 
 //======================================================
+// User Role
 
 router.get('/user_roles',(req,res)=>{
     User_Role.find({
+         isDel: { $eq: false }
         //all
-    }).then((user_roles)=>{ res.send({user_roles } );
+    }).then((user_roles)=>{
+        res.send({user_roles } );
+          //res.redirect('../');
     }).catch((e)=> { res.status(400).send(e) } );
 })
+
+router.get('/user_roles/del/:id',async(req,res)=>{
+       await User_Role.findOneAndUpdate(
+                {   _id     : req.params.id},
+                {
+                    isDel : true,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+        res.redirect('../../../userroles');
+})
+
+router.get('/user_roles/up',async(req,res)=>{
+      var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+       await User_Role.findOneAndUpdate(
+                {   _id     : req.param('id')},
+                {
+                    roleName : req.param('roleName'),
+                    accessibleLV : parseInt(req.param('accessibleLV')),
+                    isActive : active,
+                    isDel : false,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+        res.redirect('../../../userroles');
+})
+
+router.get('/user_roles/add',async(req,res)=>{
+    
+          var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+           
+            var _user_role = new User_Role({
+                
+                 roleName : req.param('roleName'),
+                 accessibleLV : parseInt(req.param('accessibleLV')),
+                 isActive : active,
+                 isDel : false,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _user_role.save();
+        res.redirect('../../../userroles');
+})
+
 
 
 //======================================================
@@ -275,8 +326,6 @@ router.patch('/shops/:id', (req, res) => {
 //Test Add Shop_Service
 router.get('/t_add_service',async (req,res)=>{
      
-    
-   
             var _service = new Service({
                
                 id: "0",
@@ -288,14 +337,22 @@ router.get('/t_add_service',async (req,res)=>{
     }
 )
 
+router.post('/t_post_api',async (req,res)=>{
+     
+        res.redirect('../');
+          
+    }
+)
+router.get('/t_get_api',async (req,res)=>{
+        //res.redirect('../');
+          res.send("5555");
+    }
+)
+
+
 
 router.get('/t_add_role',async (req,res)=>{
-     
-    
-   
             var _user_role_1 = new User_Role({
-               
-              
                 roleName : "Admin",
                 accessibleLV: 4,
                 isActive : true,
