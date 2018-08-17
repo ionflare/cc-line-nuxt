@@ -10,7 +10,10 @@
       >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.displayname }}</td>
+        <td>{{ props.item.loginType }}</td>
         <td>{{ props.item.userid }}</td>
+        <td>{{ props.item.pwd }}</td>
+        <td>{{ props.item.userrole }}</td>
         <td>{{ props.item.lastupdate }}</td>
          
       </template>

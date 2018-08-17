@@ -13,7 +13,7 @@ const url = require('url')
 /** MongoDB and Models */
 const { ObjectID } = require("mongodb")
 var { mongoose } = require('./db/mongoose');
-const {LineUser} = require("./models/lineuser")
+const {User} = require("./models/user")
 //var { Todo } = require("./models/todo");
 var { Shop } = require("./models/shop")
 var { BookInfo } = require("./models/bookinfo")
@@ -110,15 +110,16 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
         }
         //Store Session
         //req.session.lineuser = userinfo
-        try{ // Save LineUser to DB  
+        try{ // Save User to DB  
         
         
-           doc = await LineUser.findOneAndUpdate(
+           doc = await User.findOneAndUpdate(
                 {   userid     :token_response.id_token.sub },
                 {
                     displayname:token_response.id_token.name,
                     picture    :token_response.id_token.picture,
                     isfollow   :true,
+                    loginType : "Line",
                     lastupdate : new Date().getTime(),
                 },
                 {upsert:true}
@@ -160,9 +161,9 @@ router.get('/bookinfo',(req,res)=>{
 //======================================================
 
 router.get('/users',(req,res)=>{
-    LineUser.find({
+    User.find({
         //all
-    }).then((lineuser)=>{ res.send({lineuser } );
+    }).then((user)=>{ res.send({ user } );
     }).catch((e)=> { res.status(400).send(e) } );
 })
 

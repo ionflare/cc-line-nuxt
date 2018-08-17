@@ -5,7 +5,7 @@
 <!-- [main] -->
 <v-content>
   <v-container fluid>
-  <h1> LineUser</h1>
+  <h1> User</h1>
    <UserTable v-bind="getProp" />
   
   </v-container>
@@ -29,7 +29,7 @@ export default {
        headers: [
                 { text: 'Name', value: 'displayname' },
                 { text: 'UserId', value: 'userid' },
-                 { text: 'LastUpdate', value: 'lastupdate' },
+                { text: 'LastUpdate', value: 'lastupdate' },
               ],
              
         listinfo: []
@@ -52,7 +52,7 @@ export default {
     return context.app.$axios.$get('/api/users')
     .then(data =>{
       return { 
-        listinfo: data.lineuser
+        listinfo: data.user
       }
     }).catch(e => context.error(e));
 
