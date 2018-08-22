@@ -6,6 +6,8 @@ import '../assets/app.styl'
 
 let layouts = {
 
+  "_default_ori_1": () => import('../layouts/default_ori_1.vue'  /* webpackChunkName: "layouts/default_ori_1" */).then(m => m.default || m),
+
   "_default_ori": () => import('../layouts/default_ori.vue'  /* webpackChunkName: "layouts/default_ori" */).then(m => m.default || m),
 
   "_default": () => import('../layouts/default.vue'  /* webpackChunkName: "layouts/default" */).then(m => m.default || m)

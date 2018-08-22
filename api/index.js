@@ -5,6 +5,7 @@ const _ = require("lodash")
 
 /** Express */
 const express = require("express");
+const jwt = require("jsonwebtoken");
 //express-session,body-parser はnuxt.config.jsで設定
 // [url is for get req.query]
 //  https://github.com/nuxt/nuxt.js/issues/1909
@@ -250,13 +251,6 @@ router.get('/shops',(req,res)=>{
 })
 router.get('/shops/:id',(req,res)=>{
     
-    /*
-    var id = req.params.id;
-    if (!ObjectID.isValid(id)) {
-        return res.status(400).send();
-    }
-    */
-    
     Shop.findOne({
         id: id,
         // _creator: req.user._id
@@ -390,10 +384,99 @@ router.get('/t_add_role',async (req,res)=>{
            await _user_role_2.save();
            await _user_role_3.save();
            await _user_role_4.save();
+    })
+    
+router.post('/dummylogin/',async(req,res)=>{
+    
+    
+    let token= jwt.sign({
+        sub  : req.body.lineuserid,
+        name : req.body.lineuserid,
+       },process.env.JWT_SECRET).toString();
+    var userinfo={
+        lineuserid  : req.body.lineuserid,
+        displayname : req.body.lineuserid,
+        id_token    : token,
+    }   
+    userinfo._id = "testUserID";
+    req.session.lineuser = userinfo;
+        
+    res.status(200).header('x-auth', token)
+            .send({ lineuser:userinfo });
+    
+    /*
+    console.log('--[api]dummylogin')
+    let token= jwt.sign({
+        sub  : req.body.lineuserid,
+        name : req.body.lineuserid,
+       },process.env.JWT_SECRET).toString();
+    var userinfo={
+        lineuserid  : req.body.lineuserid,
+        displayname : req.body.lineuserid,
+        id_token    : token,
     }
-)
+    try{
+        doc = await LineUser.findOneAndUpdate(
+            {   lineuserid : userinfo.lineuserid },
+            {
+                displayname: userinfo.displayname ,
+                picture    : null,
+                isfollow   :true,
+                lastupdate : new Date().getTime(),
+            },
+            {upsert:true,new:true}
+        );
+        userinfo._id = doc._id;
+        req.session.lineuser = userinfo
+        
+        res.status(200).header('x-auth', token)
+            .send({ lineuser:userinfo });
+        // res.redirect('/other');
+    }catch(e){
+        console.log('[save-error]',e)
+        res.status(400).json(e);
+    }
+    */
+})
 
-
+router.post('/dummylogout',async(req,res)=>{
+    
+   req.session.lineuser = null;
+    res.status(200).send("OK");
+    /*
+    console.log('--[api]dummylogin')
+    let token= jwt.sign({
+        sub  : req.body.lineuserid,
+        name : req.body.lineuserid,
+       },process.env.JWT_SECRET).toString();
+    var userinfo={
+        lineuserid  : req.body.lineuserid,
+        displayname : req.body.lineuserid,
+        id_token    : token,
+    }
+    try{
+        doc = await LineUser.findOneAndUpdate(
+            {   lineuserid : userinfo.lineuserid },
+            {
+                displayname: userinfo.displayname ,
+                picture    : null,
+                isfollow   :true,
+                lastupdate : new Date().getTime(),
+            },
+            {upsert:true,new:true}
+        );
+        userinfo._id = doc._id;
+        req.session.lineuser = userinfo
+        
+        res.status(200).header('x-auth', token)
+            .send({ lineuser:userinfo });
+        // res.redirect('/other');
+    }catch(e){
+        console.log('[save-error]',e)
+        res.status(400).json(e);
+    }
+    */
+})
 
 
 
