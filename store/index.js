@@ -32,14 +32,14 @@ const createStore = () => {
           parentMenu: null,
           requireAccessLv: 0
         },
-        /*
-          { title: "Login",
+        
+          { title: "Playground",
           icon: "assignment",
-          url:"/Login",
+          url:"/playgroud",
           parentMenu: null,
           requireAccessLv: 0
         },
-        */
+        
         
         //=========sub menu
             
