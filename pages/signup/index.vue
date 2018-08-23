@@ -25,10 +25,34 @@
           <v-card
             class="mb-5"
             color="grey lighten-1"
-            height="200px"></v-card>
+           >
+                
+                  
+                  <v-flex md12 lg12>
+                      <v-card dark color="secondary">
+                        <v-card-text class="px-0"><h2>Agreement</h2></v-card-text>
+                      </v-card>
+                  </v-flex>
+                <v-card-text>
+                  <p class="text-sm-left">1. Term of use 1 Blah Blah Blah Blah</p>
+                  <p class="text-sm-left">2. Term of use 2 Blah Blah Blah Blah</p>
+                  <p class="text-sm-left">3. Term of use 3 Blah Blah Blah Blah</p>
+                  <p class="text-sm-left">4. Term of use 4 Blah Blah Blah Blah</p>
+                  <p class="text-sm-left">5. Term of use 5 Blah Blah Blah Blah</p>
+              
+                </v-card-text>
+            
+            
+            
+            
+          </v-card>
+            
+            
+            
+          <v-checkbox color="success" label="I understand and accept this agreement." v-model="checkbox1"></v-checkbox>  
           <v-btn flat>Previous</v-btn>
           <v-btn
-            color="primary"
+            color="blue"
             @click="e1 = 2">
             Next
           </v-btn>
@@ -39,14 +63,92 @@
         <v-stepper-content step="2">
           <v-card
             class="mb-5"
-            color="grey lighten-1"
-            height="200px">
-              
+            color="grey lighten-1">
+                <v-flex md12 lg12>
+                      <v-card dark color="secondary">
+                        <v-card-text class="px-0"><h2>Create your account (1/2)</h2></v-card-text>
+                      </v-card>
+                </v-flex>
+                
+                <v-flex md12 lg12>
+                  <v-layout row wrap>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Username :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                                v-model="title"
+                                :rules="rules"
+                                counter="25"
+                                hint="This field uses counter prop"
+                                label="Regular"
+                              ></v-text-field>
+                      </v-flex>
+                          <v-flex md2>
+                          <v-card-text class="px-0"><h2>Password :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                        
+                         <v-text-field
+                          v-model="password"
+                          :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                          :rules="[rules.required, rules.min]"
+                          :type="show1 ? 'text' : 'password'"
+                          name="input-10-1"
+                          label=""
+                          hint="At least 8 characters"
+                          counter
+                          @click:append="show1 = !show1"
+                        ></v-text-field>
+                      </v-flex>
+                  </v-layout>    
+                  
+                  <v-layout row wrap>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Firstname :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                               
+                              ></v-text-field>
+                      </v-flex>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Lastname :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                               
+                              ></v-text-field>
+                      </v-flex>
+                  </v-layout>    
+                  
+                     <v-layout row wrap>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Email :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                               
+                              ></v-text-field>
+                      </v-flex>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Tel :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                               
+                              ></v-text-field>
+                      </v-flex>
+                  </v-layout>    
+                  
+                  
+                </v-flex>
+                
           </v-card>
         
           <v-btn flat  @click="e1 = 1">Previous</v-btn>
           <v-btn
-            color="primary"
+            color="blue"
             @click="e1 = 3"
           >
             Next
@@ -63,7 +165,7 @@
           ></v-card>
            <v-btn flat  @click="e1 = 2">Previous</v-btn>
           <v-btn
-            color="primary"
+            color="green"
             @click=""
           >
             Done
@@ -87,7 +189,28 @@
 export default{
   data () {
     return {
-      e1: 0
+      e1: 0,
+      checkbox1: true,
+       show1: false,
+      show2: true,
+      show3: false,
+      show4: false,
+      password: '',
+     
+      
+      title: '',
+      email: '',
+      rules: {
+        required: value => !!value || 'Required.',
+        counter: value => value.length <= 20 || 'Max 20 characters',
+        min: v => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => ('The email and password you entered don\'t match'),
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        }
+      }
+    
     }
   }
 }    
@@ -97,7 +220,7 @@ export default{
 
 </script>
 <style>
-* {
-   text-align: center; 
-}
+*   {text-align: center}
+h2   {text-align: center;  color: Black;}
+p    {color: black;}
 </style>
