@@ -509,7 +509,7 @@ router.post('/signup',async(req,res)=>{
     }).then((user) => {
         //if request username already existed
         if (user) {
-            return res.send( {msg : "Dupplicate Username"});
+            return res.send( {result :"failed",msg : "Dupplicate Username"});
         }
         else 
         {
@@ -540,19 +540,20 @@ router.post('/signup',async(req,res)=>{
                 }
                 else //if saving successed
                 {
-                    /*
+                    //create user token to redirect to main menu
                     let token= jwt.sign({
-                        sub  : req.body.lineuserid,
-                        Userro : req.body.lineuserid,
+                        //sub  : req.body.lineuserid,
+                        //Userro : req.body.lineuserid,
                        },process.env.JWT_SECRET).toString();
-                    var userinfo={
-                        username  : req.body.lineuserid,
-                        displayname : req.body.lineuserid,
+                    var userinfo = {
+                        username  : req.body.user.username,
+                        displayname : req.body.user.username,
+                        accessibiltyLv : 0,
                         id_token    : token,
                         }
-                     req.session.lineuser = userinfo
-                     */
-                     res.send({result :"success", msg: "Save successed"} );
+                     req.session.current_user = userinfo;
+                     res.send({result :"success", msg: "Save successed", info: userinfo});
+                    
                 }
                
               });
@@ -565,14 +566,10 @@ router.post('/signup',async(req,res)=>{
 })
 
 
-
-
-
-
-router.post('/dummylogout',async(req,res)=>{
+router.post('/logout',async(req,res)=>{
     
-   req.session.lineuser = null;
-    res.status(200).send("OK");
+   req.session.current_user = null;
+   res.send({result :"success", msg: "Logout Completed!!"} );
     /*
     console.log('--[api]dummylogin')
     let token= jwt.sign({
@@ -607,6 +604,8 @@ router.post('/dummylogout',async(req,res)=>{
     }
     */
 })
+
+
 
 
 

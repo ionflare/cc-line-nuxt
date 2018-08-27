@@ -137,7 +137,9 @@ export default {
         {return "Log In";}
       },
       getAvatar : function () {
-        if(this.$store.state.current_user != null) {return this.$store.state.current_user.username ;}
+        if(this.$store.state.current_user != null) {
+          return this.$store.state.current_user.username;
+        }
         else
         {return "Guest";}
       },

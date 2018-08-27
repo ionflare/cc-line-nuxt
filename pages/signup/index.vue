@@ -192,7 +192,7 @@ export default{
     return {
       e1: 0,
       checkbox1: true,
-       show1: false,
+      show1: false,
       show2: true,
       show3: false,
       show4: false,
@@ -238,17 +238,9 @@ export default{
             });
             if(data.result == "success")
             {
-                //create
-                 var payload = {
-                 username : data.username,
-                 displayName : data.displayName,
-                 USER_ROLE_id: data.USER_ROLE_id,
-                 picture: data.picture,
-                 loginType: data.loginType
-                }
-                //userToken = jwt.sign(payload, this.privateKeyJWT, { expiresIn:  2*60*60, });
-                //this.$store.commit('set_current_user', userToken);
+                
                 alert(data.msg);
+                location.href = "/";
             }
            else{
                alert(data.msg);

@@ -50,7 +50,7 @@
   <v-container fluid grid-list-md text-xs-center>
     
      <!--***[If no one has logged in yet -- layout]***-->
-      <v-layout v-if="$store.state.lineuser == null" row wrap>
+      <v-layout v-if="$store.state.current_user == null" row wrap>
         <v-flex md12 lg12>
            <v-card dark color="primary">
                   <v-card-text class="px-0"><h1>Log In</h1></v-card-text>
@@ -74,7 +74,7 @@
                       </v-flex>
                        <v-flex md8 lg8>
                            <v-text-field v-model="username"
-                                      label="input dummy lineuserid"
+                                      label="username"
                                       outline >
                           </v-text-field>
                       </v-flex>
@@ -82,8 +82,13 @@
                          <v-card-text class="px-0">Password :</v-card-text>
                       </v-flex>
                        <v-flex md8 lg8>
-                               <v-text-field v-model="pwd"
-                                      label="input dummy pwd"
+                               <v-text-field
+                                      v-model="pwd"
+                                      :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                                      :type="show1 ? 'text' : 'password'"
+                                    
+                                      @click:append="show1 = !show1"
+                                      label="Password"
                                       outline >
                               </v-text-field> 
                                    
@@ -170,7 +175,7 @@
     <v-layout v-else row wrap>
        <h2>CurrentUser</h2>
           {{currentUser}}
-       <v-btn color="orange" @click="onDummyLogOut()">Log Out</v-btn>
+       <v-btn color="orange" @click="onLogOut()">Log Out</v-btn>
   
     </v-layout>
         
@@ -201,7 +206,7 @@ export default {
     return {
         username:'',
         pwd:'',
-        dummyid:'',
+        show1: false,
       // items:null
     };
   },
@@ -247,10 +252,10 @@ export default {
             console.log(e);
           }
         },
-        async onDummyLogOut(context){
+        async onLogOut(context){
           try{
             
-            let data = await this.$axios.$post('/api/dummylogout');
+            let data = await this.$axios.$post('/api/logout');
             this.$store.commit('clearUser');
             location.href="/";
           }catch(e){
