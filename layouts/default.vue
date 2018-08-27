@@ -132,12 +132,12 @@ export default {
         return true;
       },
       loginText : function () {
-        if(this.$store.state.lineuser != null) {return "Log Out";}
+        if(this.$store.state.current_user != null) {return "Log Out";}
         else
         {return "Log In";}
       },
       getAvatar : function () {
-        if(this.$store.state.lineuser != null) {return this.$store.state.lineuser.lineuserid ;}
+        if(this.$store.state.current_user != null) {return this.$store.state.current_user.username ;}
         else
         {return "Guest";}
       },

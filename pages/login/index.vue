@@ -73,7 +73,7 @@
                          <v-card-text class="px-0">Username :</v-card-text>
                       </v-flex>
                        <v-flex md8 lg8>
-                           <v-text-field v-model="dummyid"
+                           <v-text-field v-model="username"
                                       label="input dummy lineuserid"
                                       outline >
                           </v-text-field>
@@ -82,7 +82,7 @@
                          <v-card-text class="px-0">Password :</v-card-text>
                       </v-flex>
                        <v-flex md8 lg8>
-                               <v-text-field 
+                               <v-text-field v-model="pwd"
                                       label="input dummy pwd"
                                       outline >
                               </v-text-field> 
@@ -95,7 +95,7 @@
                  <v-flex md3 lg3>
                    <v-layout align-center justify-center row fill-height>
                      <v-card-text class="px-0">
-                           <v-btn color="green" @click="onDummyLogin()">Log In</v-btn>
+                           <v-btn color="green" @click="onWebLogin()">Log In</v-btn>
                      </v-card-text>
                     </v-layout>   
                 </v-flex>
@@ -195,10 +195,13 @@
 }
 </style>
 <script>
+const jwt = require("jsonwebtoken");
 export default {
   data() {
     return {
-      dummyid:'',
+        username:'',
+        pwd:'',
+        dummyid:'',
       // items:null
     };
   },
@@ -208,34 +211,52 @@ export default {
     },
   },
   methods:{
-      async onDummyLogin(context){
-      console.log('--onDummyLogin');
-      if(!this.dummyid) {
-        console.log('no dumyid')
-        return
-      }
-      try{
-        
-        let data = await this.$axios.$post('/api/dummylogin',{
-          lineuserid : this.dummyid
-        });
-        console.log(data);
-        this.$store.commit('setLineuser', data.lineuser);
-        location.href="/";
-      }catch(e){
-        console.log(e);
-      }
-    },
-    async onDummyLogOut(context){
-      try{
-        
-        let data = await this.$axios.$post('/api/dummylogout');
-        this.$store.commit('clearUser');
-        location.href="/";
-      }catch(e){
-        console.log(e);
-      }
-     
+      async onWebLogin(context){
+          try{
+            let data = await this.$axios.$post('/api/weblogin',{
+            user :{
+                    username : this.username,
+                    pwd : this.pwd
+                }   
+            });
+            if(data.result == "success")
+            {
+                //alert(data.info.username);
+                //create
+                /*
+                 var payload = {
+                 username : data.username,
+                 displayName : data.displayName,
+                 accessibleLV: data.USER_ROLE_id,
+                 picture: data.picture,
+                 loginType: data.loginType
+                }
+               
+                */
+                //alert(data.msg);
+                //this.$store.commit('set_current_user', data.data);
+                
+                location.href = "/";
+                //var userinfo = jwt.sign(payload, this.privateKeyJWT, { expiresIn:  2*60*60, });
+                 
+            }
+           else{
+               alert(data.msg);
+           }
+          }catch(e){
+            console.log(e);
+          }
+        },
+        async onDummyLogOut(context){
+          try{
+            
+            let data = await this.$axios.$post('/api/dummylogout');
+            this.$store.commit('clearUser');
+            location.href="/";
+          }catch(e){
+            console.log(e);
+          }
+         
     },
     gotoSignUp(){
       location.href = "/signup";

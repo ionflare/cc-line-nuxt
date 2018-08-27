@@ -5,7 +5,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       
-      lineuser: null, // ?, line object for access user
+      current_user: null, // ?, line object for access user
       accessibiltyLv: 0,
       menus:[
         { title: "Home",
@@ -62,14 +62,14 @@ const createStore = () => {
       shopname : 'nothing'
     },
     mutations: {
-      setLineuser(state,user){
-                console.log('--[$sotre.mutations]setLineuser')
-                state.lineuser = user
+      set_current_user(state,user){
+                console.log('--[$sotre.mutations]setUser')
+                state.current_user = user
                 // state.idToken = user.id_token
             },
       clearUser(state){
                // console.log('--[$sotre.mutations]setLineuser')
-                state.lineuser = null
+                state.current_user = null
                 // state.idToken = user.id_token
             },
       
@@ -80,24 +80,24 @@ const createStore = () => {
      actions:{
         nuxtServerInit(vuexContext,context){
                 console.log('--[$sotre.nextServerInit]')
-                if (context.req.session.lineuser) {
+                if (context.req.session.current_user) {
                     // vuexContext.commit('setLineuser', context.req.session.lineuser)
-                    vuexContext.state.lineuser = context.req.session.lineuser;
-                    vuexContext.state.accessibiltyLv = 4;
+                    vuexContext.state.current_user = context.req.session.current_user;
+                    vuexContext.state.accessibiltyLv = parseInt(context.req.session.current_user.accessibiltyLv);
                 }
                 else{
-                    vuexContext.state.lineuser = null;
+                    vuexContext.state.current_user = null;
                     vuexContext.state.accessibiltyLv = 0;
-                    console.log('---[$sotre.nextServerInit] no lineuser')
+                    console.log('---[$sotre.nextServerInit] no euser')
                 }
             },
      },
      getters :{
         currentUser(state){
-                return state.lineuser
+                return state.current_user
             },
             isAuthenticated(state){
-                return state.lineuser !=null
+                return state.current_user !=null
             },
        
        getmenus: (state) => (accessLV) => {

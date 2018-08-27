@@ -17,7 +17,7 @@
   
         <v-divider></v-divider>
   
-        <v-stepper-step step="3">Create your Account(2/2)</v-stepper-step>
+       
       </v-stepper-header>
   
       <v-stepper-items>
@@ -66,7 +66,7 @@
             color="grey lighten-1">
                 <v-flex md12 lg12>
                       <v-card dark color="secondary">
-                        <v-card-text class="px-0"><h2>Create your account (1/2)</h2></v-card-text>
+                        <v-card-text class="px-0"><h2>Create your account</h2></v-card-text>
                       </v-card>
                 </v-flex>
                 
@@ -77,7 +77,7 @@
                       </v-flex>
                       <v-flex md3>
                               <v-text-field
-                                v-model="title"
+                                v-model="username"
                                 :rules="rules"
                                 counter="25"
                                 hint="This field uses counter prop"
@@ -90,7 +90,7 @@
                       <v-flex md3>
                         
                          <v-text-field
-                          v-model="password"
+                          v-model="pwd"
                           :append-icon="show1 ? 'visibility_off' : 'visibility'"
                           :rules="[rules.required, rules.min]"
                           :type="show1 ? 'text' : 'password'"
@@ -109,7 +109,7 @@
                       </v-flex>
                       <v-flex md3>
                               <v-text-field
-                               
+                               v-model="firstname"
                               ></v-text-field>
                       </v-flex>
                      <v-flex md2>
@@ -117,9 +117,29 @@
                       </v-flex>
                       <v-flex md3>
                               <v-text-field
-                               
+                               v-model="lastname"
                               ></v-text-field>
                       </v-flex>
+                   </v-layout>    
+                  
+                     <v-layout row wrap>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Addresss :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                               v-model="address"
+                              ></v-text-field>
+                      </v-flex>
+                     <v-flex md2>
+                          <v-card-text class="px-0"><h2>Picture :</h2></v-card-text>
+                      </v-flex>
+                      <v-flex md3>
+                              <v-text-field
+                                v-model="picture"
+                              ></v-text-field>
+                      </v-flex>
+                  </v-layout>        
                   </v-layout>    
                   
                      <v-layout row wrap>
@@ -128,7 +148,7 @@
                       </v-flex>
                       <v-flex md3>
                               <v-text-field
-                               
+                               v-model="email"
                               ></v-text-field>
                       </v-flex>
                      <v-flex md2>
@@ -136,7 +156,7 @@
                       </v-flex>
                       <v-flex md3>
                               <v-text-field
-                               
+                               v-model="tel"
                               ></v-text-field>
                       </v-flex>
                   </v-layout>    
@@ -148,31 +168,12 @@
         
           <v-btn flat  @click="e1 = 1">Previous</v-btn>
           <v-btn
-            color="blue"
-            @click="e1 = 3"
-          >
-            Next
-          </v-btn>
-  
-        
-        </v-stepper-content>
-  
-        <v-stepper-content step="3">
-          <v-card
-            class="mb-5"
-            color="grey lighten-1"
-            height="200px"
-          ></v-card>
-           <v-btn flat  @click="e1 = 2">Previous</v-btn>
-          <v-btn
             color="green"
-            @click=""
+            @click="signUp"
           >
             Done
           </v-btn>
-  
-         
-        </v-stepper-content>
+       </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
   
@@ -195,11 +196,17 @@ export default{
       show2: true,
       show3: false,
       show4: false,
-      password: '',
-     
       
-      title: '',
+      username: '',
+      pwd: '',
+      firstname: '',
+      lastname: '',
       email: '',
+      tel: '',
+      displayName: '',
+      address: '',   
+      picture: '',
+      
       rules: {
         required: value => !!value || 'Required.',
         counter: value => value.length <= 20 || 'Max 20 characters',
@@ -212,7 +219,46 @@ export default{
       }
     
     }
-  }
+  },
+  methods:{
+      async signUp(context){
+          try{
+            let data = await this.$axios.$post('/api/signup',{
+            user :{
+                    username : this.username,
+                    pwd : this.pwd,
+                    firstname : this.firstname,
+                    lastname : this.lastname,
+                    email: this.email,
+                    tel : this.tel,
+                    displayName : this.displayName,
+                    address : this.address,
+                    picture: this.picture,
+                    }   
+            });
+            if(data.result == "success")
+            {
+                //create
+                 var payload = {
+                 username : data.username,
+                 displayName : data.displayName,
+                 USER_ROLE_id: data.USER_ROLE_id,
+                 picture: data.picture,
+                 loginType: data.loginType
+                }
+                //userToken = jwt.sign(payload, this.privateKeyJWT, { expiresIn:  2*60*60, });
+                //this.$store.commit('set_current_user', userToken);
+                alert(data.msg);
+            }
+           else{
+               alert(data.msg);
+           }
+          }catch(e){
+            console.log(e);
+          }
+        },
+         
+    },
 }    
   
 

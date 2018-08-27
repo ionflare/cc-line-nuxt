@@ -6,6 +6,7 @@ const _ = require("lodash")
 /** Express */
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 //express-session,body-parser はnuxt.config.jsで設定
 // [url is for get req.query]
 //  https://github.com/nuxt/nuxt.js/issues/1909
@@ -385,10 +386,62 @@ router.get('/t_add_role',async (req,res)=>{
            await _user_role_3.save();
            await _user_role_4.save();
     })
+
     
-router.post('/dummylogin/',async(req,res)=>{
+router.post('/weblogin',async(req,res)=>{
+    //return res.status(200).send(req.body.user.username);
+    
+    //check username and get salt
+    User.findOne({
+        username: { $eq:  req.body.user.username }
+        //username: req.body.user.username,
+        // _creator: req.user._id
+    }).then((user) => {
+        
+        //return res.status(200).send(user);
+       
+        
+        if (!user) {
+            //return res.status(404).send({ msg : "Username or Password is Inccorrect!!"});
+            return res.send({result :"failed", msg: "Username or Password is Inccorrect!!"} );
+        }
+        else //compare hash 
+        {
+            //return res.status(200).send(user.hash);
+            
+            var reqHash = bcrypt.hashSync(req.body.user.username + req.body.user.pwd, user.salt);
+            if(reqHash == user.hash)//if username and pwd is corrected
+            {
+                //create jwt
+                 let token= jwt.sign({
+                        //sub  : req.body.lineuserid,
+                        //Userro : req.body.lineuserid,
+                       },process.env.JWT_SECRET).toString();
+                    var userinfo = {
+                        username  : req.body.user.username,
+                        displayname : req.body.user.username,
+                        accessibiltyLv : user.USER_ROLE_id,
+                        id_token    : token,
+                        }
+                  req.session.current_user = userinfo;
+                  return res.send({result :"success", msg: "Login Successed", info: userinfo});
+                  
+            }
+            else
+            {
+                return res.send({result :"failed", msg: "Username or Password is Inccorrect!!"} );
+               
+                 //return res.status(404).send({ msg : "Username or Password is Inccorrect!!"});
+            }
+          
+        }
+        
+    }).catch((e) => {
+        return   res.send({result :"failed", msg: "Cannot Connect to DB"} );
+    }) 
     
     
+    /*
     let token= jwt.sign({
         sub  : req.body.lineuserid,
         name : req.body.lineuserid,
@@ -403,7 +456,7 @@ router.post('/dummylogin/',async(req,res)=>{
         
     res.status(200).header('x-auth', token)
             .send({ lineuser:userinfo });
-    
+    */
     /*
     console.log('--[api]dummylogin')
     let token= jwt.sign({
@@ -438,6 +491,83 @@ router.post('/dummylogin/',async(req,res)=>{
     }
     */
 })
+
+
+
+
+
+
+
+router.post('/signup',async(req,res)=>{
+    
+    
+    //check username
+    User.findOne({
+        username: { $eq:  req.body.user.username }
+        //username: req.body.user.username,
+        // _creator: req.user._id
+    }).then((user) => {
+        //if request username already existed
+        if (user) {
+            return res.send( {msg : "Dupplicate Username"});
+        }
+        else 
+        {
+            var gensalt = bcrypt.genSaltSync(10)
+            var genhash = bcrypt.hashSync(req.body.user.username + req.body.user.pwd, gensalt);
+             var _user = new User({
+                username : req.body.user.username,
+                hash: genhash,
+                salt : gensalt,
+                firstname : req.body.user.firstname,
+                lastname : req.body.user.lastname,
+                email: req.body.user.email,
+                tel : req.body.user.tel,
+                displayName : req.body.user.firstname,
+                address : req.body.user.address,
+                picture: req.body.user.picture,
+                loginType : "normal",
+                isValidated : false,
+                USER_ROLE_id : 0,
+                lastUpdate : new Date().getTime(),
+            });
+            
+           //Save user
+              _user.save(function (err, data) {
+                if (err) 
+                {
+                    return res.send({result :"failed", msg: "Errors occured while saving data!!"} );
+                }
+                else //if saving successed
+                {
+                    /*
+                    let token= jwt.sign({
+                        sub  : req.body.lineuserid,
+                        Userro : req.body.lineuserid,
+                       },process.env.JWT_SECRET).toString();
+                    var userinfo={
+                        username  : req.body.lineuserid,
+                        displayname : req.body.lineuserid,
+                        id_token    : token,
+                        }
+                     req.session.lineuser = userinfo
+                     */
+                     res.send({result :"success", msg: "Save successed"} );
+                }
+               
+              });
+        
+        }
+        
+    }).catch((e) => {
+        return res.send({result :"failed", msg: "Cannot connect to DB"});
+    }) 
+})
+
+
+
+
+
 
 router.post('/dummylogout',async(req,res)=>{
     
