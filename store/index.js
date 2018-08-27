@@ -24,11 +24,18 @@ const createStore = () => {
           icon: "assignment",
           url:"/services",
           parentMenu: null,
-          requireAccessLv: 4
+          requireAccessLv: 3
         },
          { title: "Booking",
           icon: "shop",
           url:"/Booking",
+          parentMenu: null,
+          requireAccessLv: 0
+        },
+        
+         { title: "Setting",
+          icon: "settings",
+          url:"/settings",
           parentMenu: null,
           requireAccessLv: 0
         },
@@ -43,19 +50,24 @@ const createStore = () => {
         
         //=========sub menu
             
-        { title: "User Info",
+        { title: "All User Info (As Admin)",
+          icon: "assignment",
+          url:"/users/userlists",
+          parentMenu: "User",
+          requireAccessLv: 3
+        },
+        { title: "User Role",
+          icon: "assignment",
+          url:"/users/userroles",
+          parentMenu: "User",
+          requireAccessLv: 3
+        },
+         { title: "Profile",
           icon: "assignment",
           url:"/sss",
           parentMenu: "User",
-          requireAccessLv: 1
-        },
-        { title: "UserRole",
-          icon: "assignment",
-          url:"/userrole",
-          parentMenu: "User",
           requireAccessLv: 2
         },
-        
     
         
       ],

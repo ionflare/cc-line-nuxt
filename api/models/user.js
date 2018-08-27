@@ -65,6 +65,15 @@ var User_Schema = new mongoose.Schema({
         required: true,
         default: false
     },
+    isValidated: {
+        type: Boolean,
+        required: true,
+    },
+    isActive: {
+        type: Boolean,
+        required: true,
+    },
+    
     lastUpdate: {
         type: Number,
         default: null

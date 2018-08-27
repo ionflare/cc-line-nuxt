@@ -162,7 +162,7 @@ router.get('/bookinfo',(req,res)=>{
 
 //======================================================
 
-router.get('/users',(req,res)=>{
+router.get('/userlists',(req,res)=>{
     User.find({
         //all
     }).then((user)=>{ res.send({ user } );
@@ -175,7 +175,7 @@ router.get('/users',(req,res)=>{
 
 router.get('/user_roles',(req,res)=>{
     User_Role.find({
-         isDel: { $eq: false }
+         //isDel: { $eq: false }
         //all
     }).then((user_roles)=>{
         res.send({user_roles } );
@@ -393,7 +393,8 @@ router.get('/t_get_api',async (req,res)=>{
 router.get('/t_add_role',async (req,res)=>{
             var _user_role_1 = new User_Role({
                 roleName : "Admin",
-                accessibleLV: 4,
+                roleId : 3,
+                accessibilityLV: 3,
                 isActive : true,
                 lastupdate : new Date().getTime()
             });
@@ -402,7 +403,8 @@ router.get('/t_add_role',async (req,res)=>{
                
               
                 roleName : "Provider",
-                accessibleLV: 3,
+                roleId : 2,
+                accessibilityLV: 2,
                 isActive : true,
                 lastupdate : new Date().getTime()
             });
@@ -411,7 +413,8 @@ router.get('/t_add_role',async (req,res)=>{
                
               
                 roleName : "Secretary",
-                accessibleLV: 2,
+                accessibilityLV: 1,
+                roleId : 1,
                 isActive : true,
                 lastupdate : new Date().getTime()
             });
@@ -420,7 +423,8 @@ router.get('/t_add_role',async (req,res)=>{
                
               
                 roleName : "Customer",
-                accessibleLV: 1,
+                accessibilityLV: 0,
+                roleId : 0,
                 isActive : true,
                 lastupdate : new Date().getTime()
             });
@@ -519,6 +523,7 @@ router.post('/signup',async(req,res)=>{
                 loginType : "normal",
                 isValidated : false,
                 USER_ROLE_id : 0,
+                isActive: true,
                 lastUpdate : new Date().getTime(),
             });
             

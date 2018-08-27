@@ -2,7 +2,7 @@
   <div>
      <!--BEGIN ADD New Item Button  --->
      <v-toolbar flat color="grey">
-        <v-toolbar-title>Roles Information</v-toolbar-title>
+        <v-toolbar-title>Users Information</v-toolbar-title>
         <v-divider
           class="mx-2"
           inset
@@ -10,7 +10,7 @@
         ></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <v-btn slot="activator" color="primary" dark class="mb-2">Add New Role</v-btn>
+          <v-btn slot="activator" color="primary" dark class="mb-2">Add New Users(Under construction)</v-btn>
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -20,19 +20,28 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="roleNameCard" label="Role Name"></v-text-field>
+                    <v-text-field v-model="UsernameCard" label="User Name"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field type="number" v-model="accessibleLvCard"  label="Accessible Lv"></v-text-field>
+                    <v-text-field v-model="ImageUrlCard"  label="Image url"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                   <!-- <v-text-field  v-model="activeCard" label="Active"></v-text-field> -->
-                    <v-select
-                        v-model="activeCard"
-                        :items="activeChioce"
-                        label="Active"
-                        outline
-                    ></v-select>
+                    <v-text-field v-model="DisplayNameCard"  label="Display Name"></v-text-field>
+                  </v-flex>
+                 </v-layout>  
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md6>
+                        <v-text-field v-model="USER_ROLE_Card" type="number" label="User Role"></v-text-field>
+                  </v-flex>
+                 <v-flex md6>
+                       
+                
+                        <v-select
+                            v-model="activeCard"
+                            :items="activeChioce"
+                            label="Active"
+                            outline
+                        ></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -58,10 +67,13 @@
       >
       <template slot="items" slot-scope="props">
         <td>{{ props.item._id }}</td>
-        <td>{{ props.item.roleName }}</td>
-        <td>{{ props.item.accessibilityLV }}</td>
+        <td>{{ props.item.username }}</td>
+        <td>{{ props.item.picture }}</td>
+        <td>{{ props.item.displayName }}</td>
+        <td>{{ props.item.loginType }}</td>
+        <td>{{ props.item.USER_ROLE_id }}</td>
         <td>{{ props.item.isActive }}</td>
-        <td>{{ props.item.lastupdate }}</td>
+        <td>{{ props.item.lastUpdate }}</td>
         <td class="justify-center layout px-0">
             <v-icon
               small
@@ -93,8 +105,10 @@
 export default {
   data: () => ({
     activeChioce: ['True', 'False'],
-    roleNameCard : '',
-    accessibleLvCard :'', 
+    UsernameCard : '',
+    ImageUrlCard :'', 
+    DisplayNameCard :'',
+    USER_ROLE_Card: '',
     activeCard :'',
     dialog: false,
     editedIndex: -1,
@@ -103,7 +117,7 @@ export default {
   
  computed: {
     formTitle () {
-      return this.editedIndex === -1 ? 'New Role' : 'Edit Role'
+      return this.editedIndex === -1 ? 'New User' : 'Edit User'
     }
   },  
    watch: {
@@ -113,17 +127,20 @@ export default {
   },
   methods: {
       delData(id){
-        location.href ="./api/user_roles/del/"+id 
+        location.href ="./api/users/del/"+id 
       },
      
      upData(id){
+        //alert(id);
         //location.href ="./api/user_roles/del/"+id 
-        location.href ="./api/user_roles/up?id=" + id + "&roleName="+this.roleNameCard+"&accessibleLV="+this.accessibleLvCard+"&isActive="+this.activeCard;
+        location.href ="./api/users/up?id=" + id + "&name="+this.serviceNameCard
+        +"&picture="+this.PictureUrlCard+"&description="+this.DescriptionCard+"&isActive="+this.activeCard;
         //alert(this.activeCard);
         //alert(location.href);
       },
       addData(){
-        location.href ="./api/user_roles/add?roleName="+this.roleNameCard+"&accessibleLV="+this.accessibleLvCard+"&isActive="+this.activeCard;
+        location.href ="./api/users/add?name="+this.serviceNameCard
+        +"&picture="+this.PictureUrlCard+"&description="+this.DescriptionCard+"&isActive="+this.activeCard;
         //alert(this.activeCard);
       },
       editItem (item) {
@@ -138,8 +155,10 @@ export default {
       && this.delData(item._id)
       },
       close () {
-      this.roleNameCard =''
-      this.accessibleLvCard = ''
+      this.UsernameCard =''
+      this.ImageUrlCard = ''
+      this.DisplayNameCard = ''
+      USER_ROLE_Card= ''
       this.activeCard = ''
       this.dialog = false
       setTimeout(() => {
@@ -148,7 +167,7 @@ export default {
       }, 300)
       },
       save () {
-      if (this.editedIndex > -1) {
+      if (this.editedIndex != -1) {
         this.upData(this.editedIndex);
 
       } else {

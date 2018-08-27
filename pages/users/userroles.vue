@@ -5,8 +5,8 @@
 <!-- [main] -->
 <v-content>
   <v-container fluid>
-  <h1> User</h1>
-   <UserTable v-bind="getProp" />
+  <h1> User Roles</h1>
+   <UserRoleTable v-bind="getProp" />
   
   </v-container>
 </v-content>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import UserTable from '~/components/UserTable.vue';
+import UserRoleTable from '~/components/UserRoleTable.vue';
 
 
 export default {
@@ -27,9 +27,11 @@ export default {
     data () {
     return {
        headers: [
-                { text: 'Name', value: 'displayname' },
-                { text: 'UserId', value: 'userid' },
-                { text: 'LastUpdate', value: 'lastupdate' },
+                { text: 'Id', value: '_id' },
+                { text: 'Name', value: 'roleName' },
+                 { text: 'AccessibilityLV', value: 'accessibilityLV' },
+                { text: 'Active', value: 'isActive' },
+                 { text: 'LastUpdate', value: 'lastupdate' },
               ],
              
         listinfo: []
@@ -46,13 +48,13 @@ export default {
     },
 
   components:{
-        UserTable
+        UserRoleTable
   },
    asyncData(context){
-    return context.app.$axios.$get('/api/users')
+    return context.app.$axios.$get('/api/user_roles')
     .then(data =>{
       return { 
-        listinfo: data.user
+        listinfo: data.user_roles
       }
     }).catch(e => context.error(e));
 

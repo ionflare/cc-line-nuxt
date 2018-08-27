@@ -10,15 +10,14 @@ var User_Role_Schema = new mongoose.Schema({
     roleName:{
         type:String,
     },
+    roleId:{
+       type: Number,
+    },
     accessibilityLV:{
        type: Number,
     },
     isActive:{
         type:Boolean,
-    },
-     isDel:{
-        type:Boolean,
-        required:false,
     },
        lastupdate: {
         type: Number,
