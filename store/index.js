@@ -16,7 +16,7 @@ const createStore = () => {
         },
         { title: "User",
           icon: "assignment",
-          url:"/user",
+          url:"/users/profile",
           parentMenu: null,
           requireAccessLv: 1
         },
@@ -42,7 +42,7 @@ const createStore = () => {
         
           { title: "Playground",
           icon: "assignment",
-          url:"/playgroud",
+          url:"/playground",
           parentMenu: null,
           requireAccessLv: 0
         },
@@ -64,9 +64,9 @@ const createStore = () => {
         },
          { title: "Profile",
           icon: "assignment",
-          url:"/sss",
+          url:"/users/profile",
           parentMenu: "User",
-          requireAccessLv: 2
+          requireAccessLv: 0
         },
     
         

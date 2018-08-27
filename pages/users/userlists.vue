@@ -59,7 +59,7 @@ export default {
     return context.app.$axios.$get('/api/userlists')
     .then(data =>{
       return { 
-        listinfo: data.user
+        listinfo: data.userlists
       }
     }).catch(e => context.error(e));
 

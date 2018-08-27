@@ -161,13 +161,60 @@ router.get('/bookinfo',(req,res)=>{
 })
 
 //======================================================
-
+//user list
 router.get('/userlists',(req,res)=>{
     User.find({
         //all
-    }).then((user)=>{ res.send({ user } );
+    }).then((userlists)=>{ res.send({ userlists } );
     }).catch((e)=> { res.status(400).send(e) } );
 })
+
+
+router.get('/userlists/del/:id',async(req,res)=>{
+       await User.deleteOne(
+                {   _id     : req.params.id}
+            );
+        res.redirect('../../../userlists');
+})
+
+router.get('/userlists/up',async(req,res)=>{
+      var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+       await User.findOneAndUpdate(
+                {   _id     : req.param('id')},
+                {
+                    roleName : req.param('roleName'),
+                    accessibleLV : parseInt(req.param('accessibleLV')),
+                    isActive : active,
+                    isDel : false,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+        res.redirect('../../../userlists');
+})
+
+router.get('/userlists/add',async(req,res)=>{
+    
+          var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+           
+            var _user_role = new User({
+                
+                 roleName : req.param('roleName'),
+                 accessibleLV : parseInt(req.param('accessibleLV')),
+                 isActive : active,
+                 isDel : false,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _user_role.save();
+        res.redirect('../../../userlists');
+})
+
+
+
+
+
 
 
 //======================================================
@@ -184,15 +231,13 @@ router.get('/user_roles',(req,res)=>{
 })
 
 router.get('/user_roles/del/:id',async(req,res)=>{
-       await User_Role.findOneAndUpdate(
-                {   _id     : req.params.id},
-                {
-                    isDel : true,
-                    lastupdate : new Date().getTime(),
-                },
-                {upsert:true}
+        await User_Role.deleteOne(
+                {   _id     : req.params.id}
             );
         res.redirect('../../../userroles');
+        
+        
+        
 })
 
 router.get('/user_roles/up',async(req,res)=>{

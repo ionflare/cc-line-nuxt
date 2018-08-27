@@ -3,25 +3,26 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _42a88339 = () => import('../pages/booking/index.vue' /* webpackChunkName: "pages/booking/index" */).then(m => m.default || m)
 const _626f5432 = () => import('../pages/userroles/index.vue' /* webpackChunkName: "pages/userroles/index" */).then(m => m.default || m)
-const _5951b132 = () => import('../pages/bookinginfo/index.vue' /* webpackChunkName: "pages/bookinginfo/index" */).then(m => m.default || m)
-const _3cdc91df = () => import('../pages/playgroud/index.vue' /* webpackChunkName: "pages/playgroud/index" */).then(m => m.default || m)
-const _37c50b94 = () => import('../pages/services/index.vue' /* webpackChunkName: "pages/services/index" */).then(m => m.default || m)
-const _47f3d389 = () => import('../pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
-const _224e6f5d = () => import('../pages/shops/index.vue' /* webpackChunkName: "pages/shops/index" */).then(m => m.default || m)
 const _1b6612e4 = () => import('../pages/signup/index.vue' /* webpackChunkName: "pages/signup/index" */).then(m => m.default || m)
+const _224e6f5d = () => import('../pages/shops/index.vue' /* webpackChunkName: "pages/shops/index" */).then(m => m.default || m)
+const _47f3d389 = () => import('../pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
+const _37c50b94 = () => import('../pages/services/index.vue' /* webpackChunkName: "pages/services/index" */).then(m => m.default || m)
+const _031e441e = () => import('../pages/playground/index.vue' /* webpackChunkName: "pages/playground/index" */).then(m => m.default || m)
+const _5951b132 = () => import('../pages/bookinginfo/index.vue' /* webpackChunkName: "pages/bookinginfo/index" */).then(m => m.default || m)
+const _42a88339 = () => import('../pages/booking/index.vue' /* webpackChunkName: "pages/booking/index" */).then(m => m.default || m)
 const _2315e968 = () => import('../pages/users/userroles.vue' /* webpackChunkName: "pages/users/userroles" */).then(m => m.default || m)
 const _73cedb80 = () => import('../pages/users/userlists.vue' /* webpackChunkName: "pages/users/userlists" */).then(m => m.default || m)
-const _d672aa00 = () => import('../pages/results/ori_id.vue' /* webpackChunkName: "pages/results/ori_id" */).then(m => m.default || m)
-const _50c810f8 = () => import('../pages/shops/index_ori.vue' /* webpackChunkName: "pages/shops/index_ori" */).then(m => m.default || m)
-const _33d4cae4 = () => import('../pages/bookinginfo/index_ori.vue' /* webpackChunkName: "pages/bookinginfo/index_ori" */).then(m => m.default || m)
-const _0065467e = () => import('../pages/results/_id.vue' /* webpackChunkName: "pages/results/_id" */).then(m => m.default || m)
-const _b30ab5f6 = () => import('../pages/shops/_id.vue' /* webpackChunkName: "pages/shops/_id" */).then(m => m.default || m)
+const _55a9cd3f = () => import('../pages/users/profile.vue' /* webpackChunkName: "pages/users/profile" */).then(m => m.default || m)
 const _959d2d9a = () => import('../pages/users/index_ori2.vue' /* webpackChunkName: "pages/users/index_ori2" */).then(m => m.default || m)
-const _95b95c9c = () => import('../pages/users/index_ori1.vue' /* webpackChunkName: "pages/users/index_ori1" */).then(m => m.default || m)
-const _7a80003e = () => import('../pages/booking/_id.vue' /* webpackChunkName: "pages/booking/_id" */).then(m => m.default || m)
+const _50c810f8 = () => import('../pages/shops/index_ori.vue' /* webpackChunkName: "pages/shops/index_ori" */).then(m => m.default || m)
 const _20729860 = () => import('../pages/users/_id.vue' /* webpackChunkName: "pages/users/_id" */).then(m => m.default || m)
+const _7a80003e = () => import('../pages/booking/_id.vue' /* webpackChunkName: "pages/booking/_id" */).then(m => m.default || m)
+const _95b95c9c = () => import('../pages/users/index_ori1.vue' /* webpackChunkName: "pages/users/index_ori1" */).then(m => m.default || m)
+const _d672aa00 = () => import('../pages/results/ori_id.vue' /* webpackChunkName: "pages/results/ori_id" */).then(m => m.default || m)
+const _b30ab5f6 = () => import('../pages/shops/_id.vue' /* webpackChunkName: "pages/shops/_id" */).then(m => m.default || m)
+const _0065467e = () => import('../pages/results/_id.vue' /* webpackChunkName: "pages/results/_id" */).then(m => m.default || m)
+const _33d4cae4 = () => import('../pages/bookinginfo/index_ori.vue' /* webpackChunkName: "pages/bookinginfo/index_ori" */).then(m => m.default || m)
 const _5c1f1596 = () => import('../pages/index_ori.vue' /* webpackChunkName: "pages/index_ori" */).then(m => m.default || m)
 const _3927666f = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
@@ -84,34 +85,14 @@ export function createRouter () {
     scrollBehavior,
     routes: [
 		{
-			path: "/booking",
-			component: _42a88339,
-			name: "booking"
-		},
-		{
 			path: "/userroles",
 			component: _626f5432,
 			name: "userroles"
 		},
 		{
-			path: "/bookinginfo",
-			component: _5951b132,
-			name: "bookinginfo"
-		},
-		{
-			path: "/playgroud",
-			component: _3cdc91df,
-			name: "playgroud"
-		},
-		{
-			path: "/services",
-			component: _37c50b94,
-			name: "services"
-		},
-		{
-			path: "/login",
-			component: _47f3d389,
-			name: "login"
+			path: "/signup",
+			component: _1b6612e4,
+			name: "signup"
 		},
 		{
 			path: "/shops",
@@ -119,9 +100,29 @@ export function createRouter () {
 			name: "shops"
 		},
 		{
-			path: "/signup",
-			component: _1b6612e4,
-			name: "signup"
+			path: "/login",
+			component: _47f3d389,
+			name: "login"
+		},
+		{
+			path: "/services",
+			component: _37c50b94,
+			name: "services"
+		},
+		{
+			path: "/playground",
+			component: _031e441e,
+			name: "playground"
+		},
+		{
+			path: "/bookinginfo",
+			component: _5951b132,
+			name: "bookinginfo"
+		},
+		{
+			path: "/booking",
+			component: _42a88339,
+			name: "booking"
 		},
 		{
 			path: "/users/userroles",
@@ -134,29 +135,9 @@ export function createRouter () {
 			name: "users-userlists"
 		},
 		{
-			path: "/results/ori:id?",
-			component: _d672aa00,
-			name: "results-oriid"
-		},
-		{
-			path: "/shops/index:ori",
-			component: _50c810f8,
-			name: "shops-indexori"
-		},
-		{
-			path: "/bookinginfo/index:ori",
-			component: _33d4cae4,
-			name: "bookinginfo-indexori"
-		},
-		{
-			path: "/results/:id?",
-			component: _0065467e,
-			name: "results-id"
-		},
-		{
-			path: "/shops/:id",
-			component: _b30ab5f6,
-			name: "shops-id"
+			path: "/users/profile",
+			component: _55a9cd3f,
+			name: "users-profile"
 		},
 		{
 			path: "/users/index:ori2?",
@@ -164,9 +145,14 @@ export function createRouter () {
 			name: "users-indexori2"
 		},
 		{
-			path: "/users/index:ori1?",
-			component: _95b95c9c,
-			name: "users-indexori1"
+			path: "/shops/index:ori",
+			component: _50c810f8,
+			name: "shops-indexori"
+		},
+		{
+			path: "/users/:id?",
+			component: _20729860,
+			name: "users-id"
 		},
 		{
 			path: "/booking/:id",
@@ -174,9 +160,29 @@ export function createRouter () {
 			name: "booking-id"
 		},
 		{
-			path: "/users/:id?",
-			component: _20729860,
-			name: "users-id"
+			path: "/users/index:ori1?",
+			component: _95b95c9c,
+			name: "users-indexori1"
+		},
+		{
+			path: "/results/ori:id?",
+			component: _d672aa00,
+			name: "results-oriid"
+		},
+		{
+			path: "/shops/:id",
+			component: _b30ab5f6,
+			name: "shops-id"
+		},
+		{
+			path: "/results/:id?",
+			component: _0065467e,
+			name: "results-id"
+		},
+		{
+			path: "/bookinginfo/index:ori",
+			component: _33d4cae4,
+			name: "bookinginfo-indexori"
 		},
 		{
 			path: "/index:ori",
