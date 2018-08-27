@@ -1,25 +1,21 @@
 var mongoose = require('mongoose');
-var autoIncrement = require ('mongoose-auto-increment');
+//var autoIncrement = require ('mongoose-auto-increment');
 const _ = require("lodash");
 
 
 var Service_Schema = new mongoose.Schema({
-   
-     id:{
-        type:String,
-        required:true,
-        minlength:1,
-        trim:true
-    },
+ 
     name:{
         type:String,
-        required:true,
-        minlength:1,
-        trim:true
+    },
+    picture:{
+        type:String,
     },
     description:{
         type:String,
-        required:false,
+    },
+     isActive:{
+        type:Boolean,
     },
      lastupdate: {
         type: Number,
@@ -31,7 +27,7 @@ var Service_Schema = new mongoose.Schema({
 
 
     
-Service_Schema.plugin(autoIncrement.plugin, 'Service');    
+//Service_Schema.plugin(autoIncrement.plugin, 'Service');    
 var Service= mongoose.model('Service', Service_Schema);
 module.exports = { Service };
 

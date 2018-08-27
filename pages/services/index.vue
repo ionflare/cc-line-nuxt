@@ -29,9 +29,11 @@ export default {
     data () {
     return {
        headers: [
-                { text: 'ServiceId', value: 'id' },
+                { text: 'ServiceId', value: '_id' },
                 { text: 'ServiceName', value: 'name' },
+                { text: 'Image', value: 'picture' },
                 { text: 'Description', value: 'description' },
+                { text: 'Active', value: 'isActive' },
                 { text: 'LastUpdate', value: 'lastupdate' },
               ],
              

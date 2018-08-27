@@ -22,9 +22,9 @@ const createStore = () => {
         },
         { title: "Service",
           icon: "assignment",
-          url:"/Service",
+          url:"/services",
           parentMenu: null,
-          requireAccessLv: 0
+          requireAccessLv: 4
         },
          { title: "Booking",
           icon: "shop",

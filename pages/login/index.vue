@@ -114,7 +114,7 @@
                        </v-flex>
                        <v-flex md6 lg6>
                            
-                             <v-btn color="green" @click="onDummyLogin()">Recover account</v-btn>
+                             <v-btn color="green" @click="onRecoverAcc()">Recover account</v-btn>
                          
                        </v-flex>
                      </v-layout>
@@ -140,7 +140,7 @@
                     <v-layout row wrap><!--***[Begin Line LogIn]***-->
                     <v-flex md12 lg12>
                       <v-card dark color="primary">
-                             <v-btn color="green" @click="onDummyLogin()">Line Login</v-btn>
+                             <v-btn color="green" @click="onLineLogin()">Line Login</v-btn>
                       </v-card>
                     </v-flex>
               </v-layout>  <!--***[End Line LogIn]***-->    
@@ -262,6 +262,14 @@ export default {
             console.log(e);
           }
          
+    },
+    onLineLogin(){
+        alert("This Process is under construction!!");
+      //location.href = "/signup";
+    },
+    onRecoverAcc(){
+         alert("This Process is under construction!!");
+      //location.href = "/signup";
     },
     gotoSignUp(){
       location.href = "/signup";

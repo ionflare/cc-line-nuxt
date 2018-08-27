@@ -232,12 +232,67 @@ router.get('/user_roles/add',async(req,res)=>{
 
 
 //======================================================
+//Test Add Shop_Service
+router.get('/t_add_service',async (req,res)=>{
+     
+            var _service = new Service({
+                name : "Massage",
+                picture : "",
+                description: "If u know what I mean",
+                isActive: true,
+                lastupdate : new Date().getTime()
+            });
+           doc = await _service.save();
+    }
+)
 
 router.get('/services',(req,res)=>{
     Service.find({
         //all
     }).then((service)=>{ res.send({service } );
     }).catch((e)=> { res.status(400).send(e) } );
+})
+
+router.get('/services/del/:id',async(req,res)=>{
+       await Service.deleteOne(
+                {   _id     : req.params.id}
+            );
+        res.redirect('../../../services');
+})
+
+router.get('/services/up',async(req,res)=>{
+      var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+       await Service.findOneAndUpdate(
+                {   _id     : req.param('id')},
+                {
+                    name : req.param('name'),
+                    picture :  req.param('picture'),
+                    description : req.param('description'),
+                    isActive : active,
+                    lastupdate : new Date().getTime(),
+                    
+                },
+                {upsert:true}
+            );
+        res.redirect('../../../services');
+})
+
+router.get('/services/add',async(req,res)=>{
+    
+          var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+           
+            var _service = new Service({
+                
+                 name : req.param('name'),
+                 picture :  req.param('picture'),
+                 description : req.param('description'),
+                 isActive : active,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _service.save();
+        res.redirect('../../../services');
 })
 
 
@@ -319,19 +374,7 @@ router.patch('/shops/:id', (req, res) => {
 
 
 //=====================================================
-//Test Add Shop_Service
-router.get('/t_add_service',async (req,res)=>{
-     
-            var _service = new Service({
-               
-                id: "0",
-                name : "Massage",
-                description: "If u know what I mean",
-                lastupdate : new Date().getTime()
-            });
-           doc = await _service.save();
-    }
-)
+
 
 router.post('/t_post_api',async (req,res)=>{
      
@@ -389,8 +432,6 @@ router.get('/t_add_role',async (req,res)=>{
 
     
 router.post('/weblogin',async(req,res)=>{
-    //return res.status(200).send(req.body.user.username);
-    
     //check username and get salt
     User.findOne({
         username: { $eq:  req.body.user.username }
@@ -439,57 +480,6 @@ router.post('/weblogin',async(req,res)=>{
     }).catch((e) => {
         return   res.send({result :"failed", msg: "Cannot Connect to DB"} );
     }) 
-    
-    
-    /*
-    let token= jwt.sign({
-        sub  : req.body.lineuserid,
-        name : req.body.lineuserid,
-       },process.env.JWT_SECRET).toString();
-    var userinfo={
-        lineuserid  : req.body.lineuserid,
-        displayname : req.body.lineuserid,
-        id_token    : token,
-    }   
-    userinfo._id = "testUserID";
-    req.session.lineuser = userinfo;
-        
-    res.status(200).header('x-auth', token)
-            .send({ lineuser:userinfo });
-    */
-    /*
-    console.log('--[api]dummylogin')
-    let token= jwt.sign({
-        sub  : req.body.lineuserid,
-        name : req.body.lineuserid,
-       },process.env.JWT_SECRET).toString();
-    var userinfo={
-        lineuserid  : req.body.lineuserid,
-        displayname : req.body.lineuserid,
-        id_token    : token,
-    }
-    try{
-        doc = await LineUser.findOneAndUpdate(
-            {   lineuserid : userinfo.lineuserid },
-            {
-                displayname: userinfo.displayname ,
-                picture    : null,
-                isfollow   :true,
-                lastupdate : new Date().getTime(),
-            },
-            {upsert:true,new:true}
-        );
-        userinfo._id = doc._id;
-        req.session.lineuser = userinfo
-        
-        res.status(200).header('x-auth', token)
-            .send({ lineuser:userinfo });
-        // res.redirect('/other');
-    }catch(e){
-        console.log('[save-error]',e)
-        res.status(400).json(e);
-    }
-    */
 })
 
 
@@ -570,39 +560,7 @@ router.post('/logout',async(req,res)=>{
     
    req.session.current_user = null;
    res.send({result :"success", msg: "Logout Completed!!"} );
-    /*
-    console.log('--[api]dummylogin')
-    let token= jwt.sign({
-        sub  : req.body.lineuserid,
-        name : req.body.lineuserid,
-       },process.env.JWT_SECRET).toString();
-    var userinfo={
-        lineuserid  : req.body.lineuserid,
-        displayname : req.body.lineuserid,
-        id_token    : token,
-    }
-    try{
-        doc = await LineUser.findOneAndUpdate(
-            {   lineuserid : userinfo.lineuserid },
-            {
-                displayname: userinfo.displayname ,
-                picture    : null,
-                isfollow   :true,
-                lastupdate : new Date().getTime(),
-            },
-            {upsert:true,new:true}
-        );
-        userinfo._id = doc._id;
-        req.session.lineuser = userinfo
-        
-        res.status(200).header('x-auth', token)
-            .send({ lineuser:userinfo });
-        // res.redirect('/other');
-    }catch(e){
-        console.log('[save-error]',e)
-        res.status(400).json(e);
-    }
-    */
+ 
 })
 
 
