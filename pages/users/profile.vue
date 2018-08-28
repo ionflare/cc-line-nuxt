@@ -103,7 +103,15 @@
                             
                            <v-flex md4  v-for="item in selectedServices" :key="item._id">
                                  <v-card dark color="purple">
-                                        <v-card-text   class="px-0"><h2>{{item.name}}</h2></v-card-text>
+                                        <v-card-text   class="px-0"><h2>{{item.name}}</h2>
+                                          <v-btn
+                                            color="red"
+                                            @click.native="delData(item._id)"
+                                          >
+                                            delete
+                                          </v-btn>
+                                        
+                                        </v-card-text>
                                  </v-card>
                             
                           
@@ -190,6 +198,18 @@ export default {
         
          
       },
+      delData(service_id)
+      {
+           confirm('Are you sure you want to delete this item?') 
+        && this.deleteServiceFromUser(service_id);
+      },
+      deleteServiceFromUser(service_id)
+      {
+    
+             location.href ="../api/user_service/del?user_id="+this.$store.state.current_user.user_id
+        +"&service_id="+service_id
+        
+      }
    
 
     },

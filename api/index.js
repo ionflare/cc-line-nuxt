@@ -379,6 +379,18 @@ router.post('/user_service_get_servicename',(req,res)=>{
     }).catch((e)=> { res.status(400).send(e) } );
 })
 
+router.get('/user_service/del',async(req,res)=>{
+        await User_Service.deleteOne(
+                {   user_id     : req.param('user_id'),
+                    service_id  : req.param('service_id'),
+                }
+            );
+     res.redirect('../../../users/profile');
+        
+        
+        
+})
+
 /*
 router.get('/user_service/add',async(req,res)=>{
     
