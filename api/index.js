@@ -14,13 +14,13 @@ const url = require('url')
 
 /** MongoDB and Models */
 const { ObjectID } = require("mongodb")
-var { mongoose } = require('./db/mongoose');
-const {User} = require("./models/user")
-//var { Todo } = require("./models/todo");
-var { Shop } = require("./models/shop")
-var { BookInfo } = require("./models/bookinfo")
-var { Service } = require("./models/service")
-var { User_Role } = require("./models/user_role")
+const { mongoose } = require('./db/mongoose');
+const { User } = require("./models/user")
+const { Service } = require("./models/service")
+const { User_Service } = require("./models/user_service");
+const { User_Role } = require("./models/user_role")
+const { Shop } = require("./models/shop")
+const { BookInfo } = require("./models/bookinfo")
 //var { Shop_Service } = require("./models/service")
 //var { Shop_Service } = require("./models/shop_service")
 //var { authenticate } = require("./middleware/authenticate")
@@ -356,6 +356,47 @@ router.get('/services/add',async(req,res)=>{
 })
 
 
+
+//======================================================
+// User_service ****[Mainly for Provider]****
+
+router.post('/user_service_get_servicename',(req,res)=>{
+    User_Service.find({
+            user_id     : req.param('user_id')
+    },).then((user_service)=>{
+        
+         var storeServiceId = [];
+         for(let i=0;i< user_service.length;i++)
+         {
+             storeServiceId.push(user_service[i].service_id);
+         }
+         Service.find({
+             _id : {$in: storeServiceId}
+        }).then((service)=>{ res.send({service } );
+        }).catch((e)=> { res.status(400).send(e) } )
+            
+        //res.send({user_service } );
+    }).catch((e)=> { res.status(400).send(e) } );
+})
+
+router.get('/user_service/up',async(req,res)=>{
+      var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+       await Service.findOneAndUpdate(
+                {   _id     : req.param('id')},
+                {
+                    user_id : req.param('user_id'),
+                    service_id :  req.param('service_id'),
+                    current_serveQue : req.param('current_serveQue'),
+                    isActive : active,
+                    lastupdate : new Date().getTime(),
+                    
+                },
+                {upsert:true}
+            );
+        res.redirect('../../../services');
+})
+
 //=====================================================
 
 
@@ -448,6 +489,18 @@ router.get('/t_get_api',async (req,res)=>{
     }
 )
 
+router.get('/t_add_user_service',async (req,res)=>{
+            var _user_service = new User_Service({
+                user_id : "5b83d09a06f8f41469bdb0cb",
+                service_id : "5b839abc722d751d88023e32",
+                current_serveQue: 0,
+                isActive : true,
+                lastupdate : new Date().getTime()
+            });
+           await _user_service.save();
+           await res.redirect('/');
+          
+    })
 
 
 router.get('/t_add_role',async (req,res)=>{
@@ -492,6 +545,7 @@ router.get('/t_add_role',async (req,res)=>{
            await _user_role_2.save();
            await _user_role_3.save();
            await _user_role_4.save();
+           await res.redirect('/');
     })
 
     
@@ -523,6 +577,7 @@ router.post('/weblogin',async(req,res)=>{
                         //Userro : req.body.lineuserid,
                        },process.env.JWT_SECRET).toString();
                     var userinfo = {
+                        user_id : user._id,
                         username  : req.body.user.username,
                         displayname : req.body.user.username,
                         accessibiltyLv : user.USER_ROLE_id,
@@ -601,6 +656,7 @@ router.post('/signup',async(req,res)=>{
                         //Userro : req.body.lineuserid,
                        },process.env.JWT_SECRET).toString();
                     var userinfo = {
+                        user_id : data._id,
                         username  : req.body.user.username,
                         displayname : req.body.user.username,
                         accessibiltyLv : 0,

@@ -17,7 +17,7 @@
                  <v-layout row wrap>
                    <v-flex md12 >
                       <v-card dark color="green">
-                           <v-card-text class="px-0"><h2>Provider</h2></v-card-text>
+                           <v-card-text class="px-0"><h2>Welcome Provider</h2></v-card-text>
                            </v-card>
                    </v-flex>            
                  </v-layout>
@@ -31,43 +31,43 @@
                                   </v-flex>
                                   <v-flex md8 >
                                       <v-card dark color="secondary">
-                                        <v-card-text class="px-0"><h2>Username</h2></v-card-text>
+                                        <v-card-text class="px-0"><h2>{{$store.state.current_user.username}}</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                </v-layout>       
                                 <v-layout  justify-center>
                                    <v-flex md4 >
                                       <v-card dark color="secondary">
-                                        <v-card-text   class="px-0"><h2>Password</h2></v-card-text>
+                                        <v-card-text   class="px-0"><h2>Display Name</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                   <v-flex md8 >
                                       <v-card dark color="secondary">
-                                        <v-card-text class="px-0"><h2>Username</h2></v-card-text>
+                                        <v-card-text class="px-0"><h2>{{$store.state.current_user.displayname}}</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                </v-layout>    
                                 <v-layout  justify-center>
                                    <v-flex md4 >
                                       <v-card dark color="secondary">
-                                        <v-card-text   class="px-0"><h2>Password</h2></v-card-text>
+                                        <v-card-text   class="px-0"><h2>Accessibility Level</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                   <v-flex md8 >
                                       <v-card dark color="secondary">
-                                        <v-card-text class="px-0"><h2>Username</h2></v-card-text>
+                                        <v-card-text class="px-0"><h2>{{$store.state.current_user.accessibiltyLv}}</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                </v-layout>   
                                 <v-layout  justify-center>
                                    <v-flex md4 >
                                       <v-card dark color="secondary">
-                                        <v-card-text   class="px-0"><h2>Password</h2></v-card-text>
+                                        <v-card-text   class="px-0"><h2>user_id</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                   <v-flex md8 >
                                       <v-card dark color="secondary">
-                                        <v-card-text class="px-0"><h2>Username</h2></v-card-text>
+                                        <v-card-text class="px-0"><h2>{{$store.state.current_user.user_id}}</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                </v-layout>   
@@ -89,14 +89,12 @@
                            </v-flex>               
                       </v-layout>   
                      <v-layout row wrap><!-- check box for services selection -->
-                           <v-flex md3  v-for="item in listinfo" :key="item._id">
-                             <v-checkbox
-                                v-model="ex4"
-                                :label="item.name"
-                                color="green"
-                                :value="item._id"
-                                hide-details
-                              > </v-checkbox>
+                            
+                           <v-flex md4  v-for="item in listinfo" :key="item._id">
+                                 <v-card dark color="purple">
+                                        <v-card-text   class="px-0"><h2>{{item.name}}</h2></v-card-text>
+                                 </v-card>
+                            
                           
                             </v-flex>    
                             
@@ -104,7 +102,7 @@
                       <v-layout align-center justify-center column fill-height>
                                 <v-btn
                                     color="blue"
-                                    @click="">
+                                    @click="saveUserService">
                                     Update My Services
                                   </v-btn>
                       </v-layout>  
@@ -136,13 +134,29 @@
 export default {
     
     data:{
+     checkboxes: '',    
      listinfo: ''
     },
      methods:{
+       saveUserService(){
+        alert(this.listinfo[1].name);
+        //location.href ="./api/user_roles/del/"+id 
+        /*
+        location.href ="../api/user_service/up?id=" + id + "&username="+this.UsernameCard
+        +"&picture="+this.ImageUrlCard+"&displayName="+this.DisplayNameCard+"&isActive="+this.activeCard
+        +"&USER_ROLE_id="+this.USER_ROLE_Card;
+        */
+        //alert(this.activeCard);
+        //alert(location.href);
+      },
 
     },
     asyncData(context){
-    return context.app.$axios.$get('/api/services')
+        
+        
+        
+        
+    return context.app.$axios.$post('/api/user_service_get_servicename/',{user_id : context.store.state.current_user.user_id })
     .then(data =>{
       return { 
         listinfo: data.service
@@ -155,3 +169,8 @@ export default {
     
 }
 </script>
+<style>
+* {
+   text-align: center; 
+}
+</style>
