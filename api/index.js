@@ -174,7 +174,7 @@ router.get('/userlists/del/:id',async(req,res)=>{
        await User.deleteOne(
                 {   _id     : req.params.id}
             );
-        res.redirect('../../../userlists');
+        res.redirect('../../../users/userlists');
 })
 
 router.get('/userlists/up',async(req,res)=>{
@@ -183,32 +183,47 @@ router.get('/userlists/up',async(req,res)=>{
        await User.findOneAndUpdate(
                 {   _id     : req.param('id')},
                 {
-                    roleName : req.param('roleName'),
-                    accessibleLV : parseInt(req.param('accessibleLV')),
+                    //username : req.param('username'),
+                    //picture : req.param('picture'),
+                    //displayName : req.param('displayName'),
+                    USER_ROLE_id : req.param('USER_ROLE_id'),
                     isActive : active,
-                    isDel : false,
                     lastupdate : new Date().getTime(),
                 },
                 {upsert:true}
             );
-        res.redirect('../../../userlists');
+        res.redirect('../../../users/userlists');
 })
 
+
+
+//***[test add new user from lists table]***
 router.get('/userlists/add',async(req,res)=>{
     
           var active = false;
           if(req.param('isActive')=="True") { active=true; }
            
-            var _user_role = new User({
-                
-                 roleName : req.param('roleName'),
-                 accessibleLV : parseInt(req.param('accessibleLV')),
-                 isActive : active,
-                 isDel : false,
-                 lastupdate : new Date().getTime(),
+            var gensalt = bcrypt.genSaltSync(10)
+            var genhash = bcrypt.hashSync(req.param('username') + req.param('username'), gensalt);
+            var _userlists = new User({
+                username : req.param('username'),
+                hash: genhash,
+                salt : gensalt,
+                firstname : req.param('username'),
+                lastname : req.param('username'),
+                email: req.param('username'),
+                tel : req.param('username'),
+                displayName : req.param('displayName'),
+                address : req.param('username'),
+                picture: req.param('picture'),
+                loginType : "normal",
+                isValidated : false,
+                USER_ROLE_id : req.param('USER_ROLE_id'),
+                isActive: true,
+                lastUpdate : new Date().getTime()
             });
-           doc = await _user_role.save();
-        res.redirect('../../../userlists');
+           doc = await _userlists.save();
+        res.redirect('../../../users/userlists');
 })
 
 

@@ -18,6 +18,9 @@
   
             <v-card-text>
               <v-container grid-list-md>
+    
+    
+                <!--***[cut these out for demo version]***---
                 <v-layout wrap>
                   <v-flex xs12 sm6 md4>
                     <v-text-field v-model="UsernameCard" label="User Name"></v-text-field>
@@ -29,6 +32,8 @@
                     <v-text-field v-model="DisplayNameCard"  label="Display Name"></v-text-field>
                   </v-flex>
                  </v-layout>  
+                 
+                 -->
                 <v-layout wrap>
                   <v-flex xs12 sm6 md6>
                         <v-text-field v-model="USER_ROLE_Card" type="number" label="User Role"></v-text-field>
@@ -109,7 +114,7 @@ export default {
     ImageUrlCard :'', 
     DisplayNameCard :'',
     USER_ROLE_Card: '',
-    activeCard :'',
+    activeCard :'Active',
     dialog: false,
     editedIndex: -1,
   }),
@@ -117,7 +122,7 @@ export default {
   
  computed: {
     formTitle () {
-      return this.editedIndex === -1 ? 'New User' : 'Edit User'
+      return this.editedIndex === -1 ? 'New User' : 'Edit User (Change only Role and active!!!)'
     }
   },  
    watch: {
@@ -127,20 +132,22 @@ export default {
   },
   methods: {
       delData(id){
-        location.href ="./api/users/del/"+id 
+        location.href ="../api/userlists/del/"+id 
       },
      
      upData(id){
         //alert(id);
         //location.href ="./api/user_roles/del/"+id 
-        location.href ="./api/users/up?id=" + id + "&name="+this.serviceNameCard
-        +"&picture="+this.PictureUrlCard+"&description="+this.DescriptionCard+"&isActive="+this.activeCard;
+        location.href ="../api/userlists/up?id=" + id + "&username="+this.UsernameCard
+        +"&picture="+this.ImageUrlCard+"&displayName="+this.DisplayNameCard+"&isActive="+this.activeCard
+        +"&USER_ROLE_id="+this.USER_ROLE_Card;
         //alert(this.activeCard);
         //alert(location.href);
       },
       addData(){
-        location.href ="./api/users/add?name="+this.serviceNameCard
-        +"&picture="+this.PictureUrlCard+"&description="+this.DescriptionCard+"&isActive="+this.activeCard;
+        location.href ="../api/userlists/add?username="+this.UsernameCard
+        +"&picture="+this.ImageUrlCard+"&displayName="+this.DisplayNameCard+"&isActive="+this.activeCard
+        +"&USER_ROLE_id="+this.USER_ROLE_Card;;
         //alert(this.activeCard);
       },
       editItem (item) {
@@ -158,8 +165,8 @@ export default {
       this.UsernameCard =''
       this.ImageUrlCard = ''
       this.DisplayNameCard = ''
-      USER_ROLE_Card= ''
-      this.activeCard = ''
+      this.USER_ROLE_Card= ''
+      this.activeCard = 'Active'
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
@@ -171,7 +178,8 @@ export default {
         this.upData(this.editedIndex);
 
       } else {
-         this.addData();
+        alert("This module is now underconstruction");
+         //this.addData();
       }
       this.close()
       }
