@@ -379,11 +379,32 @@ router.post('/user_service_get_servicename',(req,res)=>{
     }).catch((e)=> { res.status(400).send(e) } );
 })
 
+/*
+router.get('/user_service/add',async(req,res)=>{
+    
+          var active = false;
+          if(req.param('isActive')=="True") { active=true; }
+           
+            var _service = new Service({
+                
+                 name : req.param('name'),
+                 picture :  req.param('picture'),
+                 description : req.param('description'),
+                 isActive : active,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _service.save();
+        res.redirect('../../../services');
+})
+*/
+
 router.get('/user_service/up',async(req,res)=>{
       var active = false;
           if(req.param('isActive')=="True") { active=true; }
-       await Service.findOneAndUpdate(
-                {   _id     : req.param('id')},
+       await User_Service.findOneAndUpdate(
+                {   user_id     : req.param('user_id'),
+                    service_id  : req.param('service_id'),
+                },
                 {
                     user_id : req.param('user_id'),
                     service_id :  req.param('service_id'),
@@ -394,7 +415,7 @@ router.get('/user_service/up',async(req,res)=>{
                 },
                 {upsert:true}
             );
-        res.redirect('../../../services');
+        res.redirect('../../../users/profile');
 })
 
 //=====================================================
