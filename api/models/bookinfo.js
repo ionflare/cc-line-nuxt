@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var autoIncrement = require ('mongoose-auto-increment');
+//var autoIncrement = require ('mongoose-auto-increment');
 const _ = require("lodash");
 
 
@@ -33,7 +33,7 @@ var BookInfo_Schema = new mongoose.Schema({
 
 
     
-BookInfo_Schema.plugin(autoIncrement.plugin, 'BookInfo');    
+//BookInfo_Schema.plugin(autoIncrement.plugin, 'BookInfo');    
 var BookInfo= mongoose.model('BookInfo', BookInfo_Schema);
 module.exports = { BookInfo };
 

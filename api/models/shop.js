@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var autoIncrement = require ('mongoose-auto-increment');
+//var autoIncrement = require ('mongoose-auto-increment');
 const _ = require("lodash");
 
 
@@ -50,7 +50,7 @@ var Shop_Schema = new mongoose.Schema({
 
 
     
-Shop_Schema.plugin(autoIncrement.plugin, 'Shop');    
+//Shop_Schema.plugin(autoIncrement.plugin, 'Shop');    
 var Shop= mongoose.model('Shop', Shop_Schema);
 module.exports = { Shop };
 

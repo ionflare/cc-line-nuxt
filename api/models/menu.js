@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var autoIncrement = require ('mongoose-auto-increment');
+//var autoIncrement = require ('mongoose-auto-increment');
 const _ = require("lodash");
 
 
@@ -34,7 +34,7 @@ var Menu_Schema = new mongoose.Schema({
 
 
     
-Menu_Schema.plugin(autoIncrement.plugin, 'Menu');    
+//Menu_Schema.plugin(autoIncrement.plugin, 'Menu');    
 var Menu= mongoose.model('Menu', Menu_Schema);
 module.exports = { Menu };
 

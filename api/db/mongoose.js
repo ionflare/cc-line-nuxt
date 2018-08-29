@@ -1,14 +1,6 @@
-
-var mongoose = require("mongoose"),
-    Schema = mongoose.Schema,
-    autoIncrement = require('mongoose-auto-increment');
-
-
+var mongoose = require("mongoose");
 
 mongoose.Promise = global.Promise;
-
-var connection = mongoose.connect(process.env.MONGODB_URI);
-const db = mongoose.connection;
-autoIncrement.initialize(db);
+mongoose.connect(process.env.MONGODB_URI);
 
 module.exports = { mongoose };

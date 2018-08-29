@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var autoIncrement = require ('mongoose-auto-increment');
+//var autoIncrement = require ('mongoose-auto-increment');
 const _ = require("lodash");
 
 
@@ -44,7 +44,7 @@ var User_Info_Schema = new mongoose.Schema({
 
 
     
-User_Info_Schema.plugin(autoIncrement.plugin, 'User_Info');    
+//User_Info_Schema.plugin(autoIncrement.plugin, 'User_Info');    
 var User_Info= mongoose.model('User_Info', User_Info_Schema);
 module.exports = { User_Info };
 
