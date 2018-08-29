@@ -94,6 +94,32 @@ router.get('/dobooking/:id',(req,res)=>{
     
 })
 
+router.get('/webbooking/add',async(req,res)=>{
+
+            var _bookinginfo = new BookInfo({
+                
+                 provider_id : req.param('provider_id'),
+                 service_id :  req.param('service_id'),
+                 customer_id : req.param('customer_id'),
+                 comment : "",
+                 isServed : false,
+                 isCancelled : false,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _bookinginfo.save();
+        res.redirect('/');
+})
+
+
+
+
+
+
+
+
+
+
+
 
 // 認証フローを開始するためのルーター設定。
 router.get("/auth", login.auth());
@@ -425,7 +451,7 @@ router.get('/user_service_get_relation',(req,res)=>{
             }
             User.find({ _id : {$in: storeUserId}
             }).then((users)=>{  //3rd
-                res.send({services, users } );
+                res.send({services, user_service, users } );
             }).catch((e)=> { res.status(400).send(e) } );//3rd
         }).catch((e)=> { res.status(400).send(e) } );//2nd
         

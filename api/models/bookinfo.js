@@ -5,23 +5,24 @@ const _ = require("lodash");
 
 var BookInfo_Schema = new mongoose.Schema({
    
-    shopid:{
+    provider_id:{
         type: String,
-        required: true,
-        minlength: 1,
-        trim: false
     },
-    serviceid:{
+    service_id:{
         type: String,
-        required: false,
-        minlength: 1,
-        trim: true
+     
     },
-    userid: {
+    customer_id: {
          type: String,
-        required: false,
-        minlength: 1,
-        trim: true
+    },
+    comment: {
+         type: String,
+    },
+    isServed: {
+         type: Boolean,
+    },
+    isCancelled: {
+         type: Boolean,
     },
     lastupdate: {
         type: Number,
