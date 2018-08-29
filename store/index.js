@@ -33,7 +33,7 @@ const createStore = () => {
           requireAccessLv: 0
         },
         
-         { title: "Setting",
+         { title: "Settings",
           icon: "settings",
           url:"/settings",
           parentMenu: null,

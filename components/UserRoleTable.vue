@@ -23,7 +23,7 @@
                     <v-text-field v-model="roleNameCard" label="Role Name"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field type="number" v-model="accessibleLvCard"  label="Accessible Lv"></v-text-field>
+                    <v-text-field type="number" v-model="accessibilityLvCard"  label="Accessible Lv"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                    <!-- <v-text-field  v-model="activeCard" label="Active"></v-text-field> -->
@@ -94,7 +94,7 @@ export default {
   data: () => ({
     activeChioce: ['True', 'False'],
     roleNameCard : '',
-    accessibleLvCard :'', 
+    accessibilityLvCard :'', 
     activeCard :'',
     dialog: false,
     editedIndex: -1,
@@ -113,17 +113,17 @@ export default {
   },
   methods: {
       delData(id){
-        location.href ="./api/user_roles/del/"+id 
+        location.href ="../api/user_roles/del/"+id 
       },
      
      upData(id){
         //location.href ="./api/user_roles/del/"+id 
-        location.href ="./api/user_roles/up?id=" + id + "&roleName="+this.roleNameCard+"&accessibleLV="+this.accessibleLvCard+"&isActive="+this.activeCard;
+        location.href ="../api/user_roles/up?id=" + id + "&roleName="+this.roleNameCard+"&accessibilityLV="+this.accessibilityLvCard+"&isActive="+this.activeCard;
         //alert(this.activeCard);
         //alert(location.href);
       },
       addData(){
-        location.href ="./api/user_roles/add?roleName="+this.roleNameCard+"&accessibleLV="+this.accessibleLvCard+"&isActive="+this.activeCard;
+        location.href ="../api/user_roles/add?roleName="+this.roleNameCard+"&accessibilityLV="+this.accessibilityLvCard+"&isActive="+this.activeCard;
         //alert(this.activeCard);
       },
       editItem (item) {
@@ -148,7 +148,7 @@ export default {
       }, 300)
       },
       save () {
-      if (this.editedIndex > -1) {
+      if (this.editedIndex != -1) {
         this.upData(this.editedIndex);
 
       } else {

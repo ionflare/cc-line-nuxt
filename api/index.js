@@ -262,7 +262,8 @@ router.get('/user_roles/up',async(req,res)=>{
                 {   _id     : req.param('id')},
                 {
                     roleName : req.param('roleName'),
-                    accessibleLV : parseInt(req.param('accessibleLV')),
+                    roleId :  req.param('accessibilityLV'),
+                    accessibilityLV:  req.param('accessibilityLV'),
                     isActive : active,
                     isDel : false,
                     lastupdate : new Date().getTime(),
@@ -280,7 +281,8 @@ router.get('/user_roles/add',async(req,res)=>{
             var _user_role = new User_Role({
                 
                  roleName : req.param('roleName'),
-                 accessibleLV : parseInt(req.param('accessibleLV')),
+                 roleId :  req.param('accessibilityLV'),
+                 accessibilityLV:  req.param('accessibilityLV'),
                  isActive : active,
                  isDel : false,
                  lastupdate : new Date().getTime(),
