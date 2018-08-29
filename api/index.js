@@ -161,6 +161,7 @@ router.get('/bookinfo',(req,res)=>{
 })
 
 //======================================================
+
 //user list
 router.get('/userlists',(req,res)=>{
     User.find({
@@ -381,6 +382,18 @@ router.post('/user_service_get_servicename',(req,res)=>{
     }).catch((e)=> { res.status(400).send(e) } );
 })
 
+
+
+router.post('/user_service_get_all',(req,res)=>{
+     User_Service.find({
+        //all
+    }).then((user_service)=>{ res.send({user_service } );
+    }).catch((e)=> { res.status(400).send(e) } );
+})
+
+
+
+
 router.get('/user_service/del',async(req,res)=>{
         await User_Service.deleteOne(
                 {   user_id     : req.param('user_id'),
@@ -393,24 +406,34 @@ router.get('/user_service/del',async(req,res)=>{
         
 })
 
-/*
-router.get('/user_service/add',async(req,res)=>{
-    
-          var active = false;
-          if(req.param('isActive')=="True") { active=true; }
-           
-            var _service = new Service({
-                
-                 name : req.param('name'),
-                 picture :  req.param('picture'),
-                 description : req.param('description'),
-                 isActive : active,
-                 lastupdate : new Date().getTime(),
-            });
-           doc = await _service.save();
-        res.redirect('../../../services');
+//when web booking
+router.get('/user_service_get_relation',(req,res)=>{
+    Service.find({//1st 
+        isActive : true
+    }).then((services)=>{ 
+        var storeServiceId = [];
+         for(let i=0;i< services.length;i++)
+         {
+             storeServiceId.push(services[i]._id);
+         }
+        User_Service.find({ service_id : {$in: storeServiceId}
+        }).then((user_service)=>{  //2nd
+            var storeUserId = [];
+            for(let i=0;i< user_service.length;i++)
+            {
+                storeUserId.push(user_service[i].user_id);
+            }
+            User.find({ _id : {$in: storeUserId}
+            }).then((users)=>{  //3rd
+                res.send({services, users } );
+            }).catch((e)=> { res.status(400).send(e) } );//3rd
+        }).catch((e)=> { res.status(400).send(e) } );//2nd
+        
+    }).catch((e)=> { res.status(400).send(e) } );//1st 
 })
-*/
+
+
+
 
 router.get('/user_service/up',async(req,res)=>{
       var active = false;
