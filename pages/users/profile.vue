@@ -243,7 +243,7 @@ export default {
          
           var canvas = document.getElementById('canvas')
  
-          QRCode.toCanvas(canvas, "http://?provider_id="+this.$store.state.current_user.user_id+
+          QRCode.toCanvas(canvas, "http://qr_booking?provider_id="+this.$store.state.current_user.user_id+
           "&service_id="+service_id, function (error) {
               if (error) console.error(error)
               console.log('success!');

@@ -110,20 +110,36 @@ router.get('/webbooking/add',async(req,res)=>{
         res.redirect('/');
 })
 
-router.get('/linebooking/add',async(req,res)=>{
-
-            var _bookinginfo = new BookInfo({
-                
-                 provider_id : req.param('provider_id'),
-                 service_id :  req.param('service_id'),
-                 customer_id : req.param('customer_id'),
-                 comment : "",
-                 isServed : false,
-                 isCancelled : false,
-                 lastupdate : new Date().getTime(),
-            });
-           doc = await _bookinginfo.save();
-        res.redirect('/');
+router.post('/qr_booking_getinfo',async(req,res)=>{
+    
+    
+      User_Service.findOne({
+           user_id     : req.body.bookingdata.provider_id,
+           service_id : req.body.bookingdata.service_id 
+           
+          /*
+           user_id: { $eq:  req.body.bookingdata.provider_id },
+           service_id : { $eq:  req.body.bookingdata.service_id },
+           */
+        }).then((user_service)=>{ 
+            if(!user_service)
+            {
+                res.send({result :"failed", msg: "No Matched", info: {}});
+            }
+            else
+            {
+                res.send({result :"successed", msg: "Matched", info: {}});
+            }
+            
+        }).catch((e)=> { res.send(e) } );
+    
+    
+    /*
+     User.findOne({
+           _id: { $eq:  req.body.bookingdata.provider_id }
+        }).then((user)=>{ res.send({ user } );
+        }).catch((e)=> { res.status(400).send(e) } );
+        */
 })
 
 
