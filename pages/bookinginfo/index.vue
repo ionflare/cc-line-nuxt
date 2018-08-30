@@ -7,10 +7,7 @@
   <v-container fluid>
   <h1> Booking Information as {{$store.state.current_user.username}}</h1>
   <br>
-  <div v-for="item in listinfo">
-     
     <BookingTable v-bind="getProp" />  
-  </div>
   </v-container>
 </v-content>
 <!-- [footer] -->
