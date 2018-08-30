@@ -1,13 +1,18 @@
 <template>
     <div v-if="getBookingResult">
-    GOOD
+        You are about to booking
+         <br>
+       Service : {{bookinginfo.info.service.name}}
+         <br>
+         From : {{bookinginfo.info.user.displayName}}
+       <br>
  
-      <v-btn>Confirm Booking</v-btn>
+      <v-btn @click.native="doBooking()">Confirm Booking</v-btn>
     </div>
      <div v-else>
-    BAD
+     ERROR : {{bookinginfo.msg}} Plese check your QR code
  
-      <v-btn>Confirm Booking</v-btn>
+     
     </div>
    
    
@@ -29,6 +34,13 @@ export default{
         };
         */
         
+    },
+    methods:{
+        doBooking: function()
+            {
+                   location.href ="./api/linebooking?provider_id="+this.bookinginfo.info.user._id
+                +"&service_id="+this.bookinginfo.info.service._id;
+            }
     },
     computed : {
         getBookingResult: function(){

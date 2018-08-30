@@ -4,6 +4,9 @@ import _ from 'lodash'
 const createStore = () => {
   return new Vuex.Store({
     state: {
+      //--***[Line booking]***---
+      line_booking_info : null,
+
       
       current_user: null, // ?, line object for access user
       accessibiltyLv: 0,
@@ -102,6 +105,19 @@ const createStore = () => {
                     vuexContext.state.accessibiltyLv = 0;
                     console.log('---[$sotre.nextServerInit] no euser')
                 }
+                
+                //for booking service with line app
+                if (context.req.session.line_booking_info) {
+                    // vuexContext.commit('setLineuser', context.req.session.lineuser)
+                    vuexContext.state.line_booking_info = context.req.session.line_booking_info;
+                }
+                else{
+                    vuexContext.state.line_booking_info = null;
+                  
+                }
+                
+                
+                
             },
      },
      getters :{

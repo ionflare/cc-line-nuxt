@@ -71,8 +71,74 @@ const login = new line_login({
 // console.log('-- line_login', login);
 
 
-router.get('/dobooking/:id',(req,res)=>{
+router.get('/webbooking/add',async(req,res)=>{
+
+            var _bookinginfo = new BookInfo({
+                
+                 provider_id : req.param('provider_id'),
+                 service_id :  req.param('service_id'),
+                 customer_id : req.param('customer_id'),
+                 comment : "",
+                 isServed : false,
+                 isCancelled : false,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _bookinginfo.save();
+        res.redirect('/');
+})
+
+router.post('/qr_booking_getinfo',async(req,res)=>{
+      User_Service.findOne({
+           user_id     : req.body.bookingdata.provider_id,
+           service_id : req.body.bookingdata.service_id 
+           
+          /*
+           user_id: { $eq:  req.body.bookingdata.provider_id },
+           service_id : { $eq:  req.body.bookingdata.service_id },
+           */
+        }).then((user_service)=>{ 
+            if(!user_service)
+            {
+                res.send({result :"failed", msg: "Selected Service and Provider did not relate to each other!!", info: { }});
+            }
+            else
+            {
+                User.findOne({_id :  user_service.user_id}).then((user)=>{ 
+                     if(!user)
+                     {
+                          res.send({result :"failed", msg: "Errors occured when find selected provider info!!", info: { }});
+                     }
+                     else
+                     {
+                         Service.findOne({_id :  user_service.service_id}).then((service)=>{ 
+                             if(!service)
+                             {
+                                  res.send({result :"failed", msg: "Errors occured when find selected service info!!", info: { }});
+                             }
+                             else
+                             {
+                                 res.send({result :"successed", msg: "No Error", info: { user, service}});
+                             }
+                         });
+                     }
+                });
+            }
+            
+        }).catch((e)=> { res.send(e) } );
+})
+
+
+
+
+router.get('/linebooking',(req,res)=>{
     
+    var req_bookinginfo = { provider_id :req.param('provider_id'),
+                service_id :req.param('service_id'),
+            }; 
+    
+    req.session.line_booking_provider = req_bookinginfo;
+    res.redirect('/api/auth');
+    /*
     var id = req.params.id;
     Shop.findOne({
         //shopid: id,
@@ -91,59 +157,8 @@ router.get('/dobooking/:id',(req,res)=>{
         return res.status(400).send();
         //res.redirect('../shops');
     })
-    
+    */
 })
-
-router.get('/webbooking/add',async(req,res)=>{
-
-            var _bookinginfo = new BookInfo({
-                
-                 provider_id : req.param('provider_id'),
-                 service_id :  req.param('service_id'),
-                 customer_id : req.param('customer_id'),
-                 comment : "",
-                 isServed : false,
-                 isCancelled : false,
-                 lastupdate : new Date().getTime(),
-            });
-           doc = await _bookinginfo.save();
-        res.redirect('/');
-})
-
-router.post('/qr_booking_getinfo',async(req,res)=>{
-    
-    
-      User_Service.findOne({
-           user_id     : req.body.bookingdata.provider_id,
-           service_id : req.body.bookingdata.service_id 
-           
-          /*
-           user_id: { $eq:  req.body.bookingdata.provider_id },
-           service_id : { $eq:  req.body.bookingdata.service_id },
-           */
-        }).then((user_service)=>{ 
-            if(!user_service)
-            {
-                res.send({result :"failed", msg: "No Matched", info: {}});
-            }
-            else
-            {
-                res.send({result :"successed", msg: "Matched", info: {}});
-            }
-            
-        }).catch((e)=> { res.send(e) } );
-    
-    
-    /*
-     User.findOne({
-           _id: { $eq:  req.body.bookingdata.provider_id }
-        }).then((user)=>{ res.send({ user } );
-        }).catch((e)=> { res.status(400).send(e) } );
-        */
-})
-
-
-
 
 
 
@@ -154,6 +169,13 @@ router.post('/qr_booking_getinfo',async(req,res)=>{
 // 認証フローを開始するためのルーター設定。
 router.get("/auth", login.auth());
 
+
+router.get("/callback", login.callback(async (req, res, next, token_response) => {
+      res.send( "GOOD" );
+}));
+
+
+/*
 // ユーザーが承認したあとに実行する処理のためのルーター設定。
 router.get("/callback", login.callback(async (req, res, next, token_response) => {
         //token_response.id_token     : decoded object
@@ -204,7 +226,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
         res.json(error);
     }
 ));
-
+*/
 
 
 
