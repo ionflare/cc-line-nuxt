@@ -110,7 +110,21 @@ router.get('/webbooking/add',async(req,res)=>{
         res.redirect('/');
 })
 
+router.get('/linebooking/add',async(req,res)=>{
 
+            var _bookinginfo = new BookInfo({
+                
+                 provider_id : req.param('provider_id'),
+                 service_id :  req.param('service_id'),
+                 customer_id : req.param('customer_id'),
+                 comment : "",
+                 isServed : false,
+                 isCancelled : false,
+                 lastupdate : new Date().getTime(),
+            });
+           doc = await _bookinginfo.save();
+        res.redirect('/');
+})
 
 
 

@@ -89,7 +89,7 @@
                                         <v-card-text class="px-0"><h2>My Services</h2></v-card-text>
                                         <v-btn
                                             color="green"
-                                            @click.native="dialog = true"
+                                            @click.native="dialog_add_service = true"
                                           >
                                             +Add more Services+
                                           </v-btn>
@@ -104,12 +104,19 @@
                            <v-flex md4  v-for="item in selectedServices" :key="item._id">
                                  <v-card dark color="purple">
                                         <v-card-text   class="px-0"><h2>{{item.name}}</h2>
+                                        <v-btn
+                                            color="green"
+                                            @click.native="changeQRCODE(item._id)" :value="item._id"
+                                          >
+                                            QR CODE
+                                          </v-btn>
                                           <v-btn
                                             color="red"
                                             @click.native="delData(item._id)"
                                           >
                                             delete
                                           </v-btn>
+                                               
                                         
                                         </v-card-text>
                                  </v-card>
@@ -118,42 +125,62 @@
                             </v-flex>    
                             
                       </v-layout>   
+                      
+                      <!--***[Add Service Dialog]***-->
                      <v-layout row justify-center>
-                              <v-dialog v-model="dialog" scrollable max-width="300px">
+                              <v-dialog v-model="dialog_add_service" scrollable max-width="300px">
                                 <!-- <v-btn slot="activator" color="blue" dark><h2>+Add more Services+</h2></v-btn>  -->
                                 <v-card>
                                   <v-card-title>Select Service</v-card-title>
                                   <v-divider></v-divider>
-                                  
-                                  
-                                  
-                                  
+
                                   <v-card-text style="height: 300px;">
-                                    <v-radio-group v-model="dialogm1" column>
+                                    <v-radio-group v-model="result_dialog_add_service" column>
                                         
                                         <v-radio v-for="item in availableServices" :label="item.name" :value="item._id" :key="item._id"></v-radio>        
-                                     
-                                        <!-- These secttion is override by user_service table
-                                      <v-radio label="Bahamas, The" value="bahamas"></v-radio>
-                                      <v-radio label="Bahrain" value="bahrain"></v-radio>
-                                      <v-radio label="Bangladesh" value="bangladesh"></v-radio>
-                                      <v-radio label="Barbados" value="barbados"></v-radio>
-                                      <v-radio label="Belarus" value="belarus"></v-radio>
-                                      <v-radio label="Belgium" value="belgium"></v-radio>
-                                      -->
-                                  
+    
                                     </v-radio-group>
                                   </v-card-text>
                                   <v-divider></v-divider>
                                   <v-card-actions>
-                                    <v-btn color="blue darken-1" flat @click.native="dialog = false">Close</v-btn>
+                                    <v-btn color="blue darken-1" flat @click.native="dialog_add_service = false">Close</v-btn>
                                     <v-btn color="blue darken-1" flat @click.native="addServiceToUser">Save</v-btn>
                                   </v-card-actions>
                                 </v-card>
                               </v-dialog>
-                            </v-layout>
-                      
-                      
+                    </v-layout>
+                     <!--***[BEGIN Show QR CODE Dialog]***-->  
+                         <v-layout row justify-center>
+                              <v-dialog v-model="dialog_show_QR" scrollable max-width="300px">
+                                <!-- <v-btn slot="activator" color="blue" dark><h2>+Add more Services+</h2></v-btn>  -->
+                                <v-card>
+                                  <v-card-title>QR CODE</v-card-title>
+                                  <v-divider></v-divider>
+
+                                  <v-card-text style="height: 300px;">
+                                      <!--***[ test canvas}*** -->
+                                      <!--
+                                        <v-avatar
+                                                tile=true
+                                                size=250px
+                                                color="grey lighten-4"
+                                              >
+                                                <img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" alt="avatar">
+                                        </v-avatar>
+                                        -->
+                                         <!--***[END test canvas}*** -->
+                                         <canvas id="canvas"></canvas>
+
+                                  </v-card-text>
+                                  <v-divider></v-divider>
+                                  <v-card-actions>
+                                    <v-btn color="blue darken-1" flat @click.native="dialog_show_QR = false">Close</v-btn>
+                                  
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+                    </v-layout>
+                    <!--***[END Show QR CODE Dialog]***-->  
                </v-card>
               </v-flex>
             </v-layout>
@@ -177,14 +204,16 @@
 </template>
 <script>
 
+import QRCode from 'qrcode'
 export default {
     
     data () {
         return {
           availableServices :'',    
           selectedServices: '',
-          dialogm1: '',
-          dialog: false
+          dialog_show_QR: false,
+          result_dialog_add_service: '',
+          dialog_add_service: false
         }
     },
      methods:{
@@ -194,7 +223,7 @@ export default {
          // alert(this.$store.state.current_user.user_id);
           
            location.href ="../api/user_service/up?user_id="+this.$store.state.current_user.user_id
-        +"&service_id="+this.dialogm1;
+        +"&service_id="+this.result_dialog_add_service;
         
          
       },
@@ -209,6 +238,17 @@ export default {
              location.href ="../api/user_service/del?user_id="+this.$store.state.current_user.user_id
         +"&service_id="+service_id
         
+      },changeQRCODE(service_id)
+      {
+         
+          var canvas = document.getElementById('canvas')
+ 
+          QRCode.toCanvas(canvas, "http://?provider_id="+this.$store.state.current_user.user_id+
+          "&service_id="+service_id, function (error) {
+              if (error) console.error(error)
+              console.log('success!');
+            })
+          this.dialog_show_QR = true;    
       }
    
 
