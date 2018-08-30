@@ -110,6 +110,14 @@
                                           >
                                             QR CODE
                                           </v-btn>
+                                          
+                                           <v-btn
+                                            color="pink"
+                                            @click.native="openBookingInfo(item._id)"
+                                          >
+                                            booking info
+                                          </v-btn>
+                                          
                                           <v-btn
                                             color="red"
                                             @click.native="delData(item._id)"
@@ -249,6 +257,10 @@ export default {
               console.log('success!');
             })
           this.dialog_show_QR = true;    
+      },
+      openBookingInfo(service_id){
+
+           location.href ="../bookinginfo?service_id="+service_id;
       }
    
 

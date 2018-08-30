@@ -231,9 +231,11 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
 
 
 //======================================================
-router.get('/bookinfo',(req,res)=>{
+router.get('/bookinfo_get',(req,res)=>{
     BookInfo.find({
-        //all
+        provider_id : req.param('provider_id'),
+        service_id : req.param('service_id'),
+        
     }).then((bookinfo)=>{ res.send({bookinfo } );
     }).catch((e)=> { res.status(400).send(e) } );
 })

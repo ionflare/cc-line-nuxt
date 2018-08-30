@@ -5,9 +5,12 @@
 <!-- [main] -->
 <v-content>
   <v-container fluid>
-  <h1> Booking Information</h1>
-   <BookingTable v-bind="getProp" />
-  
+  <h1> Booking Information as {{$store.state.current_user.username}}</h1>
+  <br>
+  <div v-for="item in listinfo">
+     
+    <BookingTable v-bind="getProp" />  
+  </div>
   </v-container>
 </v-content>
 <!-- [footer] -->
@@ -27,9 +30,9 @@ export default {
     data () {
     return {
        headers: [
-                { text: 'Shopid', value: 'shopid' },
-                { text: 'Serviceid', value: 'serviceid' },
-                { text: 'Userid', value: 'userid' },
+                { text: 'CustomerId', value: 'customer_id' },
+                { text: 'IsServed', value: 'isServed' },
+                { text: 'IsCancelled', value: 'isCancelled' },
                 { text: 'LastUpdate', value: 'lastupdate' },
               ],
              
@@ -50,7 +53,7 @@ export default {
         BookingTable
   },
    asyncData(context){
-    return context.app.$axios.$get('/api/bookinfo')
+    return context.app.$axios.$get("/api/bookinfo_get?provider_id="+context.store.state.current_user.user_id+"&service_id="+context.route.query.service_id )
     .then(data =>{
       return { 
         listinfo: data.bookinfo
