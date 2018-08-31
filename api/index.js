@@ -193,7 +193,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                 {upsert:true}
             );
             // add booking info 
-        /*
+        
          var _bookinginfo = new BookInfo({
                 
                  provider_id : req.session.line_booking_info.provider_id,
@@ -205,10 +205,13 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                  lastupdate : new Date().getTime(),
             });
            var res_save_booking = await _bookinginfo.save();
-           */
+           
 
      //await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
-     await clientBot.pushMessage("U6a0764890cdbb5393b84accb7b37c266",{type:'text',text:"5555"})
+     await clientBot.pushMessage(token_response.id_token.sub,{
+        type:'text',
+        text:"Booking Successed!! pd :"+ req.session.line_booking_info.provider_id 
+     })
      await res.status(200).redirect('../qr_booking/my_queue');
      // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
       // res.send( "GOOD" );
