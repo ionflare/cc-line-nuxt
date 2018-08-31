@@ -145,26 +145,18 @@ router.get('/linebooking',(req,res)=>{
     
     req.session.line_booking_info = req_bookinginfo;
     res.redirect('/api/auth');
-    /*
-    var id = req.params.id;
-    Shop.findOne({
-        //shopid: id,
-        id: id
-        // _creator: req.user._id
-    }).then((shops) => {
-        if (!shops) {
-            return res.status(404).send();
-             //res.redirect('../shops');
-        }
-        req.session.bookingShop = req.params.id;
-        //return res.status(200).send({ shop });
-        res.redirect('../auth');
-        
-    }).catch((e) => {
-        return res.status(400).send();
-        //res.redirect('../shops');
-    })
-    */
+})
+
+
+router.get('/linebooking',(req,res)=>{
+    
+
+    var req_bookinginfo = { provider_id :req.param('provider_id'),
+                service_id :req.param('service_id'),
+            }; 
+    
+    req.session.line_booking_info = req_bookinginfo;
+    res.redirect('/api/auth');
 })
 
 
@@ -196,7 +188,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                 {upsert:true}
             );
             // add booking info 
-        
+        /*
          var _bookinginfo = new BookInfo({
                 
                  provider_id : req.session.line_booking_info.provider_id,
@@ -208,10 +200,12 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                  lastupdate : new Date().getTime(),
             });
            var res_save_booking = await _bookinginfo.save();
+           */
 
      await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
     //await line_client.pushMessage(userid,{type:'text',text:pushmessage})
-      await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
+     await res.redirect('../qr_booking/my_queue');
+     // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
       // res.send( "GOOD" );
 }));
 
