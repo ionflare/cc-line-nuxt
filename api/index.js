@@ -136,7 +136,7 @@ router.get('/linebooking',(req,res)=>{
                 service_id :req.param('service_id'),
             }; 
     
-    req.session.line_booking_provider = req_bookinginfo;
+    req.session.line_booking_info = req_bookinginfo;
     res.redirect('/api/auth');
     /*
     var id = req.params.id;
@@ -171,9 +171,57 @@ router.get("/auth", login.auth());
 
 
 router.get("/callback", login.callback(async (req, res, next, token_response) => {
-      res.send( "GOOD" );
+    
+         //regis this line user to user table
+          var res_save_user = await User.findOneAndUpdate(
+                {   username    :  token_response.id_token.sub,
+                    loginType   : "line"
+                },
+                {
+                    username    :   token_response.id_token.sub,
+                    displayName :   token_response.id_token.name,
+                    picture     :   token_response.id_token.picture,
+                    loginType   :   "line",
+                    isValidated :   true,
+                    isActive    :   true,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+            // add booking info 
+        
+         var _bookinginfo = new BookInfo({
+                
+                 provider_id : req.session.line_booking_info.provider_id,
+                 service_id :  req.session.line_booking_info.service_id,
+                 customer_id : res_save_user._id,
+                 comment : "",
+                 isServed : false,
+                 isCancelled : false,
+                 lastupdate : new Date().getTime(),
+            });
+           var res_save_booking = await _bookinginfo.save();
+
+     await replyText(line_client, req.body.events[0].replyToken, "Booking Successed!!!" , "qq");
+    //await line_client.pushMessage(userid,{type:'text',text:pushmessage})
+      await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
+      // res.send( "GOOD" );
 }));
 
+function replyText(client,replyToken, returnStr,postBackStr) {
+
+   return new Promise( ( resolve, reject ) => {
+      client.replyMessage(replyToken, 
+      {
+
+    type: "text",
+    text: returnStr
+
+ }
+ );
+        
+  } );
+}
 
 /*
 // ユーザーが承認したあとに実行する処理のためのルーター設定。
