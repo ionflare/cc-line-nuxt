@@ -27,8 +27,15 @@ const { BookInfo } = require("./models/bookinfo")
 //var { authenticate_admin } = require("./middleware/authenticate_admin")
 
 /** LINE LOGIN , LINE MESSAGE */
- const line_login = require("line-login"); //module
+const line_login = require("line-login"); //module
 //const line_login = require("./line/line-login"); //custom
+const Client = require('@line/bot-sdk').Client;
+
+const clientBot= new Client({
+  channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: process
+      .env.LINE_MESSAGE_CHANNEL_SECRET,
+});
 
 
 
@@ -38,7 +45,7 @@ const config = {
       channelSecret: process
       .env.LINE_MESSAGE_CHANNEL_SECRET,
 }
-const line_client = new line_message.Client(config)
+//const line_client = new line_message.Client(config)
 
 const router = express.Router();
 const app = express()
@@ -196,13 +203,14 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                  service_id :  req.session.line_booking_info.service_id,
                  customer_id : res_save_user._id,
                  comment : "",
+                 bookingMethod :"line",
                  isServed : false,
                  isCancelled : false,
                  lastupdate : new Date().getTime(),
             });
            var res_save_booking = await _bookinginfo.save();
 
-     await replyText(line_client, req.body.events[0].replyToken, "Booking Successed!!!" , "qq");
+     await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
     //await line_client.pushMessage(userid,{type:'text',text:pushmessage})
       await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
       // res.send( "GOOD" );
