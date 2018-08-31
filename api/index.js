@@ -31,12 +31,18 @@ const line_login = require("line-login"); //module
 //const line_login = require("./line/line-login"); //custom
 const Client = require('@line/bot-sdk').Client;
 
+
 const clientBot= new Client({
         channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
-      channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
+        channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
 });
 
-
+/*
+const clientBot = new Client({
+  channelAccessToken:  '+Z00sQIfBQjVouvA+bFr9LpyYi5pErdfu0hejVGhtzlEmw3RJRyV0V5tohj832ykJqb2S+6mcIRvWhw7V7PDpFNWzRZlVNLg59J8PU+71rxjCqPJxfSIET6QcCoU1Vcb6UnJSMb/I5qVtwr4XpIhKQdB04t89/1O/w1cDnyilFU=',
+  channelSecret: 'cb7cdb67c6a8f02f2b7119365518108b'
+});
+*/
 /*
 const line_message = require('@line/bot-sdk');
 const config = {
@@ -201,8 +207,8 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
            var res_save_booking = await _bookinginfo.save();
            */
 
-     await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
-    //await line_client.pushMessage(userid,{type:'text',text:pushmessage})
+     //await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
+     await clientBot.pushMessage("U6a0764890cdbb5393b84accb7b37c266",{type:'text',text:"5555"})
      await res.status(200).redirect('../qr_booking/my_queue');
      // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
       // res.send( "GOOD" );
