@@ -210,7 +210,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
      //await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
      await clientBot.pushMessage(token_response.id_token.sub,{
         type:'text',
-        text:"Booking Successed!! pd :"+ req.session.line_booking_info.provider_id 
+        text:"Booking Successed!! Queue information : https://cc-line-nuxt.herokuapp.com/qr_booking/myqueue?booking_id="+ res_save_booking._id 
      })
      await res.status(200).redirect('../qr_booking/my_queue');
      // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
