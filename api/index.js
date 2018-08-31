@@ -286,7 +286,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
         type:'text',
         text:"Booking Successed!! Queue information : https://cc-line-nuxt.herokuapp.com/qr_booking/my_queue?booking_id="+ res_save_booking._id 
      })
-     await res.status(200).redirect('../qr_booking/my_queue');
+     await res.status(200).redirect('../qr_booking/my_queue?booking_id='+ res_save_booking._id );
      // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
       // res.send( "GOOD" );
 }));
