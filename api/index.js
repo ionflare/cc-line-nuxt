@@ -143,46 +143,69 @@ router.post('/qr_booking_getinfo',async(req,res)=>{
 
 //========***[get waiting queue]***======
 
-router.post('/booking_get_queInfo',async(req,res)=>{
+router.get('/user_roles',(req,res)=>{
+    User_Role.find({
+         //isDel: { $eq: false }
+        //all
+    }).then((user_roles)=>{
+        res.send({user_roles } );
+          //res.redirect('../');
+    }).catch((e)=> { res.status(400).send(e) } );
+})
+
+
+router.get('/booking_get_queInfo',(req,res)=>{
+     //res.send(req.param('booking_id'));
+    
+    
+    var o_id = new ObjectID("5b88ea8349c43a0014b80026");
+    
+     BookInfo.findOne({
+           _id    : o_id
+        }).then((booking_info)=>{  res.send("5555")
+    }).catch((e)=> { "xxxx" } );
+    
+    /*
       BookInfo.findOne({
            _id     : req.param('booking_id')
         }).then((booking_info)=>{ 
             if(!booking_info)
             {
-                res.send({result :"failed", msg: "Cannot find information for requested booking id!!", info: { }});
+               return res.send({result :"failed", msg: "Cannot find information for requested booking id!!", info: { }});
             }
             else
             {
                 User.findOne({_id :  booking_info.provider_id}).then((provider)=>{ 
                      if(!provider)
                      {
-                          res.send({result :"failed", msg: "Errors occured while find selected provider info!!", info: { }});
+                        return   res.send({result :"failed", msg: "Errors occured while find selected provider info!!", info: { }});
                      }
                      else
                      {
                          Service.findOne({_id :  booking_info.service_id}).then((service)=>{ 
                              if(!service)
                              {
-                                  res.send({result :"failed", msg: "Errors occured when find selected service info!!", info: { }});
+                                return  res.send({result :"failed", msg: "Errors occured when find selected service info!!", info: { }});
                              }
                              else
                              {
-                                 User_Service.findOne({_id :  booking_info._id}).then((user_service)=>{ 
+                                 User_Service.findOne({ service_id :  service._id  , user_id :  provider._id }    ).then((user_service)=>{ 
                                  if(!user_service)
                                      {
-                                          res.send({result :"failed", msg: "Errors occured when find current queue!!", info: { }});
+                                       return   res.send({result :"failed", msg: "Errors occured when find current queue!!", info: { }});
                                      }
                                      else
                                      {  res.send({result :"successed", msg: "No Error", info: { provider, service, user_service}});
                                      }
-                            });
+                                }).catch((e)=> { res.send(e) } );
                              }
-                         });
+                         }).catch((e)=> { res.send(e) } );
                      }
-                });
+                }).catch((e)=> { res.send(e) } );
             }
             
         }).catch((e)=> { res.send(e) } );
+        */
 })
 
 

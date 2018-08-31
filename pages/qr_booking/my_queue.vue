@@ -1,6 +1,7 @@
 <template>
+    <!--
     <div v-if="getQueResult">
-        Your Queue Info Id : {queInfo.info.service.name}}
+        Your Queue Info Id : {{queInfo.info.service.name}}
          <br>
        Service : {{queInfo.info.booking_info._id}}
          <br>
@@ -10,11 +11,17 @@
       
     </div>
      <div v-else>
-     ERROR : {{queInfo.msg}} Plese check your request URL
+     ERROR : {{xxx}} Plese check your request URL
  
      
     </div>
-   
+   -->
+    <div>
+    
+    Queue ID : {{queInfo}}
+    
+     
+    </div>
    
 </template>
 
@@ -22,11 +29,11 @@
 <script>
 
 export default {
-    data () {
-    return {
- 
+    data : {
+
+        //xxx: '',
         queInfo: ''
-    }
+
   },
    computed : {
         getQueResult: function(){
@@ -41,12 +48,13 @@ export default {
         }
     },
   asyncData(context){
-        /*
+      
         return {
-            selected_provider: context.route.query.provider_id
+            queInfo : context.route.query.booking_id
+            
         }
-        */
-    
+        
+    /*
         return context.app.$axios.$post('/api/booking_get_queInfo?booking_id='+context.route.query.booking_id
             )
             .then(data =>{
@@ -55,7 +63,10 @@ export default {
                 //selected_provider : data.user
               }
             }).catch(e => context.error(e));
-        
+        */
             
     }
+    
 }
+    
+</script>
