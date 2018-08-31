@@ -32,19 +32,18 @@ const line_login = require("line-login"); //module
 const Client = require('@line/bot-sdk').Client;
 
 const clientBot= new Client({
-  channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
-      channelSecret: process
-      .env.LINE_MESSAGE_CHANNEL_SECRET,
+        channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
+      channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
 });
 
 
-
+/*
 const line_message = require('@line/bot-sdk');
 const config = {
       channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
-      channelSecret: process
-      .env.LINE_MESSAGE_CHANNEL_SECRET,
+      channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
 }
+*/
 //const line_client = new line_message.Client(config)
 
 const router = express.Router();
@@ -204,7 +203,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
 
      await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
     //await line_client.pushMessage(userid,{type:'text',text:pushmessage})
-     await res.redirect('../qr_booking/my_queue');
+     await res.status(200).redirect('../qr_booking/my_queue');
      // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
       // res.send( "GOOD" );
 }));
