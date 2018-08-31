@@ -203,7 +203,6 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                  service_id :  req.session.line_booking_info.service_id,
                  customer_id : res_save_user._id,
                  comment : "",
-                 bookingMethod :"line",
                  isServed : false,
                  isCancelled : false,
                  lastupdate : new Date().getTime(),
