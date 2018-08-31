@@ -141,6 +141,57 @@ router.post('/qr_booking_getinfo',async(req,res)=>{
 
 
 
+//========***[get waiting queue]***======
+
+router.post('/booking_get_queInfo',async(req,res)=>{
+      BookInfo.findOne({
+           _id     : req.param('booking_id')
+        }).then((booking_info)=>{ 
+            if(!booking_info)
+            {
+                res.send({result :"failed", msg: "Cannot find information for requested booking id!!", info: { }});
+            }
+            else
+            {
+                User.findOne({_id :  booking_info.provider_id}).then((provider)=>{ 
+                     if(!provider)
+                     {
+                          res.send({result :"failed", msg: "Errors occured while find selected provider info!!", info: { }});
+                     }
+                     else
+                     {
+                         Service.findOne({_id :  booking_info.service_id}).then((service)=>{ 
+                             if(!service)
+                             {
+                                  res.send({result :"failed", msg: "Errors occured when find selected service info!!", info: { }});
+                             }
+                             else
+                             {
+                                 User_Service.findOne({_id :  booking_info._id}).then((user_service)=>{ 
+                                 if(!user_service)
+                                     {
+                                          res.send({result :"failed", msg: "Errors occured when find current queue!!", info: { }});
+                                     }
+                                     else
+                                     {  res.send({result :"successed", msg: "No Error", info: { provider, service, user_service}});
+                                     }
+                            });
+                             }
+                         });
+                     }
+                });
+            }
+            
+        }).catch((e)=> { res.send(e) } );
+})
+
+
+
+//===========
+
+
+
+
 
 router.get('/linebooking',(req,res)=>{
     
@@ -210,7 +261,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
      //await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
      await clientBot.pushMessage(token_response.id_token.sub,{
         type:'text',
-        text:"Booking Successed!! Queue information : https://cc-line-nuxt.herokuapp.com/qr_booking/myqueue?booking_id="+ res_save_booking._id 
+        text:"Booking Successed!! Queue information : https://cc-line-nuxt.herokuapp.com/qr_booking/my_queue?booking_id="+ res_save_booking._id 
      })
      await res.status(200).redirect('../qr_booking/my_queue');
      // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
