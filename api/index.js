@@ -13,7 +13,8 @@ const bcrypt = require("bcryptjs");
 const url = require('url')
 
 /** MongoDB and Models */
-const { ObjectID } = require("mongodb")
+//const { ObjectID } = require("mongodb")
+const ObjectId = require('mongoose').Types.ObjectId; 
 const { mongoose } = require('./db/mongoose');
 const { User } = require("./models/user")
 const { Service } = require("./models/service")
@@ -154,20 +155,30 @@ router.get('/user_roles',(req,res)=>{
 })
 
 
-router.get('/booking_get_queInfo',(req,res)=>{
+router.get('/booking_get_queInfo',async (req,res)=>{
      //res.send(req.param('booking_id'));
+    //var ObjectId = require('mongoose').Types.ObjectId; 
+    //var query = { campaign_id: new ObjectId(campaign._id) };
     
-    
-    var o_id = new ObjectID("5b88ea8349c43a0014b80026");
-    
-     BookInfo.findOne({
-           _id    : o_id
-        }).then((booking_info)=>{  res.send("5555")
-    }).catch((e)=> { "xxxx" } );
-    
+    //var o_id = new ObjectID("5b88ea8349c43a0014b80026");
     /*
+     BookInfo.findOne({
+           _id    : new ObjectId(req.param('booking_id') )
+           //mongoose.Types.ObjectId.fromString(req.param('booking_id'))
+        }).then((booking_info)=>{ 
+            res.send({result :"successed", msg: "No Error", info: { booking_info}});
+    }).catch((e)=> { 
+        res.send({result :"failed", msg: "Errors occured when find current queue!!", info: { }});
+    });
+    */
+    
+    
+    
+    
+    // res.send(req.param('booking_id'));
+    
       BookInfo.findOne({
-           _id     : req.param('booking_id')
+           _id     : new ObjectId(req.param('booking_id'))
         }).then((booking_info)=>{ 
             if(!booking_info)
             {
@@ -205,7 +216,7 @@ router.get('/booking_get_queInfo',(req,res)=>{
             }
             
         }).catch((e)=> { res.send(e) } );
-        */
+        
 })
 
 

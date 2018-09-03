@@ -4,7 +4,7 @@ const _ = require("lodash");
 
 
 var BookInfo_Schema = new mongoose.Schema({
-   
+
     provider_id:{
         type: String,
     },

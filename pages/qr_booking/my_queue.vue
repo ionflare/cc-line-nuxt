@@ -18,7 +18,26 @@
    -->
     <div>
     
-    Queue ID : {{queInfo}}
+    Queue ID : {{$route.query.booking_id}}
+    <br>
+    More information
+    <br>
+    Provider : {{queInfo.info.provider.displayName}}
+    <br>
+    Service : {{queInfo.info.service.name}}
+    <br>
+    <br>
+    <v-btn
+      color="red"
+      @click.native="confirm_cancel_booking()">
+      Cancel Booking
+    </v-btn>
+   
+    <v-btn
+      color="green"
+      @click.native="show_service_location()">
+      Service Location
+    </v-btn>
     
      
     </div>
@@ -47,15 +66,33 @@ export default {
             
         }
     },
+    
+    methods: {
+        confirm_cancel_booking()
+        {
+               confirm('Are you sure you want to cancel this booking?') 
+             && this.cancel_booking();
+        },
+         cancel_booking()
+        {
+            alert("This Process is underconstuction!!");
+        },
+        show_service_location()
+        {
+            alert("This Process is underconstuction!!");
+        }
+    },
+    
   asyncData(context){
-      
+      /*
         return {
             queInfo : context.route.query.booking_id
             
         }
+        */
         
-    /*
-        return context.app.$axios.$post('/api/booking_get_queInfo?booking_id='+context.route.query.booking_id
+    
+        return context.app.$axios.$get('/api/booking_get_queInfo?booking_id='+context.route.query.booking_id
             )
             .then(data =>{
                 return { queInfo : data
@@ -63,7 +100,7 @@ export default {
                 //selected_provider : data.user
               }
             }).catch(e => context.error(e));
-        */
+        
             
     }
     
