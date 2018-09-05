@@ -156,27 +156,7 @@ router.get('/user_roles',(req,res)=>{
 
 
 router.get('/booking_get_queInfo',async (req,res)=>{
-     //res.send(req.param('booking_id'));
-    //var ObjectId = require('mongoose').Types.ObjectId; 
-    //var query = { campaign_id: new ObjectId(campaign._id) };
-    
-    //var o_id = new ObjectID("5b88ea8349c43a0014b80026");
-    /*
-     BookInfo.findOne({
-           _id    : new ObjectId(req.param('booking_id') )
-           //mongoose.Types.ObjectId.fromString(req.param('booking_id'))
-        }).then((booking_info)=>{ 
-            res.send({result :"successed", msg: "No Error", info: { booking_info}});
-    }).catch((e)=> { 
-        res.send({result :"failed", msg: "Errors occured when find current queue!!", info: { }});
-    });
-    */
-    
-    
-    
-    
-    // res.send(req.param('booking_id'));
-    
+ 
       BookInfo.findOne({
            _id     : new ObjectId(req.param('booking_id'))
         }).then((booking_info)=>{ 
@@ -238,16 +218,14 @@ router.get('/linebooking',(req,res)=>{
 })
 
 
-router.get('/linebooking',(req,res)=>{
-    
 
-    var req_bookinginfo = { provider_id :req.param('provider_id'),
-                service_id :req.param('service_id'),
-            }; 
-    
-    req.session.line_booking_info = req_bookinginfo;
+router.get('/linelogin',(req,res)=>{
+    var req_linelogin = { req_login : true}; 
+    req.session.line_login = req_linelogin;
     res.redirect('/api/auth');
+    
 })
+
 
 
 
@@ -260,6 +238,84 @@ router.get("/auth", login.auth());
 
 
 router.get("/callback", login.callback(async (req, res, next, token_response) => {
+    
+    if(req.session.line_login.req_login == true)
+    {
+          var res_linelogin_user = await User.findOneAndUpdate(
+                {   username    :  token_response.id_token.sub,
+                    loginType   : "line"
+                },
+                {
+                    username    :   token_response.id_token.sub,
+                    displayName :   token_response.id_token.name,
+                    picture     :   token_response.id_token.picture,
+                    loginType   :   "line",
+                    isValidated :   true,
+                    isActive    :   true,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+            
+            let token= jwt.sign({
+                        //sub  : req.body.lineuserid,
+                        //Userro : req.body.lineuserid,
+                       },process.env.JWT_SECRET).toString();
+            var userinfo = {
+                        user_id : res_linelogin_user._id,
+                        username  : token_response.id_token.sub,
+                        displayname : token_response.id_token.name,
+                        accessibiltyLv : res_linelogin_user.accessibiltyLv,
+                        id_token    : token,
+                        }
+           req.session.current_user = userinfo;
+           req.session.line_login.req_login = false;
+           //return res.send({result :"success", msg: "Login Successed", info: userinfo});            
+
+         res.redirect('/');
+    }
+    else
+    {
+        var res_save_user = await User.findOneAndUpdate(
+                {   username    :  token_response.id_token.sub,
+                    loginType   : "line"
+                },
+                {
+                    username    :   token_response.id_token.sub,
+                    displayName :   token_response.id_token.name,
+                    picture     :   token_response.id_token.picture,
+                    loginType   :   "line",
+                    isValidated :   true,
+                    isActive    :   true,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+            // add booking info 
+        
+         var _bookinginfo = new BookInfo({
+                
+                 provider_id : req.session.line_booking_info.provider_id,
+                 service_id :  req.session.line_booking_info.service_id,
+                 customer_id : res_save_user._id,
+                 comment : "",
+                 isServed : false,
+                 isCancelled : false,
+                 lastupdate : new Date().getTime(),
+            });
+           var res_save_booking = await _bookinginfo.save();
+           
+
+     //await replyText(clientBot, req.body.events[0].replyToken, "Booking Successed!!" , "qq");
+     await clientBot.pushMessage(token_response.id_token.sub,{
+        type:'text',
+        text:"Booking Successed!! Queue information : https://cc-line-nuxt.herokuapp.com/qr_booking/my_queue?booking_id="+ res_save_booking._id 
+     })
+     await res.status(200).redirect('../qr_booking/my_queue?booking_id='+ res_save_booking._id );
+    }
+    
+    
+    /*
     
          //regis this line user to user table
           var res_save_user = await User.findOneAndUpdate(
@@ -298,8 +354,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
         text:"Booking Successed!! Queue information : https://cc-line-nuxt.herokuapp.com/qr_booking/my_queue?booking_id="+ res_save_booking._id 
      })
      await res.status(200).redirect('../qr_booking/my_queue?booking_id='+ res_save_booking._id );
-     // await res.redirect('../qr_booking/my_queue?booking_id='+res_save_booking._id);
-      // res.send( "GOOD" );
+    */
 }));
 
 function replyText(client,replyToken, returnStr,postBackStr) {
@@ -880,10 +935,6 @@ router.post('/weblogin',async(req,res)=>{
         return   res.send({result :"failed", msg: "Cannot Connect to DB"} );
     }) 
 })
-
-
-
-
 
 
 

@@ -264,7 +264,13 @@ export default {
          
     },
     onLineLogin(){
-        alert("This Process is under construction!!");
+         
+        location.href ="../api/linelogin";
+        //alert(this.activeCard);
+    
+        
+        
+      //alert("This Process is under construction!!");
       //location.href = "/signup";
     },
     onRecoverAcc(){
