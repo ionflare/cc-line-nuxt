@@ -252,27 +252,27 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                     loginType   :   "line",
                     isValidated :   true,
                     isActive    :   true,
-                    lastupdate : new Date().getTime(),
+                    lastupdate  : new Date().getTime(),
                 },
                 {upsert:true}
             );
             
-            let token= jwt.sign({
+            let token= await jwt.sign({
                         //sub  : req.body.lineuserid,
                         //Userro : req.body.lineuserid,
                        },process.env.JWT_SECRET).toString();
-            var userinfo = {
+            var userinfo = await {
                         user_id : res_linelogin_user._id,
                         username  : token_response.id_token.sub,
                         displayName : token_response.id_token.name,
                         accessibiltyLv : res_linelogin_user.accessibiltyLv,
                         id_token    : token,
                         }
-           req.session.current_user = userinfo;
-           req.session.line_login.req_login = false;
+           req.session.current_user = await userinfo;
+           req.session.line_login.req_login =  await false;
            //return res.send({result :"success", msg: "Login Successed", info: userinfo});            
 
-         res.redirect('/');
+         await res.redirect('/');
     }
     else
     {
