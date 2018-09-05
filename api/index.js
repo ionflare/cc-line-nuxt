@@ -264,7 +264,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
             var userinfo = {
                         user_id : res_linelogin_user._id,
                         username  : token_response.id_token.sub,
-                        displayname : token_response.id_token.name,
+                        displayName : token_response.id_token.name,
                         accessibiltyLv : res_linelogin_user.accessibiltyLv,
                         id_token    : token,
                         }
@@ -914,7 +914,7 @@ router.post('/weblogin',async(req,res)=>{
                     var userinfo = {
                         user_id : user._id,
                         username  : req.body.user.username,
-                        displayname : req.body.user.username,
+                        displayName : user.displayName,
                         accessibiltyLv : user.USER_ROLE_id,
                         id_token    : token,
                         }
