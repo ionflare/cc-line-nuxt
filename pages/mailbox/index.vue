@@ -5,9 +5,9 @@
 <!-- [main] -->
 <v-content>
   <v-container fluid>
-  <h1> Booking Information as {{$store.state.current_user.displayName}}</h1>
+  <h1> MailBox Information as {{$store.state.current_user.displayName}}</h1>
   <br>
-    <BookingTable v-bind="getProp" />  
+    <MailBoxTable v-bind="getProp" />  
   </v-container>
 </v-content>
 <!-- [footer] -->
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import BookingTable from '~/components/BookingTable.vue';
+import MailBoxTable from '~/components/MailBoxTable.vue';
 
 
 export default {
@@ -28,9 +28,6 @@ export default {
     return {
        headers: [
                 { text: 'CustomerId', value: 'customer_id' },
-                { text: 'Quantity', value: 'quantity' },
-                { text: 'IsServed', value: 'isServed' },
-                { text: 'IsCancelled', value: 'isCancelled' },
                 { text: 'LastUpdate', value: 'lastupdate' },
               ],
              
@@ -48,13 +45,13 @@ export default {
     },
 
   components:{
-        BookingTable
+        MailBoxTable
   },
    asyncData(context){
     return context.app.$axios.$get("/api/bookinfo_get?provider_id="+context.store.state.current_user.user_id+"&service_id="+context.route.query.service_id )
     .then(data =>{
       return { 
-        listinfo: data.bookinfo
+        listinfo: data.mailboxinfo
       }
     }).catch(e => context.error(e));
 

@@ -33,6 +33,13 @@ const line_login = require("line-login"); //module
 const Client = require('@line/bot-sdk').Client;
 
 
+const line = require('@line/bot-sdk');	
+const config = {
+channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
+channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET
+};
+
+
 const clientBot= new Client({
         channelAccessToken: process.env.LINE_MESSAGE_CHANNEL_ACCESS_TOKEN,
         channelSecret: process.env.LINE_MESSAGE_CHANNEL_SECRET,
@@ -1001,9 +1008,75 @@ router.post('/logout',async(req,res)=>{
  
 })
 
+//=================line bot recieve text===============
 
+/*
+router.get('/webhook', async (req, res) => {
 
+  //var ip = "207.97.227.239";
+  //var geo = await testGeoIP("58.10.224.143");  
+  
+  //await res.send(geo.country);
+  //await res.send(req.socket.address().address);
+  
+   await res.status(200).send("OK");
+  
+   //await replyYesNoTemplate(clientBot_2, req.body.events[0].replyToken, message, "qq");
+  
+  
+  
+})
+*/
+/*
+const app2 = express()
+const bodyParser = require('body-parser')
 
+app2.use(bodyParser.json()) // for parsing application/json
+app2.use(bodyParser.urlencoded({
+  extended: true
+})) // for parsing application/x-www-form-urlencoded
+*/
+/*
+router.post('/webhook', (req, res) => {
+    //res.json(result)
+    clientBot.pushMessage("U6a0764890cdbb5393b84accb7b37c266",  {
+     type: "text",
+        text: "HIHI"
+        }
+      
+ );
+   res.status(200).json("xxx");
+    
+Promise
+.all(req.body.events.map(handleEvent))
+.then((result) => res.json(result));
+
+});
+*/
+
+router.post('/webhook', line.middleware(config), (req, res) => {
+  Promise
+    .all(req.body.events.map(handleEvent))
+    .then((result) => res.json(result))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
+});
+
+// event handler
+function handleEvent(event) {
+  if (event.type !== 'message' || event.message.type !== 'text') {
+    // ignore non-text-message event
+    return Promise.resolve(null);
+  }
+
+  // create a echoing text message
+  const echo = { type: 'text', text: event.message.text };
+
+  // use reply API
+  return clientBot.replyMessage(event.replyToken, echo);
+}
 
 
 

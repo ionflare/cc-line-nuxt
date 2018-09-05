@@ -18,7 +18,11 @@
                  <v-layout row wrap>
                    <v-flex md12 >
                       <v-card dark color="green">
-                           <v-card-text class="px-0"><h2>Welcome Provider</h2></v-card-text>
+                           <v-card-text class="px-0"><h2>Welcome Provider</h2>
+                             <v-btn color="orange" @click.native="openMailBox">
+                                My Mail Box
+                             </v-btn>            
+                           </v-card-text>
                            </v-card>
                    </v-flex>            
                  </v-layout>
@@ -232,8 +236,6 @@ export default {
           
            location.href ="../api/user_service/up?user_id="+this.$store.state.current_user.user_id
         +"&service_id="+this.result_dialog_add_service;
-        
-         
       },
       delData(service_id)
       {
@@ -261,6 +263,10 @@ export default {
       openBookingInfo(service_id){
 
            location.href ="../bookinginfo?service_id="+service_id;
+      },
+      openMailBox(){
+
+           location.href ="../mailbox";
       }
    
 
