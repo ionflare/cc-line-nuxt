@@ -138,7 +138,7 @@ export default {
       },
       getAvatar : function () {
         if(this.$store.state.current_user != null) {
-          return this.$store.state.current_user.username;
+          return this.$store.state.current_user.displayName;
         }
         else
         {return "Guest";}
