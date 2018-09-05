@@ -26,6 +26,7 @@
     <br>
     Service : {{queInfo.info.service.name}}
     <br>
+    Quantity : {{queInfo.info.booking_info.quantity}}
     <br>
     <v-btn
       color="red"

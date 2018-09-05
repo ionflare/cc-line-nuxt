@@ -44,7 +44,7 @@
                                   </v-flex>
                                   <v-flex md8 >
                                       <v-card dark color="secondary">
-                                        <v-card-text class="px-0"><h2>{{$store.state.current_user.displayname}}</h2></v-card-text>
+                                        <v-card-text class="px-0"><h2>{{$store.state.current_user.displayName}}</h2></v-card-text>
                                       </v-card>
                                   </v-flex>
                                </v-layout>    
@@ -77,7 +77,7 @@
                           <v-flex md3 >
                              
                                    <v-card-media
-                                      src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+                                      :src="$store.state.current_user.picture"
                                       height="200px"
                                     ></v-card-media>
                           </v-flex>
@@ -199,7 +199,7 @@
                   <h1>Under Construction</h1>
               </v-flex>
             </v-layout>
-             <v-layout  justify-center v-if="$store.state.accessibiltyLv == 0">
+             <v-layout  justify-center v-if="$store.state.accessibiltyLv == 0 || $store.state.accessibiltyLv == false">
               <v-flex md12>
                   <h1>Customer</h1>
                   <h1>Under Construction</h1>

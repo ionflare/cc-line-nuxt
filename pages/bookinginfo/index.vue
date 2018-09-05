@@ -28,6 +28,7 @@ export default {
     return {
        headers: [
                 { text: 'CustomerId', value: 'customer_id' },
+                { text: 'Quantity', value: 'quantity' },
                 { text: 'IsServed', value: 'isServed' },
                 { text: 'IsCancelled', value: 'isCancelled' },
                 { text: 'LastUpdate', value: 'lastupdate' },

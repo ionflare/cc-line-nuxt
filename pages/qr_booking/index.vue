@@ -6,7 +6,8 @@
          <br>
          From : {{bookinginfo.info.user.displayName}}
        <br>
- 
+         Quantity :  <input v-model.number="quantity" type="number">
+        <br>
       <v-btn @click.native="doBooking()">Confirm Booking</v-btn>
     </div>
      <div v-else>
@@ -25,7 +26,10 @@
 export default{
     data: () =>
     {   
-        return { bookinginfo : ''}
+        return { bookinginfo : '',
+            quantity : 1
+            
+        }
         /*
         msg : '';
         return {
@@ -39,7 +43,7 @@ export default{
         doBooking: function()
             {
                    location.href ="./api/linebooking?provider_id="+this.bookinginfo.info.user._id
-                +"&service_id="+this.bookinginfo.info.service._id;
+                +"&service_id="+this.bookinginfo.info.service._id+"&quantity="+this.quantity;
             }
     },
     computed : {

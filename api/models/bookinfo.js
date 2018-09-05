@@ -15,6 +15,9 @@ var BookInfo_Schema = new mongoose.Schema({
     customer_id: {
          type: String,
     },
+    quantity: {
+        type: Number,
+    },
     comment: {
          type: String,
     },
