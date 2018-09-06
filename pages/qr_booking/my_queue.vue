@@ -1,58 +1,128 @@
+
 <template>
-    <!--
-    <div v-if="getQueResult">
-        Your Queue Info Id : {{queInfo.info.service.name}}
-         <br>
-       Service : {{queInfo.info.booking_info._id}}
-         <br>
-       From : {{queInfo.info.provider.displayName}}
-       <br>
-       Current Queue : {{queInfo.info.user_service.current_serveQue}}
-      
+<div>
+
+<!-- [main] -->
+<v-content>
+   <br>
+   <div v-if="getQueResult">
+     <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
+          <v-toolbar color="black" dark>
+            <v-toolbar-title> Queue ID : {{$route.query.booking_id}}</v-toolbar-title>
+          </v-toolbar>
+  
+            <v-carousel style="height:150px"  :hide-delimiters="true">
+              <v-carousel-item
+                v-for="(item,i) in items"
+                :key="i"
+                :src="item.src"
+              
+              ></v-carousel-item>
+            </v-carousel>
+          
+          <v-divider></v-divider>
+           <v-subheader> Queue Information</v-subheader>
+           <v-layout row wrap>
+               <v-flex md6>
+                   <v-list-tile avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>Provider</v-list-tile-title>
+                        <v-list-tile-sub-title> {{queInfo.info.provider.displayName}}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+               </v-flex>
+               <v-flex md6>
+                   <v-list-tile avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>Service</v-list-tile-title>
+                        <v-list-tile-sub-title>{{queInfo.info.service.name}}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+               </v-flex>
+           </v-layout>
+             <v-layout row wrap>
+               <v-flex md6>
+                   <v-list-tile avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>Queue ID</v-list-tile-title>
+                        <v-list-tile-sub-title>{{$route.query.booking_id}}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+               </v-flex>
+               <v-flex md6>
+                   <v-list-tile avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>Quantity</v-list-tile-title>
+                        <v-list-tile-sub-title>{{queInfo.info.booking_info.quantity}}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+               </v-flex>
+           </v-layout>
+
+          <v-divider></v-divider>
+  
+            <v-subheader>Customer Requirement</v-subheader>
+       
+          
+          <v-layout align-space-around justify-center row wrap>
+               <v-flex md12>
+                  <v-btn
+                      color="red"
+                      @click.native="confirm_cancel_booking()">
+                      Cancel Booking
+                    </v-btn>
+                   
+                    <v-btn
+                      color="green"
+                      @click.native="show_service_location()">
+                      Service Location
+                    </v-btn>
+               </v-flex>
+
+           </v-layout>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+  </div>
+   <div v-else>
+     ERROR : {{queInfo.msg}} Plese check your Queue ID
     </div>
-     <div v-else>
-     ERROR : {{xxx}} Plese check your request URL
- 
-     
-    </div>
-   -->
-    <div>
-    
-    Queue ID : {{$route.query.booking_id}}
-    <br>
-    More information
-    <br>
-    Provider : {{queInfo.info.provider.displayName}}
-    <br>
-    Service : {{queInfo.info.service.name}}
-    <br>
-    Quantity : {{queInfo.info.booking_info.quantity}}
-    <br>
-    <v-btn
-      color="red"
-      @click.native="confirm_cancel_booking()">
-      Cancel Booking
-    </v-btn>
-   
-    <v-btn
-      color="green"
-      @click.native="show_service_location()">
-      Service Location
-    </v-btn>
-    
-     
-    </div>
-   
+</v-content>
+<!-- [footer] -->
+<v-footer  app inset>
+      <span class="white--text">&copy; 2018 footer</span>
+</v-footer>
+
+</div>
 </template>
 
-    
 <script>
-
-export default {
-    data : {
-
-        //xxx: '',
-        queInfo: ''
+export default{
+    data: () =>
+    {  
+        return { 
+            queInfo: '',
+        
+              items: [
+                {
+                  src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
+                },
+                {
+                  src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
+                },
+                {
+                  src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
+                },
+                {
+                  src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
+                }
+              ]
+        }   
 
   },
    computed : {
@@ -69,16 +139,16 @@ export default {
     },
     
     methods: {
-        confirm_cancel_booking()
+        confirm_cancel_booking: function()
         {
                confirm('Are you sure you want to cancel this booking?') 
              && this.cancel_booking();
         },
-         cancel_booking()
+         cancel_booking: function()
         {
             alert("This Process is underconstuction!!");
         },
-        show_service_location()
+        show_service_location: function()
         {
             alert("This Process is underconstuction!!");
         }

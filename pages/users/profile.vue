@@ -114,7 +114,12 @@
                                           >
                                             QR CODE
                                           </v-btn>
-                                          
+                                          <v-btn
+                                            color="orange"
+                                            @click.native="alert('UnderConstruction')" :value="item._id"
+                                          >
+                                            Add service info
+                                          </v-btn>
                                            <v-btn
                                             color="pink"
                                             @click.native="openBookingInfo(item._id)"

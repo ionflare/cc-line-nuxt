@@ -229,6 +229,10 @@
               </v-flex>
           </v-layout>          
      <!--***[END POINT Test Token for Authorization]***-->  
+     
+     <input v-model.number="quantity" type="number"  min="1"
+       max="10">
+     
    
   </v-container> 
 </v-content>
@@ -240,6 +244,9 @@ const jwt = require("jsonwebtoken");
 export default{
     data: ()=>{
      return {
+         
+         //****[testInputNumber Max Min]*********
+         quantity:1,
           //****[Hash]****
          username : '',
          password:'',

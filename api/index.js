@@ -330,15 +330,19 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
      User.findOne({
         _id: new ObjectId(res_save_booking.provider_id) 
     }).then((user) => {
-        if(user.loginType == "line")
-        {
-            clientBot.pushMessage(user.username,{
-            type:'text',
-            text:"Your service : "+req.session.line_booking_info.service_id+" has been booked by customer : "
-            + res_save_user.displayName + ". booking_id : " + res_save_booking._id
-         })
-        }
-
+            Service.findOne({
+            _id: new ObjectId(req.session.line_booking_info.service_id) 
+            }).then((service) => {
+                
+                if(user.loginType == "line")
+                {
+                    clientBot.pushMessage(user.username,{
+                    type:'text',
+                    text:"Your service : "+service.name+" has been booked by customer : "
+                    + res_save_user.displayName + ". Booking ID : " + res_save_booking._id
+                 })
+                }
+            })
     })
      
      
