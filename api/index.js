@@ -338,7 +338,8 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                 {
                     clientBot.pushMessage(user.username,{
                     type:'text',
-                    text:"Your service : "+service.name+" has been booked by customer : "
+                    text:"Your service : "+service.name+" Quantity : "+res_save_booking.quantity
+                    + "has been booked by customer : "
                     + res_save_user.displayName + ". Booking ID : " + res_save_booking._id
                  })
                 }
