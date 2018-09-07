@@ -22,7 +22,8 @@
       class="elevation-1"
       >
       <template slot="items" slot-scope="props">
-      <td>{{ props.item.customer_id }}</td>
+        <td>{{ props.item._id }}</td>
+        <td>{{ props.item.customer_id }}</td>
        <td>{{ props.item.quantity }}</td>
         <td>{{ props.item.isServed }}</td>
         <td>{{ props.item.isCancelled }}</td>

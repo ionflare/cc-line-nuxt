@@ -27,6 +27,7 @@ export default {
     data () {
     return {
        headers: [
+                { text: 'QueueId', value: '_id' },
                 { text: 'CustomerId', value: 'customer_id' },
                 { text: 'Quantity', value: 'quantity' },
                 { text: 'IsServed', value: 'isServed' },
