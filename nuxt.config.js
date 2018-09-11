@@ -19,8 +19,9 @@ else{
   mode: 'universal',
   
   serverMiddleware:[
-    /*
+    
     bodyParser.json(),
+    /*
     session({
       secret: process.env.LINE_LOGIN_CHANNEL_SECRET,
       resave: false,
@@ -30,9 +31,8 @@ else{
         maxAge : 1000 * 60 * 60, // 60min
     }
     }),
-    '~/api',
     */
-    '~/api2'
+    '~/api','~/api2'
     
     //{ path: '/api', handler: '~/api/index.js' },
   ],
