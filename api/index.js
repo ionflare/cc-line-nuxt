@@ -22,6 +22,7 @@ const { User_Service } = require("./models/user_service");
 const { User_Role } = require("./models/user_role")
 const { Shop } = require("./models/shop")
 const { BookInfo } = require("./models/bookinfo")
+const { MailBox } = require("./models/mailbox")
 //var { Shop_Service } = require("./models/service")
 //var { Shop_Service } = require("./models/shop_service")
 //var { authenticate } = require("./middleware/authenticate")
@@ -1013,7 +1014,30 @@ router.post('/logout',async(req,res)=>{
  
 })
 
-//=================line bot recieve text===============
+//=================Mailbox===============
+
+router.get('/mailbox',(req,res)=>{
+    MailBox.find({
+        to_user_id : req.param('id')
+        //service_id : req.param('service_id'),
+        //to_user_id :"5b83d09a06f8f41469bdb0cb"
+        //all
+    }).then((mailbox)=>{ res.send({mailbox } );
+    }).catch((e)=> { res.status(400).send(e) } );
+})
+
+
+router.post('/sendMsg',async(req,res)=>{
+      
+     await clientBot.pushMessage(req.body.msgInfo.to_user_id,{
+        type:'text',
+        text:"From: "+ req.body.msgInfo.from+ ". Msg :"+req.body.msgInfo.text
+     })
+     await res.send({result :"success", msg: "test"} );
+})
+
+
+
 
 /*
 router.get('/webhook', async (req, res) => {

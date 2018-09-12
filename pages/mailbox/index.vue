@@ -7,7 +7,9 @@
   <v-container fluid>
   <h1> MailBox Information as {{$store.state.current_user.displayName}}</h1>
   <br>
-    <MailBoxTable v-bind="getProp" />  
+  
+  <!-- {{listinfo}} -->
+     <MailBoxTable v-bind="getProp" />  
   </v-container>
 </v-content>
 <!-- [footer] -->
@@ -21,14 +23,16 @@
 <script>
 import MailBoxTable from '~/components/MailBoxTable.vue';
 
-
+import _ from 'lodash';
 export default {
     
     data () {
     return {
        headers: [
-                { text: 'CustomerId', value: 'customer_id' },
-                { text: 'LastUpdate', value: 'lastupdate' },
+                { text: 'From Customer', value: 'msg.from_user_displayName' },
+                //{ text: 'ProviderId', value: 'to_user_id' },
+                { text: 'Last Message', value: 'msg.from_user_displayName' },
+                { text: 'Last Update', value: 'msg.from_user_displayName' },
               ],
              
         listinfo: []
@@ -48,10 +52,31 @@ export default {
         MailBoxTable
   },
    asyncData(context){
-    return context.app.$axios.$get("/api/bookinfo_get?provider_id="+context.store.state.current_user.user_id+"&service_id="+context.route.query.service_id )
+    return context.app.$axios.$get("/api/mailbox?id="+context.store.state.current_user.user_id)
     .then(data =>{
       return { 
-        listinfo: data.mailboxinfo
+          listinfo : _(data.mailbox)
+            .groupBy(x => x.from_user_id)
+            .map((value, key) => ({from_user_id: key, msg: value}))
+            .value()
+          /*
+          listinfo : _.chain(data.mailbox)
+         // var result = _.chain(data.mailbox)
+            .groupBy("from_user_id")
+            .pairs()
+            .map(function(currentItem) {
+                return _.object(_.zip(["from_user_id", "msg"], currentItem));
+            })
+            .value()
+          */
+          
+          /*
+          var grouped = _.groupBy(cars, function(car) {
+                return car.make;
+                });
+          data.mailbox.from_user_id
+          */
+        //listinfo: data.mailbox
       }
     }).catch(e => context.error(e));
 
