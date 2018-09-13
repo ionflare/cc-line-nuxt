@@ -11,13 +11,27 @@
         <v-spacer></v-spacer>
         
         
-         <v-dialog v-model="dialog" max-width="500px">
+         <v-dialog v-model="dialog" scrollable max-width="500px">
   
           <v-card>
             <v-card-title>
               <span class="headline">{{MsgTitle}}</span>
             </v-card-title>
-  
+            <v-divider></v-divider>
+             <v-card-text style="height: 300px;">
+
+                 <v-layout  row wrap v-for="itemMsg in alignMessage_Time">
+                     <v-flex md12>
+                       <p v-if="itemMsg.from_user_id != $store.state.current_user.user_id" class="text-lg-right">{{itemMsg.message}}</p>
+                       <p v-else class="text-lg-left">{{itemMsg.message}}</p>
+                       
+                     </v-flex>
+                 </v-layout> 
+                 <!--
+               -->
+             </v-card-text>   
+                 
+            <v-divider></v-divider>
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
@@ -50,7 +64,7 @@
        <v-data-table
       :headers="headers"
       
-      :items="listinfo"
+      :items="ListMsg_To_CurrentUser"
     
       class="elevation-1"
       >
@@ -96,24 +110,46 @@
 
 <script>
 import Axios from 'axios';
+import _ from 'lodash';
 export default {
  data: () => ({
     dialog: false,
     //editedIndex: -1,
     currentContact:'',
     MsgTitle: "",
-    myMsg:""
-
+    myMsg:"",
+    dialogm1:"",
+    PreviousMsg: [],
   }),
+  
+  
+  computed :{
+    alignMessage_Time : function (){
+      /*
+      var maxTime = 0;
+      var storeMsg = this.PreviousMsg;
+      var alignedStore = [];
+      
+      for(var i = 0; i< this.PreviousMsg.length; i++)
+      {
+       
+      }
+      */
+       return  _.sortBy(this.PreviousMsg, o => o.lastupdate)
+      
+    }
+    
+  },
+  
   methods: {
     
      async sendMsg () {
       await  Axios.post(`/api/sendMsg`,{
             msgInfo :{
-                    from : this.$store.state.current_user.displayName,
-                    //from : "test prov",
+                    from_user_id : this.$store.state.current_user.user_id,
+                    from_user_displayName : this.$store.state.current_user.displayName,
                     to_user_id : this.currentContact,
-                    text : this.myMsg
+                    message : this.myMsg
                 }   
             })
         .then((res) => {
@@ -122,9 +158,56 @@ export default {
       this.close()
       },
     editItem (item) {
+      
+      
+        //searching for
         this.MsgTitle = "Contact with "+ item.msg[0].from_user_displayName;
         this.currentContact = item.from_user_id;
-        //this.editedIndex = item._id;
+        
+        
+        var mathedUserIdx = -1;
+        
+        for(var i=0; i< this.ListMsg_From_CurrentUser.length ;i ++)
+        {
+          if(this.ListMsg_From_CurrentUser[i].to_user_id == item.from_user_id)
+          {
+             mathedUserIdx = i;
+             break;
+          }
+        }
+        
+        this.PreviousMsg = [];
+        
+        for(var i=0; i< item.msg.length ;i ++)
+         {
+              this.PreviousMsg.push(item.msg[i]);
+        }   
+      
+        if(mathedUserIdx != -1)
+        {
+            for(var i=0; i< this.ListMsg_From_CurrentUser[mathedUserIdx].msg.length ;i ++)
+          {
+             this.PreviousMsg.push(this.ListMsg_From_CurrentUser[mathedUserIdx].msg[i]);
+          }
+        }
+      
+        /*
+        let song = _.find(this.props.ListMsg_From_CurrentUser, {to_user_id: item.from_user_id});
+        
+        
+        this.PreviousMsg = [];
+        for(var i=0; i< item.msg.length ;i ++)
+        {
+          this.PreviousMsg.push(item.msg[i]);
+        }
+        */
+        
+        //this.PreviousMsg = _.find(this.ListMsg_From_CurrentUser, {to_user_id: item.from_user_id});
+        
+        //this.PreviousMsg =this.ListMsg_From_CurrentUser[0].to_user_id;
+        //this.PreviousMsg = [];
+        
+        
         this.dialog = true;
        
         //alert(item.roleName);
@@ -139,7 +222,7 @@ export default {
       }
   },
 
-props: ['headers', 'listinfo']
+props: ['headers', 'ListMsg_To_CurrentUser' ,'ListMsg_From_CurrentUser']
 
 }
 </script>>

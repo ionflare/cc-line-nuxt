@@ -7,9 +7,14 @@
   <v-container fluid>
   <h1> MailBox Information as {{$store.state.current_user.displayName}}</h1>
   <br>
-  
-  <!-- {{listinfo}} -->
+    <!--
+   {{ListMsg_To_CurrentUser}} 
+   <br>
+   <br>
+   {{ListMsg_From_CurrentUser}}
+    -->
      <MailBoxTable v-bind="getProp" />  
+  
   </v-container>
 </v-content>
 <!-- [footer] -->
@@ -35,14 +40,16 @@ export default {
                 { text: 'Last Update', value: 'msg.from_user_displayName' },
               ],
              
-        listinfo: []
+        ListMsg_To_CurrentUser: [],
+        ListMsg_From_CurrentUser :[]
     }
   },
     computed:{
         getProp(){
            
             return {
-               headers: this.headers, listinfo: this.listinfo
+               headers: this.headers, ListMsg_To_CurrentUser: this.ListMsg_To_CurrentUser,
+               ListMsg_From_CurrentUser: this.ListMsg_From_CurrentUser
                 
             }
         }
@@ -55,10 +62,16 @@ export default {
     return context.app.$axios.$get("/api/mailbox?id="+context.store.state.current_user.user_id)
     .then(data =>{
       return { 
-          listinfo : _(data.mailbox)
+          ListMsg_To_CurrentUser : _(data.mailbox_to_currentUser)
             .groupBy(x => x.from_user_id)
             .map((value, key) => ({from_user_id: key, msg: value}))
             .value()
+          ,  
+            
+          ListMsg_From_CurrentUser :  _(data.mailbox_from_currentUser)
+            .groupBy(x => x.to_user_id)
+            .map((value, key) => ({to_user_id: key, msg: value}))
+            .value()     
           /*
           listinfo : _.chain(data.mailbox)
          // var result = _.chain(data.mailbox)

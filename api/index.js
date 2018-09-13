@@ -1019,19 +1019,35 @@ router.post('/logout',async(req,res)=>{
 router.get('/mailbox',(req,res)=>{
     MailBox.find({
         to_user_id : req.param('id')
-        //service_id : req.param('service_id'),
-        //to_user_id :"5b83d09a06f8f41469bdb0cb"
-        //all
-    }).then((mailbox)=>{ res.send({mailbox } );
+    }).then((mailbox_to_currentUser)=>{
+        
+        MailBox.find({
+         from_user_id : req.param('id')
+         }).then((mailbox_from_currentUser)=>{
+             
+             res.send({mailbox_to_currentUser , mailbox_from_currentUser} );
+         }).catch((e)=> { res.status(400).send(e) } );
+        
+        
     }).catch((e)=> { res.status(400).send(e) } );
 })
 
 
 router.post('/sendMsg',async(req,res)=>{
-      
+     
+      var _mailbox = new MailBox({
+                
+                         from_user_id :  req.body.msgInfo.from_user_id,
+                         from_user_displayName : req.body.msgInfo.displayName,
+                         to_user_id : req.body.msgInfo.to_user_id,
+                         message : req.body.msgInfo.message,
+                         lastupdate : new Date().getTime(),
+                        });
+     await _mailbox.save();
+                     
      await clientBot.pushMessage(req.body.msgInfo.to_user_id,{
         type:'text',
-        text:"From: "+ req.body.msgInfo.from+ ". Msg :"+req.body.msgInfo.text
+        text:"From: "+ req.body.msgInfo.from_user_displayName+ ". Msg :"+req.body.msgInfo.message
      })
      await res.send({result :"success", msg: "test"} );
 })
