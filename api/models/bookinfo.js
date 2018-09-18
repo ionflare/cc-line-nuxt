@@ -28,7 +28,7 @@ var BookInfo_Schema = new mongoose.Schema({
          type: Boolean,
     },
     lastupdate: {
-        type: Number,
+        type: Date,
         default: null
     },
 });

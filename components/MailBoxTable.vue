@@ -15,15 +15,25 @@
   
           <v-card>
             <v-card-title>
-              <span class="headline">{{MsgTitle}}</span>
+              <span class="headline">
+                {{MsgTitle}}</span>
             </v-card-title>
             <v-divider></v-divider>
              <v-card-text style="height: 300px;">
 
                  <v-layout  row wrap v-for="itemMsg in alignMessage_Time">
                      <v-flex md12>
-                       <p v-if="itemMsg.from_user_id != $store.state.current_user.user_id" class="text-lg-right">{{itemMsg.message}}</p>
-                       <p v-else class="text-lg-left">{{itemMsg.message}}</p>
+                       <p v-if="itemMsg.from_user_id != $store.state.current_user.user_id" class="text-lg-left">
+                         
+                          <v-avatar
+                              :tile="false"
+                              :size="40"
+                              color="grey lighten-4"
+                            >
+                        <img :src="getUserAvatar" alt="avatar">
+                        </v-avatar>
+                         {{itemMsg.messageInfo}}</p>
+                       <p v-else class="text-lg-right"> {{itemMsg.messageInfo}}</p>
                        
                      </v-flex>
                  </v-layout> 
@@ -69,25 +79,38 @@
       class="elevation-1"
       >
       <template slot="items" slot-scope="props">
-      <td>{{ props.item.msg[0].from_user_displayName }}</td>
-      <td>{{ props.item.msg[props.item.msg.length - 1].message }}</td> 
-      <td>{{ props.item.msg[props.item.msg.length - 1].lastupdate }}</td>
-      <!--
-      <td>{{ props.item.to_user_id }}</td>
-      <td>{{ props.item.message }}</td>
-      <td>{{ props.item.lastupdate }}</td>
-      -->
+        
+        
+        
+        
+        
+      <td>{{ props.item.msg[0].from_user_web_displayName }}</td>
+      <td>{{ props.item.msg[props.item.msg.length - 1].messageInfo }}</td> 
+      <td>{{ props.item.msg[props.item.msg.length - 1].lastupdate }}
+      
+  
+      
+      </td>
+    
   
         <td class="justify-center layout px-0">
+            <v-badge
+                overlap
+                color="orange"
+                v-if="getUnSeenMailNumber(props.item)"
+              >
+              <span  slot="badge"> {{getUnSeenMailNumber(props.item)}} </span>
+            </v-badge>
             <v-icon
-              small
-              class="mr-2"
+              medium
+              class="mr-4"
               @click="editItem(props.item)"
             >
-              edit
+               mail
             </v-icon>
+        
             <v-icon
-              small
+              medium
               @click=""
             >
               delete
@@ -115,61 +138,77 @@ export default {
  data: () => ({
     dialog: false,
     //editedIndex: -1,
-    currentContact:'',
+    currentContact_web_id:'',
+    currentContact_line_id:'',
     MsgTitle: "",
     myMsg:"",
     dialogm1:"",
     PreviousMsg: [],
+    currentContactAvatar_Src : ""
   }),
   
   
   computed :{
     alignMessage_Time : function (){
-      /*
-      var maxTime = 0;
-      var storeMsg = this.PreviousMsg;
-      var alignedStore = [];
-      
-      for(var i = 0; i< this.PreviousMsg.length; i++)
-      {
-       
-      }
-      */
        return  _.sortBy(this.PreviousMsg, o => o.lastupdate)
-      
+    },
+    
+    getUserAvatar : function(){
+      return this.currentContactAvatar_Src;
     }
+    
     
   },
   
   methods: {
     
+    getUnSeenMailNumber(item){
+      var mail_unseen_number = 0;
+      for(var i=item.msg.length-1 ; i >= 0 ;i --)
+         {
+              if(item.msg[i].IsSeen == true)
+              {
+                break;
+              }
+              mail_unseen_number++;
+        }    
+      
+      return mail_unseen_number;
+    },
      async sendMsg () {
       await  Axios.post(`/api/sendMsg`,{
             msgInfo :{
-                    from_user_id : this.$store.state.current_user.user_id,
-                    from_user_displayName : this.$store.state.current_user.displayName,
-                    to_user_id : this.currentContact,
-                    message : this.myMsg
+                    from_user_web_id : this.$store.state.current_user.user_id,
+                    from_user_web_displayName : this.$store.state.current_user.displayName,
+                  
+                    to_user_web_id : this.currentContact_web_id,
+                    to_user_line_id : this.currentContact_line_id,
+                    to_user_web_displayName :  this.$store.state.current_user.displayName,
+                    messageType : "text",
+                    messageInfo : this.myMsg
+                  
                 }   
             })
         .then((res) => {
           //this.menus = res.data
         })
       this.close()
+      //location.href = "./mailbox";
       },
-    editItem (item) {
+   async editItem (item) {
       
       
         //searching for
-        this.MsgTitle = "Contact with "+ item.msg[0].from_user_displayName;
-        this.currentContact = item.from_user_id;
-        
+        this.MsgTitle = "Contact with "+ item.msg[0].from_user_web_displayName;
+        this.currentContact_web_id = item.msg[0].from_user_web_id;
+        this.currentContact_line_id = item.msg[0].from_user_line_id;
+        this.currentContactAvatar_Src = item.msg[0].from_user_src_imageProfile;
         
         var mathedUserIdx = -1;
         
         for(var i=0; i< this.ListMsg_From_CurrentUser.length ;i ++)
         {
-          if(this.ListMsg_From_CurrentUser[i].to_user_id == item.from_user_id)
+          if(this.ListMsg_From_CurrentUser[i].to_user_web_id == item.from_user_web_id)
           {
              mathedUserIdx = i;
              break;
@@ -190,35 +229,29 @@ export default {
              this.PreviousMsg.push(this.ListMsg_From_CurrentUser[mathedUserIdx].msg[i]);
           }
         }
-      
-        /*
-        let song = _.find(this.props.ListMsg_From_CurrentUser, {to_user_id: item.from_user_id});
-        
-        
-        this.PreviousMsg = [];
-        for(var i=0; i< item.msg.length ;i ++)
-        {
-          this.PreviousMsg.push(item.msg[i]);
-        }
-        */
-        
-        //this.PreviousMsg = _.find(this.ListMsg_From_CurrentUser, {to_user_id: item.from_user_id});
-        
-        //this.PreviousMsg =this.ListMsg_From_CurrentUser[0].to_user_id;
-        //this.PreviousMsg = [];
-        
-        
-        this.dialog = true;
        
-        //alert(item.roleName);
+       
+        //alert(item.msg[item.msg.length-1]._id);
+        
+        await  Axios.post('/api/mailbox/update',{
+                    _id : item.msg[item.msg.length-1]._id,
+            })
+        .then((res) => {
+          //this.menus = res.data
+          //alert(res);
+           this.dialog = true;
+        })
+       
+      
       },
-       close () {
+      close () {
       this.myMsg =''
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       }, 300)
+      //location.href = "./mailbox";
       }
   },
 

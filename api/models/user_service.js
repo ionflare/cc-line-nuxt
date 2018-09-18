@@ -20,7 +20,7 @@ var User_Service_Schema = new mongoose.Schema({
         type:Boolean,
     },
        lastupdate: {
-        type: Number,
+        type: Date,
         default: null
     }
 });

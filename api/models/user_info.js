@@ -35,7 +35,7 @@ var User_Info_Schema = new mongoose.Schema({
         trim: false
     },
     lastUpdate: {
-        type: Number,
+        type: Date,
         default: null
     },
 });

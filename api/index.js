@@ -260,6 +260,7 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                     picture     :   token_response.id_token.picture,
                     loginType   :   "line",
                     isValidated :   true,
+                    USER_ROLE_id:   1,
                     isActive    :   true,
                     lastupdate  : new Date().getTime(),
                 },
@@ -471,7 +472,22 @@ router.get('/userlists/up',async(req,res)=>{
         res.redirect('../../../users/userlists');
 })
 
-
+router.get('/userlists/getProfileImage_fromLineID',async(req,res)=>{
+     //await res.send( {result :"failed",msg : "Dupplicate Username"});  
+    await res.redirect("../../");
+    /*
+    User.findOne({
+        username     : "U6a0764890cdbb5393b84accb7b37c266",
+        loginType : "line"
+        //username: req.body.user.username,
+        // _creator: req.user._id
+    }).then((user) => {
+         if (user) {
+           
+        }
+    }).catch((e)=> { res.status(400).send(e) } );
+    */
+})
 
 //***[test add new user from lists table]***
 router.get('/userlists/add',async(req,res)=>{
@@ -1018,12 +1034,12 @@ router.post('/logout',async(req,res)=>{
 
 router.get('/mailbox',(req,res)=>{
     MailBox.find({
-        to_user_id : req.param('id')
+        to_user_web_id : req.param('id')
     }).then((mailbox_to_currentUser)=>{
         
         MailBox.find({
-         from_user_id : req.param('id')
-         }).then((mailbox_from_currentUser)=>{
+         from_user_web_id : req.param('id')
+         }).then((mailbox_from_currentUser )=>{
              
              res.send({mailbox_to_currentUser , mailbox_from_currentUser} );
          }).catch((e)=> { res.status(400).send(e) } );
@@ -1032,16 +1048,41 @@ router.get('/mailbox',(req,res)=>{
     }).catch((e)=> { res.status(400).send(e) } );
 })
 
+router.post('/mailbox/update', async(req,res)=>{
+
+    await MailBox.findOneAndUpdate(
+                {   _id     : ObjectId(req.body._id) },
+                {
+                    IsSeen : true,
+                    lastupdate : new Date().getTime(),
+                },
+                {upsert:true}
+            );
+    await res.send("OK" );
+})
+
 
 router.post('/sendMsg',async(req,res)=>{
      
       var _mailbox = new MailBox({
                 
-                         from_user_id :  req.body.msgInfo.from_user_id,
+                         from_user_web_id :  req.body.msgInfo.from_user_web_id,
+                         from_user_line_id : "",
+                         from_user_web_displayName : req.body.msgInfo.from_user_web_displayName,
+                         from_user_src_imageProfile : "",
+                         to_user_web_id : req.body.msgInfo.to_user_web_id,
+                         to_user_line_id :  req.body.msgInfo.to_user_line_id,
+                         to_user_web_displayName : req.body.to_user_web_displayName,
+                         messageType : "text",
+                         messageInfo : req.body.msgInfo.messageInfo,
+                         IsSeen : true,
+                         lastupdate :new Date().getTime(),
+                         /*
                          from_user_displayName : req.body.msgInfo.displayName,
                          to_user_id : req.body.msgInfo.to_user_id,
                          message : req.body.msgInfo.message,
                          lastupdate : new Date().getTime(),
+                         */
                         });
      await _mailbox.save();
                      

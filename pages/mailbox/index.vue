@@ -34,10 +34,10 @@ export default {
     data () {
     return {
        headers: [
-                { text: 'From Customer', value: 'msg.from_user_displayName' },
+                { text: 'From Customer', value: 'msg.from_user_web_displayName' },
                 //{ text: 'ProviderId', value: 'to_user_id' },
-                { text: 'Last Message', value: 'msg.from_user_displayName' },
-                { text: 'Last Update', value: 'msg.from_user_displayName' },
+                { text: 'Last Message', value: 'msg.from_user_web_displayName' },
+                { text: 'Last Update', value: 'msg.from_user_web_displayName' },
               ],
              
         ListMsg_To_CurrentUser: [],
@@ -63,14 +63,14 @@ export default {
     .then(data =>{
       return { 
           ListMsg_To_CurrentUser : _(data.mailbox_to_currentUser)
-            .groupBy(x => x.from_user_id)
-            .map((value, key) => ({from_user_id: key, msg: value}))
+            .groupBy(x => x.from_user_web_id)
+            .map((value, key) => ({from_user_web_id: key, msg: value}))
             .value()
           ,  
             
           ListMsg_From_CurrentUser :  _(data.mailbox_from_currentUser)
-            .groupBy(x => x.to_user_id)
-            .map((value, key) => ({to_user_id: key, msg: value}))
+            .groupBy(x => x.to_user_web_id)
+            .map((value, key) => ({to_user_web_id: key, msg: value}))
             .value()     
           /*
           listinfo : _.chain(data.mailbox)

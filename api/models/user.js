@@ -75,7 +75,7 @@ var User_Schema = new mongoose.Schema({
     },
     
     lastUpdate: {
-        type: Number,
+        type: Date,
         default: null
     },
 });
