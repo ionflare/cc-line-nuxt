@@ -23,7 +23,7 @@
 
                  <v-layout  row wrap v-for="itemMsg in alignMessage_Time">
                      <v-flex md12>
-                       <p v-if="itemMsg.from_user_id != $store.state.current_user.user_id" class="text-lg-left">
+                       <p v-if="itemMsg.from_user_web_id != $store.state.current_user.user_id" class="text-lg-left">
                          
                           <v-avatar
                               :tile="false"
@@ -193,7 +193,7 @@ export default {
           //this.menus = res.data
         })
       this.close()
-      //location.href = "./mailbox";
+      location.href = "./mailbox";
       },
    async editItem (item) {
       
@@ -251,7 +251,8 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       }, 300)
-      //location.href = "./mailbox";
+      location.href = "./mailbox";
+      
       }
   },
 

@@ -27,7 +27,7 @@
 
 <script>
 import MailBoxTable from '~/components/MailBoxTable.vue';
-
+import Axios from 'axios';
 import _ from 'lodash';
 export default {
     
@@ -54,6 +54,31 @@ export default {
             }
         }
     },
+    methods:{
+        refreshMailList() {
+            /*
+             Axios.get("/api/mailbox?id="+context.store.state.current_user.user_id)
+            .then(data =>{
+              return { 
+                  ListMsg_To_CurrentUser : _(data.mailbox_to_currentUser)
+                    .groupBy(x => x.from_user_web_id)
+                    .map((value, key) => ({from_user_web_id: key, msg: value}))
+                    .value()
+                  ,  
+                    
+                  ListMsg_From_CurrentUser :  _(data.mailbox_from_currentUser)
+                    .groupBy(x => x.to_user_web_id)
+                    .map((value, key) => ({to_user_web_id: key, msg: value}))
+                    .value()     
+    
+              }
+            }).catch(e => context.error(e));
+        */
+        alert("xxx");
+      }
+    
+    },
+     
 
   components:{
         MailBoxTable

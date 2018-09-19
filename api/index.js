@@ -1054,7 +1054,6 @@ router.post('/mailbox/update', async(req,res)=>{
                 {   _id     : ObjectId(req.body._id) },
                 {
                     IsSeen : true,
-                    lastupdate : new Date().getTime(),
                 },
                 {upsert:true}
             );
@@ -1086,9 +1085,9 @@ router.post('/sendMsg',async(req,res)=>{
                         });
      await _mailbox.save();
                      
-     await clientBot.pushMessage(req.body.msgInfo.to_user_id,{
+     await clientBot.pushMessage(req.body.msgInfo.to_user_line_id,{
         type:'text',
-        text:"From: "+ req.body.msgInfo.from_user_displayName+ ". Msg :"+req.body.msgInfo.message
+        text:"From: "+ req.body.msgInfo.from_user_web_displayName+ ". Msg :"+req.body.msgInfo.messageInfo
      })
      await res.send({result :"success", msg: "test"} );
 })
