@@ -11,7 +11,7 @@
         <v-spacer></v-spacer>
         
         
-         <v-dialog v-model="dialog" scrollable max-width="500px">
+         <v-dialog v-model="dialog" scrollable max-width="600px">
   
           <v-card>
             <v-card-title>
@@ -19,22 +19,79 @@
                 {{MsgTitle}}</span>
             </v-card-title>
             <v-divider></v-divider>
-             <v-card-text style="height: 300px;">
+             <v-card-text style="height: 400px;">
 
                  <v-layout  row wrap v-for="itemMsg in alignMessage_Time">
-                     <v-flex md12>
+                   
+                    <!-- ***[MESSAGE FROM CURRENT CUSTOMER]*** -->
+                     <v-flex md12 v-if="itemMsg.from_user_web_id != $store.state.current_user.user_id &&
+                       itemMsg.messageType == 'text'" class="text-lg-left">
+                         <v-avatar
+                                  :tile="false"
+                                  :size="40"
+                                  color="grey lighten-4"
+                                >
+                            <img :src="getUserAvatar" alt="avatar">
+                         </v-avatar>
+                       
+                         {{itemMsg.messageInfo}} 
+                    </v-flex> 
+                     <v-flex md12 v-if="itemMsg.from_user_web_id != $store.state.current_user.user_id &&
+                       itemMsg.messageType == 'location'" class="text-lg-left">
+                         <v-avatar
+                                  :tile="false"
+                                  :size="40"
+                                  color="grey lighten-4"
+                                >
+                            <img :src="getUserAvatar" alt="avatar">
+                         </v-avatar>
+                           {{getLocationAddress(itemMsg.messageInfo)}}
+                           <br>
+                         <img :src="get_Src_GoogleMap(itemMsg.messageInfo)">
+                    </v-flex> 
+              
+                    <!-- ***[MESSAGE FROM CURRENT USER]*** -->
+                    <v-flex md12 v-if="itemMsg.from_user_web_id == $store.state.current_user.user_id &&
+                       itemMsg.messageType == 'text'" class="text-lg-right">
+                        
+                         {{itemMsg.messageInfo}} 
+                    </v-flex> 
+                     <v-flex md12 v-if="itemMsg.from_user_web_id == $store.state.current_user.user_id &&
+                       itemMsg.messageType == 'location'" class="text-lg-right">
+                         
+                       
+                         <img src="http://maps.googleapis.com/maps/api/staticmap?center=13.904752,100.531372&zoom=11&size=200x200&maptype=roadmap&&markers=color:red%7Ccolor:red%7Clabel:C%7C13.904752,100.531372&sensor=false">
+                    </v-flex> 
+                    
+                       <!--
                        <p v-if="itemMsg.from_user_web_id != $store.state.current_user.user_id" class="text-lg-left">
                          
-                          <v-avatar
-                              :tile="false"
-                              :size="40"
-                              color="grey lighten-4"
-                            >
-                        <img :src="getUserAvatar" alt="avatar">
-                        </v-avatar>
-                         {{itemMsg.messageInfo}}</p>
+                              <v-avatar
+                                  :tile="false"
+                                  :size="40"
+                                  color="grey lighten-4"
+                                >
+                            <img :src="getUserAvatar" alt="avatar">
+                            </v-avatar>
+                             <div v-if= "itemMsg.messageType == 'text'">
+                                 {{itemMsg.messageInfo}} 
+                              </div>
+                            
+                            
+                            <!--
+                              <div v-if= "itemMsg.messageType == 'location'">
+                                <img src="http://maps.googleapis.com/maps/api/staticmap?center=13.904752,100.531372&zoom=11&size=200x200&maptype=roadmap&&markers=color:red%7Ccolor:red%7Clabel:C%7C13.904752,100.531372&sensor=false">
+                              </div>
+                               <div v-if= "itemMsg.messageType == 'text'">
+                                 {{itemMsg.messageInfo}} 
+                              </div>
+                               <!---->
+                              
+                           
+                         <!-- </p>
+                         
                        <p v-else class="text-lg-right"> {{itemMsg.messageInfo}}</p>
-                       
+                       -->
                      </v-flex>
                  </v-layout> 
                  <!--
@@ -161,6 +218,24 @@ export default {
   },
   
   methods: {
+    
+    getLocationAddress(item){
+      var arr = item.split("&");
+      var address = arr[0].split("address=");
+      return "Address : " + address[address.length-1];
+    },
+    
+    get_Src_GoogleMap(item){
+      var arr1 = item.split("&latitude=");
+      var lat = arr1[arr1.length-1].split("&");
+      
+      var arr2 = item.split("&longitude=");
+      var long = arr2[arr2.length-1];
+      
+      return "http://maps.googleapis.com/maps/api/staticmap?center="+lat[0]+","+long
+      +"&zoom=11&size=200x200&maptype=roadmap&&markers=color:red%7Ccolor:red%7Clabel:C%7C"+lat[0]+","+long+"&sensor=false";
+    },
+    
     
     getUnSeenMailNumber(item){
       var mail_unseen_number = 0;
