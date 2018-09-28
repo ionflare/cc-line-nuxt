@@ -1062,8 +1062,13 @@ router.post('/mailbox/update', async(req,res)=>{
 
 
 router.post('/sendMsg',async(req,res)=>{
-     
-      var _mailbox = new MailBox({
+    
+   
+    
+     var _mailbox;
+     if(req.body.msgInfo.messageType == "text")
+     {
+          _mailbox = MailBox({
                 
                          from_user_web_id :  req.body.msgInfo.from_user_web_id,
                          from_user_line_id : "",
@@ -1072,7 +1077,7 @@ router.post('/sendMsg',async(req,res)=>{
                          to_user_web_id : req.body.msgInfo.to_user_web_id,
                          to_user_line_id :  req.body.msgInfo.to_user_line_id,
                          to_user_web_displayName : req.body.to_user_web_displayName,
-                         messageType : "text",
+                         messageType : req.body.msgInfo.messageType,
                          messageInfo : req.body.msgInfo.messageInfo,
                          IsSeen : true,
                          lastupdate :new Date().getTime(),
@@ -1083,13 +1088,59 @@ router.post('/sendMsg',async(req,res)=>{
                          lastupdate : new Date().getTime(),
                          */
                         });
-     await _mailbox.save();
+             await _mailbox.save();
                      
-     await clientBot.pushMessage(req.body.msgInfo.to_user_line_id,{
-        type:'text',
-        text:"From: "+ req.body.msgInfo.from_user_web_displayName+ ". Msg :"+req.body.msgInfo.messageInfo
-     })
-     await res.send({result :"success", msg: "test"} );
+             await clientBot.pushMessage(req.body.msgInfo.to_user_line_id,{
+                type:'text',
+                text:"From: "+ req.body.msgInfo.from_user_web_displayName+ ". Msg :"+req.body.msgInfo.messageInfo
+             })
+             await res.send({result :"success", msg: "test"} );
+     }
+     else if(req.body.msgInfo.messageType == "location")
+     {
+         _mailbox = MailBox({
+                
+                         from_user_web_id :  req.body.msgInfo.from_user_web_id,
+                         from_user_line_id : "",
+                         from_user_web_displayName : req.body.msgInfo.from_user_web_displayName,
+                         from_user_src_imageProfile : "",
+                         to_user_web_id : req.body.msgInfo.to_user_web_id,
+                         to_user_line_id :  req.body.msgInfo.to_user_line_id,
+                         to_user_web_displayName : req.body.to_user_web_displayName,
+                         messageType : req.body.msgInfo.messageType,
+                         
+                         messageInfo :"address="+ req.body.msgInfo.msg_address +
+                        "&latitude="+req.body.msgInfo.msg_latitude+
+                        "&longitude="+req.body.msgInfo.msg_longitude,
+                        
+                         IsSeen : true,
+                         lastupdate :new Date().getTime(),
+                         /*
+                         from_user_displayName : req.body.msgInfo.displayName,
+                         to_user_id : req.body.msgInfo.to_user_id,
+                         message : req.body.msgInfo.message,
+                         lastupdate : new Date().getTime(),
+                         */
+                        });
+            await _mailbox.save();
+                     
+            await clientBot.pushMessage(req.body.msgInfo.to_user_line_id,{
+                type:'location',
+                //text:"From: "+ req.body.msgInfo.from_user_web_displayName+ ". Msg :"+req.body.msgInfo.messageInfo
+                title: "Location from "+ req.body.msgInfo.from_user_web_displayName,
+                address: req.body.msgInfo.msg_address,
+                latitude: req.body.msgInfo.msg_latitude,
+                longitude: req.body.msgInfo.msg_longitude
+             })
+             await res.send({result :"success", msg: "test"} );
+     }
+     else
+     {
+         
+     }
+     
+      
+    
 })
 
 

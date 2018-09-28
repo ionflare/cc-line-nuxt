@@ -230,9 +230,9 @@
           </v-layout>          
      <!--***[END POINT Test Token for Authorization]***-->  
      
-     <input v-model.number="quantity" type="number"  min="1"
-       max="10">
-     
+     <input v-model.number="quantity" type="number"  min="1" max="10">
+       <img src="http://maps.googleapis.com/maps/api/staticmap?center=13.750072,100.491292&zoom=11&size=200x200&maptype=roadmap&&markers=color:red%7Ccolor:red%7Clabel:C%7C13.750072,100.491292&sensor=false">
+      
    
   </v-container> 
 </v-content>

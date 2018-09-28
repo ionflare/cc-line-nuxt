@@ -60,7 +60,7 @@
                        itemMsg.messageType == 'location'" class="text-lg-right">
                          
                        
-                         <img src="http://maps.googleapis.com/maps/api/staticmap?center=13.904752,100.531372&zoom=11&size=200x200&maptype=roadmap&&markers=color:red%7Ccolor:red%7Clabel:C%7C13.904752,100.531372&sensor=false">
+                         <img :src="get_Src_GoogleMap(itemMsg.messageInfo)">
                     </v-flex> 
                     
                        <!--
@@ -99,8 +99,10 @@
              </v-card-text>   
                  
             <v-divider></v-divider>
+            
             <v-card-text>
-              <v-container grid-list-md>
+              
+            <!--
                 <v-layout wrap>
                   <v-flex xs12 sm12 md12>
                     <v-text-field v-model="myMsg"  label=""></v-text-field>
@@ -108,13 +110,72 @@
                  </v-layout>  
                 <v-layout wrap>
                   <v-flex md12>
-                   <!-- <v-text-field  v-model="activeCard" label="Active"></v-text-field> -->
-                 
                   </v-flex>
                 </v-layout>
-              </v-container>
-            </v-card-text>
-  
+            
+           
+          -->
+                  
+           <div>
+                
+             REPLY
+              
+                    <v-tabs
+                    size="1"
+                      centered
+                      color="green"
+                      dark
+                      icons-and-text
+                    >
+                      <v-tabs-slider color="yellow"></v-tabs-slider>
+              
+                      <v-tab href="#tab-1" @click="UpdateReplyCase(1)">
+                            Text
+                            <v-icon>text_fields</v-icon>
+                          </v-tab>
+                      
+                          <v-tab href="#tab-2" @click="UpdateReplyCase(2)">
+                            Location
+                            <v-icon>location_on</v-icon>
+                          </v-tab>
+                      
+                          <v-tab href="#tab-3" @click="UpdateReplyCase(3)">
+                            Image
+                            <v-icon>image</v-icon>
+                        </v-tab>
+                  
+              
+                     <v-tab-item
+                        v-for="i in 3"
+                        :id="'tab-' + i"
+                        :key="i"
+                        
+                      >
+                        <v-card flat>
+                            
+                          
+                          
+                         
+                          <v-card-text v-if="replyCase==1">
+                               Text :<v-text-field v-model="myMsg"  label=""></v-text-field> 
+                          </v-card-text>
+                          <v-card-text v-if="replyCase==2">
+                              Address :<v-text-field v-model="msg_address" label=""></v-text-field> 
+                              Latitude :<v-text-field v-model="msg_latitude" label=""></v-text-field> 
+                              Longitude :<v-text-field v-model="msg_longitude" label=""></v-text-field> 
+                          </v-card-text>
+                           <v-card-text v-if="replyCase>2">
+                            Underconstruction
+                          </v-card-text>
+                          
+                        </v-card>
+                  </v-tab-item>
+                      </v-tabs>
+            </div>
+          
+          
+           </v-card-text>
+          
            <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click.native="close">Close</v-btn>
@@ -197,11 +258,24 @@ export default {
     //editedIndex: -1,
     currentContact_web_id:'',
     currentContact_line_id:'',
-    MsgTitle: "",
-    myMsg:"",
+
     dialogm1:"",
     PreviousMsg: [],
-    currentContactAvatar_Src : ""
+    currentContactAvatar_Src : "",
+    
+    
+    ///////
+    MsgTitle: "",
+    myMsg:"",
+    msg_address : "",
+    msg_latitude : "",
+    msg_longitude : "",
+    /// test reply tab
+    
+    replyCase:1
+    
+    
+    
   }),
   
   
@@ -218,7 +292,11 @@ export default {
   },
   
   methods: {
-    
+    UpdateReplyCase(repCase){
+      this.replyCase =repCase;
+      // alert(txt);
+    }
+    ,
     getLocationAddress(item){
       var arr = item.split("&");
       var address = arr[0].split("address=");
@@ -251,7 +329,30 @@ export default {
       return mail_unseen_number;
     },
      async sendMsg () {
+       
+        var msgType = "text";
+        var msgInfo;
+         if(this.replyCase == 1)
+           {
+             msgType = "text";
+             msgInfo = this.myMsg;
+           }
+           else if(this.replyCase == 2)
+           {
+              msgType = "location";
+              msgInfo = { 
+                 "type": "location",
+                  "title": "my location",
+                  "address": "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
+                  "latitude": 35.65910807942215,
+                  "longitude": 139.70372892916203
+              }
+           }
+       
+       
+       
       await  Axios.post(`/api/sendMsg`,{
+          /*
             msgInfo :{
                     from_user_web_id : this.$store.state.current_user.user_id,
                     from_user_web_displayName : this.$store.state.current_user.displayName,
@@ -263,10 +364,30 @@ export default {
                     messageInfo : this.myMsg
                   
                 }   
+                */
+                msgInfo :{
+                    from_user_web_id : this.$store.state.current_user.user_id,
+                    from_user_web_displayName : this.$store.state.current_user.displayName,
+                  
+                    to_user_web_id : this.currentContact_web_id,
+                    to_user_line_id : this.currentContact_line_id,
+                    to_user_web_displayName :  this.$store.state.current_user.displayName,
+                    messageType : msgType,
+                    messageInfo : this.myMsg,
+                    msg_address :  this.msg_address,
+                    msg_latitude : this.msg_latitude,
+                    msg_longitude : this.msg_longitude
+                  
+                }   
+                
             })
         .then((res) => {
           //this.menus = res.data
         })
+        
+        
+        
+        
       this.close()
       location.href = "./mailbox";
       },
@@ -320,8 +441,11 @@ export default {
       
       },
       close () {
-      this.myMsg =''
-      this.dialog = false
+      this.myMsg ='';
+      this.msg_address = '';
+      this.msg_latitude = '';
+      this.msg_longitude = '';
+      this.dialog = false;
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
