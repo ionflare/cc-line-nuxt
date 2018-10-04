@@ -93,19 +93,25 @@ const login = new line_login({
 
 
 router.get('/webbooking/add',async(req,res)=>{
-
+         User.findOne({
+           _id     : new ObjectId(req.param('booking_id'))
+        }).then((user)=>{ 
             var _bookinginfo = new BookInfo({
                 
                  provider_id : req.param('provider_id'),
                  service_id :  req.param('service_id'),
                  customer_id : req.param('customer_id'),
+                 customer_dName : user.displayName,
                  quantity : 1,
                  comment : "",
                  isServed : false,
                  isCancelled : false,
                  lastupdate : new Date().getTime(),
             });
-           doc = await _bookinginfo.save();
+            _bookinginfo.save();
+            res.redirect('/'); 
+        }).catch((e)=> {  res.redirect('/'); } );
+          // doc = await _bookinginfo.save();
         res.redirect('/');
 })
 
@@ -313,10 +319,12 @@ router.get("/callback", login.callback(async (req, res, next, token_response) =>
                  provider_id    : req.session.line_booking_info.provider_id,
                  service_id     : req.session.line_booking_info.service_id,
                  customer_id    : res_save_user._id,
+                 customer_dName   : token_response.id_token.name,
                  quantity       : req.session.line_booking_info.quantity,
                  comment        : "",
                  isServed       : false,
                  isCancelled    : false,
+                 
                  lastupdate     : new Date().getTime(),
             });
            var res_save_booking = await _bookinginfo.save();

@@ -29,6 +29,7 @@ export default {
        headers: [
                 { text: 'QueueId', value: '_id' },
                 { text: 'CustomerId', value: 'customer_id' },
+                { text: 'CustomerName', value: 'customer_dName' },
                 { text: 'Quantity', value: 'quantity' },
                 { text: 'IsServed', value: 'isServed' },
                 { text: 'IsCancelled', value: 'isCancelled' },

@@ -15,6 +15,9 @@ var BookInfo_Schema = new mongoose.Schema({
     customer_id: {
          type: String,
     },
+    customer_dName: {
+         type: String,
+    },
     quantity: {
         type: Number,
     },
@@ -27,6 +30,10 @@ var BookInfo_Schema = new mongoose.Schema({
     isCancelled: {
          type: Boolean,
     },
+    cancelledBy: {
+      type : String  
+    },
+    
     lastupdate: {
         type: Date,
         default: null
