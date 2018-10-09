@@ -146,7 +146,9 @@ export default{
         },
          cancel_booking: function()
         {
-            alert("This Process is underconstuction!!");
+            //alert("This Process is underconstuction!!");
+            location.href = "../api/cancel_linebooking?bookingid="+"xx"+
+            "&userid=xxxxx";
         },
         show_service_location: function()
         {
@@ -155,14 +157,6 @@ export default{
     },
     
   asyncData(context){
-      /*
-        return {
-            queInfo : context.route.query.booking_id
-            
-        }
-        */
-        
-    
         return context.app.$axios.$get('/api/booking_get_queInfo?booking_id='+context.route.query.booking_id
             )
             .then(data =>{

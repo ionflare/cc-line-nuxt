@@ -244,7 +244,27 @@ router.get('/linelogin',(req,res)=>{
 
 
 
-
+router.get('/cancel_linebooking',(req,res)=>{
+    
+    
+    //===***[Is current customer Id match customer id from bookingQueue]***===
+     BookInfo.findOne({
+           _id     : new ObjectId(req.param('bookingid')),
+           customer_id : req.param('userid')
+         }).then((bookinfo)=>{ res.redirect('/');
+         }).catch((e)=> { res.redirect('/') } );
+        
+    
+    /*
+    var req_bookinginfo = { provider_id :req.param('provider_id'),
+                service_id :req.param('service_id'),
+                quantity : req.param('quantity'),
+            }; 
+    
+    req.session.line_booking_info = req_bookinginfo;
+    res.redirect('/api/auth');
+    */
+})
 
 
 
